@@ -1,0 +1,121 @@
+/* Presentation only. Existing records, controls, event handlers, and table columns
+ * are retained. Paper renderers keep their original screen and print styling. */
+@media screen {
+  html[data-dashboard-theme] .ops-shell main {
+    min-width: 0;
+  }
+
+  html[data-dashboard-theme] .ops-shell article:not(:where(.report-document, .report-document *, .report-preview-document *)) {
+    min-width: 0;
+  }
+
+  /* Page spacing must not push fixed drawers or their PDF previews below the
+   * viewport. This changes screen placement only; print renderers are untouched. */
+  html[data-dashboard-theme] .ops-shell .fixed.inset-0 {
+    margin: 0;
+  }
+
+  html[data-dashboard-theme] .ops-shell [role="radiogroup"] [role="radio"][aria-checked="true"] {
+    background-color: #6946c8;
+    color: #fff;
+  }
+
+  html[data-dashboard-theme] .ops-shell main [class~="rounded-[6px]"] {
+    border-radius: 18px;
+    border-color: var(--aurora-line);
+    box-shadow: var(--aurora-shadow);
+  }
+
+  html[data-dashboard-theme] .ops-shell main div:has(> [role="group"][aria-label="Date filters"]) {
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: var(--aurora-card);
+    border-color: var(--aurora-line);
+    box-shadow: var(--aurora-shadow);
+  }
+
+  html[data-dashboard-theme] .ops-shell main [role="group"][aria-label="Other filters"] {
+    padding-top: 12px;
+    border-top: 1px solid var(--aurora-line);
+    gap: 10px;
+  }
+
+  html[data-dashboard-theme] .ops-shell main [role="group"][aria-label="Date filters"] {
+    gap: 12px;
+  }
+
+  html[data-dashboard-theme] .ops-shell main table:not(.report-document table) {
+    font-size: 13px;
+    border-color: var(--aurora-line);
+  }
+
+  html[data-dashboard-theme] .ops-shell main table:not(.report-document table) th {
+    background: rgb(var(--admin-surface));
+    color: rgb(var(--admin-ink-2));
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: .025em;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  html[data-dashboard-theme] .ops-shell main table:not(.report-document table) td {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    border-color: var(--aurora-line);
+  }
+
+  html[data-dashboard-theme] .ops-shell main table:not(.report-document table) tbody tr:hover {
+    background-color: var(--aurora-hover);
+  }
+
+  html[data-dashboard-theme] .ops-shell main :is(input, select, textarea):not([type="checkbox"]):not([type="radio"]):not(.report-document *) {
+    max-width: 100%;
+    border-color: var(--aurora-line);
+    border-radius: 11px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--aurora-ink);
+    background-color: var(--aurora-card);
+  }
+
+  html[data-dashboard-theme] .ops-shell main :is(input, select):not([type="checkbox"]):not([type="radio"]):not(.report-document *) {
+    min-height: 40px;
+  }
+
+  html[data-dashboard-theme] .ops-shell main :is([class~="bg-[#FAFAFA]"], [class~="bg-[#F8F9FA]"], [class~="bg-[#f8fafc]"]):not(.report-document *) {
+    background-color: rgb(var(--admin-surface));
+  }
+
+  html[data-dashboard-theme] .ops-shell main :is([class~="text-[10px]"], [class~="text-[11px]"]):not(.report-document *) {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  html[data-dashboard-theme] .ops-shell main [class~="rounded-module"]:not(.report-document *) {
+    border-radius: 20px;
+  }
+
+  html[data-dashboard-theme] .ops-shell main [class~="shadow-sm"]:not(.report-document *) {
+    box-shadow: var(--aurora-shadow);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  html[data-dashboard-theme] .ops-shell main div:has(> [role="group"][aria-label="Date filters"]) {
+    padding: 12px;
+  }
+
+  html[data-dashboard-theme] .ops-shell main [role="group"][aria-label="Date filters"] {
+    gap: 10px;
+  }
+
+  html[data-dashboard-theme] .ops-shell main [role="group"][aria-label="Date filters"] > div {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  html[data-dashboard-theme] .ops-shell main [role="group"] :is(input, select):not([type="checkbox"]):not([type="radio"]) {
+    min-height: 44px;
+  }
+}

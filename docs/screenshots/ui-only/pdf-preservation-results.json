@@ -1,0 +1,34 @@
+[
+  {
+    "kind": "dossier",
+    "theme": "light",
+    "originalPages": 3,
+    "newPages": 3,
+    "textIdenticalToOriginal": true,
+    "sampleCustomerPresent": true
+  },
+  {
+    "kind": "dossier",
+    "theme": "dark",
+    "originalPages": 3,
+    "newPages": 3,
+    "textIdenticalToOriginal": true,
+    "sampleCustomerPresent": true
+  },
+  {
+    "kind": "submission",
+    "theme": "light",
+    "originalPages": 2,
+    "newPages": 2,
+    "textIdenticalToOriginal": true,
+    "sampleCustomerPresent": true
+  },
+  {
+    "kind": "submission",
+    "theme": "dark",
+    "originalPages": 2,
+    "newPages": 2,
+    "textIdenticalToOriginal": true,
+    "sampleCustomerPresent": true
+  }
+]

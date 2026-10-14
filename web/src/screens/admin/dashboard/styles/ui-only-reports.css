@@ -1,0 +1,338 @@
+/* Presentation only. All uploaded report tabs, values, handlers and exports remain
+   unchanged. Screen-only rules deliberately leave paper previews and printing
+   on the original document styles. */
+@media screen {
+  html[data-dashboard-theme] .ops-shell :is(.rpt-page, .rpt-breakdown-summary) {
+    --ui-rpt-card: var(--aurora-card, #fff);
+    --ui-rpt-ink: var(--aurora-ink, #172039);
+    --ui-rpt-muted: var(--aurora-muted, #626b82);
+    --ui-rpt-line: var(--aurora-line, #e2e6f2);
+    --ui-rpt-subtle: color-mix(in srgb, var(--ui-rpt-card) 96%, var(--aurora-chart-violet, #725cff) 4%);
+    --ui-rpt-link: #5c42cf;
+    --ui-rpt-link-soft: #eeeaff;
+    --ui-rpt-good: #197253;
+    --ui-rpt-good-soft: #e5f6ef;
+    --ui-rpt-warning: #885718;
+    --ui-rpt-warning-soft: #fff4df;
+    --ui-rpt-bad: #a82e44;
+    --ui-rpt-bad-soft: #fdebed;
+    --ui-rpt-info: #31568b;
+    --ui-rpt-info-soft: #edf5ff;
+    color: var(--ui-rpt-ink);
+    font-size: 14px;
+    line-height: 1.55;
+    min-width: 0;
+  }
+
+  html[data-dashboard-theme=dark] .ops-shell :is(.rpt-page, .rpt-breakdown-summary) {
+    --ui-rpt-link: #baacff;
+    --ui-rpt-link-soft: #30284d;
+    --ui-rpt-good: #8ae5c8;
+    --ui-rpt-good-soft: #193c36;
+    --ui-rpt-warning: #ffd28c;
+    --ui-rpt-warning-soft: #423425;
+    --ui-rpt-bad: #ffacb6;
+    --ui-rpt-bad-soft: #482933;
+    --ui-rpt-info: #b5d1ff;
+    --ui-rpt-info-soft: #222f47;
+  }
+
+  html[data-dashboard-theme] .ops-shell .rpt-header {
+    padding: 4px 0 22px;
+    gap: 20px;
+  }
+
+  html[data-dashboard-theme] .ops-shell .rpt-title { gap: 13px; }
+  html[data-dashboard-theme] .ops-shell .rpt-title > img {
+    width: 48px;
+    height: 48px;
+    padding: 5px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid var(--ui-rpt-line);
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-title h1 {
+    color: var(--ui-rpt-ink);
+    font-size: 28px;
+    font-weight: 750;
+    line-height: 1.2;
+    letter-spacing: -.55px;
+    margin-bottom: 7px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-title p {
+    color: var(--ui-rpt-muted);
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-identity {
+    color: var(--ui-rpt-muted);
+    font-size: 13px;
+    gap: 9px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-header button,
+  html[data-dashboard-theme] .ops-shell .rpt-pager button {
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 11px;
+    border-color: var(--ui-rpt-line);
+    background: var(--ui-rpt-card);
+    color: var(--ui-rpt-ink);
+    padding: 10px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-header button:hover:not(:disabled),
+  html[data-dashboard-theme] .ops-shell .rpt-pager button:hover:not(:disabled) {
+    background: var(--ui-rpt-subtle);
+    border-color: color-mix(in srgb, var(--ui-rpt-line) 65%, var(--ui-rpt-link) 35%);
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-export-actions { gap: 9px; }
+  html[data-dashboard-theme] .ops-shell .rpt-page label { color: var(--ui-rpt-muted); font-size: 13px; }
+  html[data-dashboard-theme] .ops-shell .rpt-page select {
+    min-height: 44px;
+    padding: 10px 12px;
+    background: var(--ui-rpt-card);
+    color: var(--ui-rpt-ink);
+    border-color: var(--ui-rpt-line);
+    border-radius: 10px;
+    font-size: 14px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-toolbar {
+    border: 1px solid var(--ui-rpt-line);
+    background: var(--ui-rpt-card);
+    border-radius: 15px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    gap: 14px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-toolbar > div { max-width: 100%; }
+  html[data-dashboard-theme] .ops-shell .rpt-coverage { color: var(--ui-rpt-muted); }
+
+  html[data-dashboard-theme] .ops-shell .rpt-tabs {
+    gap: 5px;
+    border: 1px solid var(--ui-rpt-line);
+    background: var(--ui-rpt-subtle);
+    border-radius: 14px;
+    padding: 5px;
+    margin-bottom: 4px;
+    width: max-content;
+    max-width: 100%;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-tabs button {
+    color: var(--ui-rpt-muted);
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 11px 13px;
+    min-height: 44px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-tabs button:hover { background: var(--ui-rpt-card); }
+  html[data-dashboard-theme] .ops-shell .rpt-tabs button[aria-selected=true] {
+    background: var(--ui-rpt-card);
+    color: var(--ui-rpt-link);
+    border-color: var(--ui-rpt-line);
+    box-shadow: 0 2px 5px #13213b08;
+  }
+
+  html[data-dashboard-theme] .ops-shell .rpt-metrics { gap: 14px; padding: 20px 0; }
+  html[data-dashboard-theme] .ops-shell .rpt-metric {
+    --ui-rpt-accent: var(--aurora-chart-violet, #725cff);
+    position: relative;
+    background: linear-gradient(145deg, color-mix(in srgb, var(--ui-rpt-card) 96%, var(--ui-rpt-accent) 4%), var(--ui-rpt-card) 75%);
+    border-color: var(--ui-rpt-line);
+    border-radius: 17px;
+    padding: 18px;
+    min-height: 132px;
+    box-shadow: 0 5px 18px #28326304;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-metric:nth-child(4n + 2) { --ui-rpt-accent: var(--aurora-chart-blue, #599efb); }
+  html[data-dashboard-theme] .ops-shell .rpt-metric:nth-child(4n + 3) { --ui-rpt-accent: var(--aurora-chart-teal, #1ccfb0); }
+  html[data-dashboard-theme] .ops-shell .rpt-metric:nth-child(4n) { --ui-rpt-accent: var(--aurora-chart-amber, #ffba49); }
+  html[data-dashboard-theme] .ops-shell .rpt-metric-label {
+    color: var(--ui-rpt-muted);
+    font-size: 13px;
+    font-weight: 550;
+    min-height: 32px;
+    line-height: 1.45;
+    gap: 9px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-metric-label > svg {
+    box-sizing: content-box;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    padding: 7px;
+    color: var(--ui-rpt-link);
+    background: var(--ui-rpt-link-soft);
+    border-radius: 10px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-metric > strong {
+    color: var(--ui-rpt-ink);
+    font-size: 28px;
+    font-weight: 750;
+    line-height: 1.25;
+    letter-spacing: -.55px;
+    margin: 12px 0 5px;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-metric small {
+    display: block;
+    color: var(--ui-rpt-muted);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-metric-incomplete { border-color: color-mix(in srgb, var(--ui-rpt-line) 45%, var(--ui-rpt-bad) 55%); }
+  html[data-dashboard-theme] .ops-shell .rpt-metric-incomplete > strong,
+  html[data-dashboard-theme] .ops-shell .rpt-metric-incomplete > small,
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-unavailable-count { color: var(--ui-rpt-bad); }
+
+  html[data-dashboard-theme] .ops-shell .rpt-section {
+    background: var(--ui-rpt-card);
+    color: var(--ui-rpt-ink);
+    border: 1px solid var(--ui-rpt-line);
+    border-radius: 18px;
+    padding: 21px;
+    margin-bottom: 18px;
+    min-width: 0;
+    box-shadow: 0 5px 18px #28326304;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-section h2 {
+    color: var(--ui-rpt-ink);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -.25px;
+    margin-bottom: 16px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-section-heading h2 { margin-bottom: 0; }
+  html[data-dashboard-theme] .ops-shell .rpt-chart-pair { gap: 18px; align-items: start; }
+  html[data-dashboard-theme] .ops-shell .rpt-performance-charts { gap: 22px; }
+  html[data-dashboard-theme] .ops-shell .rpt-performance-chart h3 { color: var(--ui-rpt-ink); font-size: 15px; }
+  html[data-dashboard-theme] .ops-shell .rpt-performance-chart h3 span { color: var(--ui-rpt-muted); font-size: 12px; }
+  html[data-dashboard-theme] .ops-shell .rpt-chart { height: 260px; }
+  html[data-dashboard-theme] .ops-shell .rpt-chart .recharts-cartesian-axis-tick-value { fill: var(--ui-rpt-muted); }
+  html[data-dashboard-theme] .ops-shell .rpt-chart .recharts-cartesian-grid-horizontal line { stroke: var(--ui-rpt-line); }
+  html[data-dashboard-theme] .ops-shell .rpt-chart .recharts-tooltip-cursor { fill: var(--ui-rpt-subtle); }
+  html[data-dashboard-theme] .ops-shell .rpt-performance-chart:first-child .recharts-bar-rectangle path { fill: var(--aurora-chart-violet, #725cff); }
+  html[data-dashboard-theme] .ops-shell .rpt-performance-chart:nth-child(2) .recharts-bar-rectangle path { fill: var(--aurora-chart-teal, #1ccfb0); }
+  html[data-dashboard-theme] .ops-shell .rpt-chart .recharts-default-tooltip {
+    background: var(--ui-rpt-card) !important;
+    color: var(--ui-rpt-ink) !important;
+    border-color: var(--ui-rpt-line) !important;
+    border-radius: 12px;
+    padding: 12px 14px !important;
+    box-shadow: 0 10px 30px #1720391a;
+    font-size: 13px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-chart .recharts-tooltip-label { color: var(--ui-rpt-muted); }
+  html[data-dashboard-theme] .ops-shell .rpt-chart .recharts-tooltip-item { color: var(--ui-rpt-ink) !important; }
+
+  html[data-dashboard-theme] .ops-shell .rpt-page th,
+  html[data-dashboard-theme] .ops-shell .rpt-breakdown-summary th {
+    background: var(--ui-rpt-subtle);
+    color: var(--ui-rpt-muted);
+    font-size: 12px;
+    padding: 12px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-page td,
+  html[data-dashboard-theme] .ops-shell .rpt-breakdown-summary td {
+    color: var(--ui-rpt-ink);
+    border-color: var(--ui-rpt-line);
+    font-size: 14px;
+    padding: 14px 12px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-page tbody th { background: transparent; border-color: var(--ui-rpt-line); color: var(--ui-rpt-ink); }
+  html[data-dashboard-theme] .ops-shell .rpt-page tfoot :is(th, td) { background: var(--ui-rpt-subtle); border-color: var(--ui-rpt-line); color: var(--ui-rpt-ink); }
+  html[data-dashboard-theme] .ops-shell .rpt-table-scroll { max-width: 100%; overscroll-behavior-x: contain; }
+  html[data-dashboard-theme] .ops-shell .rpt-badge { border-radius: 7px; padding: 4px 8px; font-size: 12px; background: var(--ui-rpt-subtle); color: var(--ui-rpt-muted); }
+  html[data-dashboard-theme] .ops-shell .rpt-good { color: var(--ui-rpt-good); background: var(--ui-rpt-good-soft); }
+  html[data-dashboard-theme] .ops-shell .rpt-bad { color: var(--ui-rpt-bad); background: var(--ui-rpt-bad-soft); }
+  html[data-dashboard-theme] .ops-shell .rpt-warning { color: var(--ui-rpt-warning); background: var(--ui-rpt-warning-soft); border-radius: 11px; padding: 13px 15px; }
+  html[data-dashboard-theme] .ops-shell .rpt-badge.rpt-warning { border-radius: 7px; padding: 4px 8px; }
+  html[data-dashboard-theme] .ops-shell .rpt-job-link,
+  html[data-dashboard-theme] .ops-shell .rpt-chart-data summary,
+  html[data-dashboard-theme] .ops-shell .rpt-adjustment-reasons summary,
+  html[data-dashboard-theme] .ops-shell .rpt-expand-indicator { color: var(--ui-rpt-link); }
+  html[data-dashboard-theme] .ops-shell .rpt-job-link { min-height: 40px; }
+  html[data-dashboard-theme] .ops-shell .rpt-note,
+  html[data-dashboard-theme] .ops-shell .rpt-muted,
+  html[data-dashboard-theme] .ops-shell .rpt-block,
+  html[data-dashboard-theme] .ops-shell .rpt-pager { color: var(--ui-rpt-muted); font-size: 13px; }
+  html[data-dashboard-theme] .ops-shell .rpt-empty { padding: 36px 16px; color: var(--ui-rpt-muted); font-size: 14px; }
+  html[data-dashboard-theme] .ops-shell .rpt-issues { color: var(--ui-rpt-warning); }
+
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job {
+    background: var(--ui-rpt-card);
+    border-color: var(--ui-rpt-line);
+    border-radius: 13px;
+    margin-bottom: 12px;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job > summary { border-radius: 13px; }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job[open] > summary { border-color: var(--ui-rpt-line); border-radius: 13px 13px 0 0; }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job > summary:hover { background: var(--ui-rpt-subtle); }
+  html[data-dashboard-theme] .ops-shell .rpt-job > summary small { color: var(--ui-rpt-muted); }
+  html[data-dashboard-theme] .ops-shell .rpt-job-body .rpt-section { margin-bottom: 14px; border-radius: 12px; padding: 18px 16px; }
+  html[data-dashboard-theme] .ops-shell .rpt-job-section-white { background: var(--ui-rpt-card); }
+  html[data-dashboard-theme] .ops-shell .rpt-job-section-blue { background: var(--ui-rpt-info-soft); }
+  html[data-dashboard-theme] .ops-shell .rpt-job-section-blue .rpt-job-detail-table thead th { background: color-mix(in srgb, var(--ui-rpt-info-soft) 92%, var(--ui-rpt-info) 8%); color: var(--ui-rpt-info); }
+  html[data-dashboard-theme] .ops-shell .rpt-comparison-job,
+  html[data-dashboard-theme] .ops-shell .rpt-fee-compare,
+  html[data-dashboard-theme] .ops-shell .rpt-adjustment-reasons li { border-color: var(--ui-rpt-line); }
+  html[data-dashboard-theme] .ops-shell .rpt-comparison-sides { background: var(--ui-rpt-card); border-color: var(--ui-rpt-line); border-radius: 12px; }
+  html[data-dashboard-theme] .ops-shell .rpt-comparison-sides > section { padding: 18px 20px; }
+  html[data-dashboard-theme] .ops-shell .rpt-comparison-sides > section + section { border-color: var(--ui-rpt-line); }
+  html[data-dashboard-theme] .ops-shell .rpt-comparison-row { border-color: var(--ui-rpt-line); }
+  html[data-dashboard-theme] .ops-shell .rpt-comparison-row > span { color: var(--ui-rpt-muted); }
+  html[data-dashboard-theme] .ops-shell .rpt-comparison-row.rpt-difference { background: var(--ui-rpt-bad-soft); }
+  html[data-dashboard-theme] .ops-shell .rpt-comparison-row.rpt-difference > :is(span, strong) { color: var(--ui-rpt-bad); }
+  html[data-dashboard-theme] .ops-shell .rpt-reconciliation { background: var(--ui-rpt-subtle); border-radius: 11px; }
+  html[data-dashboard-theme] .ops-shell .rpt-evidence img { background: var(--ui-rpt-subtle); border-color: var(--ui-rpt-line); border-radius: 8px; }
+  html[data-dashboard-theme] .ops-shell .rpt-chargeable-times { background: var(--ui-rpt-warning-soft); border-color: color-mix(in srgb, var(--ui-rpt-line) 55%, var(--ui-rpt-warning) 45%); color: var(--ui-rpt-warning); }
+  html[data-dashboard-theme] .ops-shell .rpt-chargeable-times :is(.rpt-metric-label, small) { color: var(--ui-rpt-warning); }
+  html[data-dashboard-theme] .ops-shell .rpt-chargeable-times .rpt-metric-label > svg { color: var(--ui-rpt-warning); background: color-mix(in srgb, var(--ui-rpt-warning-soft) 90%, var(--ui-rpt-warning) 10%); }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job-road-summary .rpt-metric-label { font-size: 12px; }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job-road-summary .rpt-metric { border-radius: 11px; }
+
+  html[data-dashboard-theme] .ops-shell .rpt-page :is(button, select, a, summary):focus-visible,
+  html[data-dashboard-theme] .ops-shell .rpt-breakdown-summary a:focus-visible {
+    outline: 2px solid var(--ui-rpt-link);
+    outline-offset: 3px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  html[data-dashboard-theme] .ops-shell .rpt-chart-pair { grid-template-columns: minmax(0, 1fr); }
+  html[data-dashboard-theme] .ops-shell .rpt-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  html[data-dashboard-theme] .ops-shell .rpt-performance-charts { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media screen and (max-width: 650px) {
+  html[data-dashboard-theme] .ops-shell .rpt-header { flex-direction: column; align-items: stretch; gap: 15px; }
+  html[data-dashboard-theme] .ops-shell .rpt-title { gap: 10px; }
+  html[data-dashboard-theme] .ops-shell .rpt-title > img { width: 40px; height: 40px; border-radius: 11px; }
+  html[data-dashboard-theme] .ops-shell .rpt-title h1 { font-size: 24px; }
+  html[data-dashboard-theme] .ops-shell .rpt-export-actions { justify-content: flex-start; width: 100%; flex: none; }
+  html[data-dashboard-theme] .ops-shell .rpt-export-actions .rpt-driver-filter { flex: 1 1 0; max-width: none; }
+  html[data-dashboard-theme] .ops-shell .rpt-toolbar { padding: 12px; }
+  html[data-dashboard-theme] .ops-shell .rpt-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; overflow: visible; gap: 4px; }
+  html[data-dashboard-theme] .ops-shell .rpt-tabs button { white-space: normal; font-size: 13px; padding: 10px 8px; }
+  html[data-dashboard-theme] .ops-shell .rpt-metrics { gap: 10px; }
+  html[data-dashboard-theme] .ops-shell .rpt-metric { padding: 14px; border-radius: 14px; min-height: 136px; }
+  html[data-dashboard-theme] .ops-shell .rpt-metric > strong { font-size: 24px; }
+  html[data-dashboard-theme] .ops-shell .rpt-metric-label { font-size: 13px; gap: 7px; align-items: flex-start; }
+  html[data-dashboard-theme] .ops-shell .rpt-metric-label > svg { width: 16px; height: 16px; padding: 5px; border-radius: 8px; }
+  html[data-dashboard-theme] .ops-shell .rpt-section { padding: 16px; border-radius: 15px; }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-chart { height: 236px; }
+  html[data-dashboard-theme] .ops-shell .rpt-section-heading { align-items: flex-start; }
+  html[data-dashboard-theme] .ops-shell .rpt-section-heading > label { width: 100%; }
+  html[data-dashboard-theme] .ops-shell .rpt-filter-row { gap: 10px; }
+  html[data-dashboard-theme] .ops-shell .rpt-job-link { min-height: 44px; }
+  html[data-dashboard-theme] .ops-shell .rpt-job > summary { gap: 9px; }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job > summary strong { font-size: 14px; }
+  html[data-dashboard-theme] .ops-shell .rpt-comparison-sides > section { padding: 15px; }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job-detail-table :is(th, td) { padding: 11px 8px; font-size: 14px; }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job-road-summary .rpt-metric-label { font-size: 12px; }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job-road-summary .rpt-metric { padding: 12px; min-height: 104px; }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job-road-summary .rpt-metric strong { font-size: 20px; }
+  html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job-road-summary .rpt-metric strong.rpt-road-value-long { font-size: 14px; }
+  html[data-dashboard-theme] .ops-shell .rpt-job-road .rpt-metrics { grid-template-columns: minmax(0, 1fr); }
+}

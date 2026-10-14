@@ -1,0 +1,16 @@
+{
+  "name": "tmv-dashboard-browser-checks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "capture": "node capture.mjs",
+    "workflows": "node workflows.mjs",
+    "contrast": "node contrast.mjs",
+    "timing-status": "node timing-status.mjs",
+    "live": "node live-preview.mjs",
+    "aurora": "node aurora-review.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.58.2"
+  }
+}
