@@ -1,0 +1,2306 @@
+{
+  "release": "Aurora Glass CSS refinement",
+  "consolidatedAtUtc": "2026-10-14T17:22:00.831060+00:00",
+  "sanitizedFixture": true,
+  "base": "http://localhost:3013",
+  "baseline": "http://localhost:3014",
+  "summary": {
+    "matrix": {
+      "passed": 108,
+      "total": 108,
+      "views": 18,
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "widths": [
+        390,
+        768,
+        1366
+      ]
+    },
+    "wide": {
+      "passed": 10,
+      "total": 10,
+      "width": 1920
+    },
+    "motionAccessibilityOverlays": {
+      "passed": 21,
+      "total": 21
+    },
+    "preservedFeatureWorkflows": {
+      "passed": 16,
+      "total": 16
+    },
+    "contrast": {
+      "passedPairs": 36,
+      "totalPairs": 36,
+      "checkedTextRuns": 2526,
+      "minimumSampledRatio": 4.75,
+      "normalTextThreshold": 4.5,
+      "largeTextThreshold": 3
+    },
+    "runtimeErrors": 0,
+    "unhandledApiPaths": 0,
+    "mutations": 0,
+    "allLatestChecksPassed": true
+  },
+  "matrix": [
+    {
+      "name": "overview",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    }
+  ],
+  "wide": [
+    {
+      "name": "overview",
+      "theme": "light",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    }
+  ],
+  "workflows": [
+    {
+      "name": "Motion enabled entrances settle visibly without persistent content transforms",
+      "theme": "light",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion keeps metrics and report content static and visible",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Reduced transparency uses opaque glass fallback",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 768,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 1920,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Keyboard focus, account popup and notification popup remain visible above glass",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "light",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "light",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Motion enabled entrances settle visibly without persistent content transforms",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion keeps metrics and report content static and visible",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Reduced transparency uses opaque glass fallback",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 768,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 1920,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Keyboard focus, account popup and notification popup remain visible above glass",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "dark",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Preview and print text stay identical to the uploaded original",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    }
+  ],
+  "preservedWorkflows": [
+    {
+      "name": "Original six report tabs and date range preserved",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original payment job filter limits breakdown",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original comparison pending-submission filter retained",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original performance job filter retained",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Jobs search opens exact original drawer and keeps query",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original jobs next-page action retained",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Theme preference persists and System follows browser",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Submission preview zoom and Back to Form preserve original feature",
+      "theme": "light",
+      "width": 390,
+      "passed": true
+    },
+    {
+      "name": "Original dossier PDF stays white and prints multiple readable pages",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original submission PDF stays white and prints multiple readable pages",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original PDF Download and Print invoke print callback safely",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Submission preview zoom and Back to Form preserve original feature",
+      "theme": "dark",
+      "width": 390,
+      "passed": true
+    },
+    {
+      "name": "Original dossier PDF stays white and prints multiple readable pages",
+      "theme": "dark",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original submission PDF stays white and prints multiple readable pages",
+      "theme": "dark",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original PDF Download and Print invoke print callback safely",
+      "theme": "dark",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Secondary source failure retains recoverable original error state",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    }
+  ],
+  "contrast": [
+    {
+      "name": "overview",
+      "theme": "light",
+      "position": "top",
+      "checked": 79,
+      "minimum": 5.12,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 79,
+      "minimum": 5.12,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "position": "top",
+      "checked": 152,
+      "minimum": 5.3,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "light",
+      "position": "top",
+      "checked": 100,
+      "minimum": 4.82,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "light",
+      "position": "top",
+      "checked": 75,
+      "minimum": 4.75,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "light",
+      "position": "top",
+      "checked": 54,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "light",
+      "position": "top",
+      "checked": 53,
+      "minimum": 5.3,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "position": "top",
+      "checked": 33,
+      "minimum": 5.3,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "light",
+      "position": "top",
+      "checked": 55,
+      "minimum": 5.3,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "light",
+      "position": "top",
+      "checked": 52,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "position": "top",
+      "checked": 67,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 139,
+      "minimum": 5.51,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "position": "top",
+      "checked": 53,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 71,
+      "minimum": 5.51,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "position": "top",
+      "checked": 49,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 53,
+      "minimum": 5.13,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "light",
+      "position": "top",
+      "checked": 54,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "light",
+      "position": "top",
+      "checked": 47,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "position": "top",
+      "checked": 79,
+      "minimum": 5.86,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 79,
+      "minimum": 5.86,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "position": "top",
+      "checked": 152,
+      "minimum": 6.02,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "dark",
+      "position": "top",
+      "checked": 100,
+      "minimum": 6.04,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "dark",
+      "position": "top",
+      "checked": 75,
+      "minimum": 4.75,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "dark",
+      "position": "top",
+      "checked": 54,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "dark",
+      "position": "top",
+      "checked": 53,
+      "minimum": 6.09,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "position": "top",
+      "checked": 33,
+      "minimum": 6.08,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "dark",
+      "position": "top",
+      "checked": 55,
+      "minimum": 6.04,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "dark",
+      "position": "top",
+      "checked": 52,
+      "minimum": 6.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "position": "top",
+      "checked": 67,
+      "minimum": 7.07,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 139,
+      "minimum": 7.66,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "position": "top",
+      "checked": 53,
+      "minimum": 7.13,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 71,
+      "minimum": 7.54,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "position": "top",
+      "checked": 49,
+      "minimum": 7.21,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 49,
+      "minimum": 7.25,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "dark",
+      "position": "top",
+      "checked": 54,
+      "minimum": 7.25,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "dark",
+      "position": "top",
+      "checked": 47,
+      "minimum": 6.79,
+      "failures": [],
+      "passed": true
+    }
+  ],
+  "papers": [
+    {
+      "theme": "light",
+      "width": 390,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 390,
+        "bottom": 844,
+        "width": 390,
+        "height": 844,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "width": 768,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 768,
+        "bottom": 1000,
+        "width": 768,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1366,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 1366,
+        "bottom": 1000,
+        "width": 1366,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 1920,
+        "bottom": 1000,
+        "width": 1920,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 390,
+        "bottom": 844,
+        "width": 390,
+        "height": 844,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 768,
+        "bottom": 1000,
+        "width": 768,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1366,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 1366,
+        "bottom": 1000,
+        "width": 1366,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 1920,
+        "bottom": 1000,
+        "width": 1920,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "dossier",
+      "pages": 2,
+      "previewTextMatchesOriginal": true,
+      "printTextMatchesOriginal": true
+    },
+    {
+      "kind": "submission",
+      "pages": 2,
+      "previewTextMatchesOriginal": true,
+      "printTextMatchesOriginal": true
+    }
+  ],
+  "preservedPaperExamples": [
+    {
+      "kind": "dossier",
+      "theme": "light",
+      "paper": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Job Completed\n020 3773 9113\nDriver\nSecond Sample Driver (NEXT)\nRecord time\n13/10/26 \u00b7 08:00 | Europe/London\nReference\nDEMO-001\nSynthetic photo\n13/10/26 \u00b7 12:00L"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Synthetic photo\n13/10/26 \u00b7 12:00Location not recorded\nAmount Charged\n\u00a3255.00\nPayment Method\nCash/Card\nClient Signature:\nNot captured\nConfirmed By: N/A\nSigned: 1"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Job time breakdown\nOriginal Calendar duration\n90 min\nActual job duration\nNot recorded\nRecorded extra charge\nGBP 55.00\n\nCalculation pending recorded arrival and "
+        }
+      ]
+    },
+    {
+      "kind": "submission",
+      "theme": "light",
+      "paper": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Storage Check-in\n020 3773 9113\nDriver\nSecond Sample Driver (SE)\nRecord time\n13/10/26 \u00b7 10:15 | Europe/London\nReference\nsample-evidence-0\nJob ID\nDEMO-001\nStorage"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Storage Check-in Evidence 2\n13/10/26 \u00b7 12:00\nsample-evidence-0\nPage 2 of 2"
+        }
+      ]
+    },
+    {
+      "kind": "dossier",
+      "theme": "dark",
+      "paper": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Job Completed\n020 3773 9113\nDriver\nSecond Sample Driver (NEXT)\nRecord time\n13/10/26 \u00b7 08:00 | Europe/London\nReference\nDEMO-001\nSynthetic photo\n13/10/26 \u00b7 12:00L"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Synthetic photo\n13/10/26 \u00b7 12:00Location not recorded\nAmount Charged\n\u00a3255.00\nPayment Method\nCash/Card\nClient Signature:\nNot captured\nConfirmed By: N/A\nSigned: 1"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Job time breakdown\nOriginal Calendar duration\n90 min\nActual job duration\nNot recorded\nRecorded extra charge\nGBP 55.00\n\nCalculation pending recorded arrival and "
+        }
+      ]
+    },
+    {
+      "kind": "submission",
+      "theme": "dark",
+      "paper": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Storage Check-in\n020 3773 9113\nDriver\nSecond Sample Driver (SE)\nRecord time\n13/10/26 \u00b7 10:15 | Europe/London\nReference\nsample-evidence-0\nJob ID\nDEMO-001\nStorage"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Storage Check-in Evidence 2\n13/10/26 \u00b7 12:00\nsample-evidence-0\nPage 2 of 2"
+        }
+      ]
+    }
+  ],
+  "runtimeErrors": [],
+  "unhandledApiPaths": [],
+  "mutations": [],
+  "contrastMethod": "Computed foreground compared with rendered background pixels after screenshot-only glyph masking, preserving currentColor and layout; gradients and translucent surfaces included. Latest three targeted retry pairs clip overflow and exclude covered text by hit-testing. WCAG AA thresholds remain 4.5:1 for normal text and 3:1 for large text; disabled controls excluded. Individual source methods are recorded below.",
+  "sourceArtifacts": [
+    {
+      "file": "luxe-results-all.json",
+      "sha256AtConsolidationInput": "518f26d1ae40fc8c05e66eccebfb17c3f6dbe1523ef4677f93dd04520a906525"
+    },
+    {
+      "file": "luxe-results-workflows.json",
+      "sha256AtConsolidationInput": "f5f619b6ebba1fc16569bab02b502aa9282ace1cbe84ca90dd9adcd3db4ff341"
+    },
+    {
+      "file": "luxe-results-workflows-menus.json",
+      "sha256AtConsolidationInput": "1beb75a49be2d805de9c9c29a939eaca544ea0cf9f38df16f576357cb97647d9"
+    },
+    {
+      "file": "luxe-results-matrix.json",
+      "sha256AtConsolidationInput": "e48d117bf282ad6e0868f82a434eb27c4e376c2cb35f2993d6b9a7090cf1d185",
+      "inputState": "Initial108-case capture before replacing latest retry results; the current file is the consolidated passing matrix."
+    },
+    {
+      "file": "luxe-results-matrix-retry.json",
+      "sha256AtConsolidationInput": "09fa63ce7c25b860a16f34c3e635f4abec428de80d8606c3068bff68cb64393c"
+    },
+    {
+      "file": "luxe-results-matrix-evidence.json",
+      "sha256AtConsolidationInput": "54e1ff5726b77d3be10b0ba824dc4b1c59d39277f9b92002f3e98c01fc1e107a"
+    },
+    {
+      "file": "luxe-results-contrast.json",
+      "sha256AtConsolidationInput": "2228b63b166fa03916a6b3413aa5eb93a316cea395be77bc8ec1e5f40e7fb221"
+    },
+    {
+      "file": "luxe-results-contrast-retry.json",
+      "sha256AtConsolidationInput": "d3273a784fbe890bd4f87303ed00c6ca1b2dd19993f3f21e117c42b0f316fdc1"
+    },
+    {
+      "file": "review-results-workflows.json",
+      "sha256AtConsolidationInput": "6a28f89a406f04d82c8a298c4409898392da1d16f7090eedad06dd2becee707b"
+    }
+  ],
+  "retryProvenance": [
+    {
+      "category": "workflows",
+      "earlierSource": "luxe-results-workflows.json",
+      "replacementSource": "luxe-results-all.json",
+      "earlierFailures": [
+        {
+          "name": "Reduced transparency uses opaque glass fallback",
+          "theme": "light",
+          "width": 1366,
+          "motion": "reduce",
+          "passed": false,
+          "error": "inline-flex items-center gap-0.5 rounded-control border border-line bg-surface-sunken p-0.5 ui-only-overview-tabs disables backdrop\n+ actual - expected\n\n+ 'blur(12px)'\n- 'none'\n"
+        },
+        {
+          "name": "Job and PDF overlays stay anchored to the entire viewport",
+          "theme": "light",
+          "width": 390,
+          "motion": "no-preference",
+          "passed": false,
+          "error": "locator.waitFor: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('main').getByRole('button').filter({ hasText: 'DEMO-001' }).first() to be visible\u001b[22m\n"
+        },
+        {
+          "name": "Job and PDF overlays stay anchored to the entire viewport",
+          "theme": "light",
+          "width": 1920,
+          "motion": "no-preference",
+          "passed": false,
+          "error": "locator.waitFor: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('main').getByRole('button').filter({ hasText: 'DEMO-001' }).first() to be visible\u001b[22m\n"
+        },
+        {
+          "name": "Motion enabled entrances settle visibly without persistent content transforms",
+          "theme": "dark",
+          "width": 1366,
+          "motion": "no-preference",
+          "passed": false,
+          "error": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('radio', { name: 'Overview', exact: true })\u001b[22m\n"
+        },
+        {
+          "name": "Reduced transparency uses opaque glass fallback",
+          "theme": "dark",
+          "width": 1366,
+          "motion": "reduce",
+          "passed": false,
+          "error": "inline-flex items-center gap-0.5 rounded-control border border-line bg-surface-sunken p-0.5 ui-only-overview-tabs disables backdrop\n+ actual - expected\n\n+ 'blur(12px)'\n- 'none'\n"
+        },
+        {
+          "name": "Preview and print text stay identical to the uploaded original",
+          "theme": "light",
+          "width": 1366,
+          "motion": "reduce",
+          "passed": false,
+          "error": "locator.waitFor: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('main').getByRole('button').filter({ hasText: 'DEMO-001' }).first() to be visible\u001b[22m\n"
+        }
+      ],
+      "reason": "Initial development-server loading timeouts were retested serially. Genuine reduced-transparency overview-tab fallback failure was corrected in CSS before the all-run."
+    },
+    {
+      "category": "workflows",
+      "earlierSource": "luxe-results-all.json",
+      "replacementSource": "luxe-results-workflows-menus.json",
+      "earlierFailures": [
+        {
+          "name": "Job action dropdown paints above neighboring glass cards",
+          "theme": "light",
+          "width": 1366,
+          "motion": "no-preference",
+          "passed": false,
+          "error": "open-menu card stops hover transform\n+ actual - expected\n\n+ 'matrix(1, 0, 0, 1, 0, -0.0036666)'\n- 'none'\n"
+        }
+      ],
+      "replacementResults": [
+        {
+          "name": "Job action dropdown paints above neighboring glass cards",
+          "theme": "light",
+          "width": 390,
+          "motion": "no-preference",
+          "passed": true
+        },
+        {
+          "name": "Job action dropdown paints above neighboring glass cards",
+          "theme": "light",
+          "width": 1366,
+          "motion": "no-preference",
+          "passed": true
+        },
+        {
+          "name": "Job action dropdown paints above neighboring glass cards",
+          "theme": "dark",
+          "width": 390,
+          "motion": "no-preference",
+          "passed": true
+        },
+        {
+          "name": "Job action dropdown paints above neighboring glass cards",
+          "theme": "dark",
+          "width": 1366,
+          "motion": "no-preference",
+          "passed": true
+        }
+      ],
+      "reason": "A legitimate 180ms hover reset was sampled during an intermediate frame. Retest waits 220ms for settling while preserving menu hit-testing and the final transform-none assertion; no threshold changed."
+    },
+    {
+      "category": "matrix",
+      "earlierSource": "luxe-results-matrix.json (initial capture)",
+      "replacementSource": "luxe-results-matrix-retry.json",
+      "earlierFailures": [
+        {
+          "name": "drivers",
+          "theme": "dark",
+          "width": 390,
+          "passed": false,
+          "error": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('main').getByText('Sample Driver', { exact: true }).first() to be visible\u001b[22m\n"
+        }
+      ],
+      "replacementResults": [
+        {
+          "name": "drivers",
+          "theme": "dark",
+          "width": 390,
+          "scrollWidth": 390,
+          "clippedHeadings": [],
+          "passed": true
+        }
+      ],
+      "reason": "Drivers Midnight390 development-server/loading timeout passed on an isolated retry; no application change."
+    },
+    {
+      "category": "matrix",
+      "replacementSource": "luxe-results-matrix-evidence.json",
+      "replacementResults": [
+        {
+          "name": "evidence",
+          "theme": "light",
+          "width": 390,
+          "scrollWidth": 390,
+          "clippedHeadings": [],
+          "passed": true
+        },
+        {
+          "name": "evidence",
+          "theme": "light",
+          "width": 768,
+          "scrollWidth": 768,
+          "clippedHeadings": [],
+          "passed": true
+        },
+        {
+          "name": "evidence",
+          "theme": "light",
+          "width": 1366,
+          "scrollWidth": 1366,
+          "clippedHeadings": [],
+          "passed": true
+        },
+        {
+          "name": "evidence",
+          "theme": "dark",
+          "width": 390,
+          "scrollWidth": 390,
+          "clippedHeadings": [],
+          "passed": true
+        },
+        {
+          "name": "evidence",
+          "theme": "dark",
+          "width": 768,
+          "scrollWidth": 768,
+          "clippedHeadings": [],
+          "passed": true
+        },
+        {
+          "name": "evidence",
+          "theme": "dark",
+          "width": 1366,
+          "scrollWidth": 1366,
+          "clippedHeadings": [],
+          "passed": true
+        }
+      ],
+      "reason": "All six Evidence viewport images and geometry checks were refreshed after the final dark-link contrast correction."
+    },
+    {
+      "category": "contrast",
+      "earlierSource": "luxe-results-contrast.json",
+      "replacementSource": "luxe-results-contrast-retry.json",
+      "earlierFailures": [
+        {
+          "name": "evidence",
+          "theme": "dark",
+          "position": "top",
+          "checked": 54,
+          "minimum": 3.17,
+          "failures": [
+            {
+              "text": "DEMO-001",
+              "selector": "button.font-medium text-[#2563EB] hover:underline text-[14px]",
+              "fg": [
+                37,
+                99,
+                235,
+                1
+              ],
+              "color": "rgb(37, 99, 235)",
+              "fontSize": 14,
+              "fontWeight": 500,
+              "required": 4.5,
+              "minimum": 3.17,
+              "backgroundSamples": [
+                [
+                  26,
+                  30,
+                  54
+                ],
+                [
+                  26,
+                  30,
+                  54
+                ],
+                [
+                  26,
+                  30,
+                  54
+                ],
+                [
+                  26,
+                  30,
+                  54
+                ],
+                [
+                  26,
+                  30,
+                  54
+                ]
+              ]
+            },
+            {
+              "text": "DEMO-002",
+              "selector": "button.font-medium text-[#2563EB] hover:underline text-[14px]",
+              "fg": [
+                37,
+                99,
+                235,
+                1
+              ],
+              "color": "rgb(37, 99, 235)",
+              "fontSize": 14,
+              "fontWeight": 500,
+              "required": 4.5,
+              "minimum": 3.17,
+              "backgroundSamples": [
+                [
+                  26,
+                  30,
+                  54
+                ],
+                [
+                  26,
+                  30,
+                  54
+                ],
+                [
+                  26,
+                  30,
+                  54
+                ],
+                [
+                  26,
+                  30,
+                  54
+                ],
+                [
+                  26,
+                  30,
+                  54
+                ]
+              ]
+            }
+          ],
+          "passed": false
+        },
+        {
+          "name": "report-comparison",
+          "theme": "dark",
+          "position": "scrolled",
+          "checked": 53,
+          "minimum": 1.14,
+          "failures": [
+            {
+              "text": "\u00a33,466.24",
+              "selector": "strong.",
+              "fg": [
+                241,
+                241,
+                252,
+                1
+              ],
+              "color": "rgb(241, 241, 252)",
+              "fontSize": 14,
+              "fontWeight": 600,
+              "required": 4.5,
+              "minimum": 1.14,
+              "backgroundSamples": [
+                [
+                  25,
+                  30,
+                  54
+                ],
+                [
+                  25,
+                  30,
+                  54
+                ],
+                [
+                  155,
+                  187,
+                  198
+                ],
+                [
+                  215,
+                  230,
+                  233
+                ],
+                [
+                  25,
+                  30,
+                  54
+                ]
+              ]
+            }
+          ],
+          "passed": false
+        }
+      ],
+      "replacementResults": [
+        {
+          "name": "evidence",
+          "theme": "dark",
+          "position": "top",
+          "checked": 54,
+          "minimum": 4.79,
+          "failures": [],
+          "passed": true
+        },
+        {
+          "name": "report-comparison",
+          "theme": "dark",
+          "position": "top",
+          "checked": 49,
+          "minimum": 7.21,
+          "failures": [],
+          "passed": true
+        },
+        {
+          "name": "report-comparison",
+          "theme": "dark",
+          "position": "scrolled",
+          "checked": 49,
+          "minimum": 7.25,
+          "failures": [],
+          "passed": true
+        }
+      ],
+      "reason": "Evidence hardcoded blue links genuinely failed normal-text AA (3.17:1); CSS now uses the theme-brand token and the rerun passes 4.79:1. Scrolled Comparison text underneath the sticky account/header was wrongly sampled against the occluding avatar; corrected hit-testing excludes covered text. Overflow clipping and screenshot glyph masking preserve the real foreground/background and WCAG 4.5/3 thresholds."
+    }
+  ],
+  "limitations": [
+    "Results consolidate actual local Chromium runs against synthetic fixtures; they do not establish production/backend data correctness or Windows runtime compatibility.",
+    "Contrast covers sampled visible direct text-node runs, top/scrolled positions in the documented 36 view/theme pairs. It is not a claim of comprehensive WCAG conformance.",
+    "Earlier timeouts, one genuine missing-transparency fallback, one genuine Evidence contrast failure and measurement corrections are retained above; this is a latest-results consolidation, not a claim every initial run passed.",
+    "Paper counts differ by fixture: advanced source-parity cases use 2 pages; preserved-feature dossier with two synthetic photos has 3 pages and submission 2 pages. White-paper text and preview/print features remain preserved."
+  ],
+  "contrastSamplingMethods": [
+    {
+      "source": "luxe-results-contrast.json",
+      "description": "Visible direct text-node runs; foreground from computed styles; five rendered background pixels per line after temporarily hiding glyphs, preserving color/currentColor and layout. Includes gradients and translucent/backdrop surfaces. WCAG AA 4.5 normal / 3 large; disabled controls excluded."
+    },
+    {
+      "source": "luxe-results-contrast-retry.json",
+      "description": "Visible direct text-node runs clipped to actual overflow boxes; covered text excluded by hit-testing. Computed foreground converted by browser canvas; up to five rendered background pixels per line captured with screenshot-only glyph masking, preserving color/currentColor and layout. Includes gradients and translucent/backdrop surfaces. WCAG AA 4.5 normal / 3 large; disabled controls excluded.",
+      "replaces": [
+        "evidence/dark/top",
+        "report-comparison/dark/top",
+        "report-comparison/dark/scrolled"
+      ]
+    }
+  ],
+  "visualReview": {
+    "reviewer": "glass_final_review",
+    "screenshots": [
+      {
+        "file": "after/overview-light-1366-viewport.png",
+        "finding": "Desktop cards, date controls, floating rail and chart are readable without primary-content clipping."
+      },
+      {
+        "file": "after/overview-dark-1366-viewport.png",
+        "finding": "Color accents and glass surfaces retain readable content and restrained hierarchy."
+      },
+      {
+        "file": "after/overview-dark-390-viewport.png",
+        "finding": "Phone header, stacked toolbar and two-column metrics fit 390px without horizontal overflow."
+      },
+      {
+        "file": "after/report-performance-dark-1366-viewport.png",
+        "finding": "Original report tabs, metric grid and timing table remain readable."
+      },
+      {
+        "file": "after/evidence-dark-1366-viewport.png",
+        "finding": "Final theme-brand job links are readable; evidence controls and original fields remain accessible."
+      },
+      {
+        "file": "after/pdf-preview-dark-390-viewport.png",
+        "finding": "Dark preview chrome surrounds unchanged white paper; toolbar, record fields and evidence state are readable."
+      }
+    ],
+    "applicationCodeEdited": false
+  }
+}

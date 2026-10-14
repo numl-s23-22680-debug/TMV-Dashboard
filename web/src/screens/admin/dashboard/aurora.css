@@ -3,16 +3,16 @@
 /* TMV Aurora. The attribute exists only while the dashboard is mounted, including
  * its body portals. Driver-facing styles and the driver theme remain independent. */
 html[data-dashboard-theme] {
-  --admin-bg: 246 246 253;
-  --admin-surface: 244 243 251;
-  --admin-surface-2: 239 237 248;
+  --admin-bg: 244 246 253;
+  --admin-surface: 242 242 252;
+  --admin-surface-2: 235 236 250;
   --admin-line: 226 226 239;
   --admin-line-strong: 205 204 224;
   --admin-ink: 27 27 53;
   --admin-ink-2: 78 78 104;
   --admin-muted: 98 97 123;
-  --admin-brand: 101 72 213;
-  --admin-brand-dark: 76 48 177;
+  --admin-brand: 94 61 200;
+  --admin-brand-dark: 75 45 175;
   --admin-brand-soft: 237 231 255;
   --admin-status-green: 9 113 89;
   --admin-status-green-bg: 225 246 239;
@@ -22,7 +22,15 @@ html[data-dashboard-theme] {
   --admin-status-red-bg: 255 236 241;
   --admin-editable: 255 244 220;
   --aurora-card: #fff;
-  --aurora-card-glass: rgb(255 255 255 / .94);
+  --aurora-card-glass: rgb(255 255 255 / .88);
+  --aurora-glass: rgb(255 255 255 / .82);
+  --aurora-glass-line: rgb(255 255 255 / .92);
+  --aurora-glass-shadow: 0 1px 0 rgb(255 255 255 / .9) inset, 0 14px 42px -24px rgb(60 43 128 / .3);
+  --aurora-accent-violet: #7953e1;
+  --aurora-accent-cobalt: #376ce4;
+  --aurora-accent-cyan: #089cae;
+  --aurora-accent-coral: #e26888;
+  --aurora-ease: cubic-bezier(.22, .61, .36, 1);
   --aurora-ink: rgb(var(--admin-ink));
   --aurora-muted: rgb(var(--admin-muted));
   --aurora-line: rgb(var(--admin-line));
@@ -34,11 +42,11 @@ html[data-dashboard-theme] {
   --aurora-chart-amber: #c18117;
   --aurora-chart-coral: #d4496b;
   --aurora-hover: #f7f5fd;
-  --aurora-shadow: 0 3px 5px rgb(35 26 81 / .015), 0 12px 32px -18px rgb(35 26 81 / .14);
-  --aurora-shadow-raised: 0 16px 44px -18px rgb(35 26 81 / .22);
+  --aurora-shadow: 0 1px 2px rgb(35 26 81 / .025), 0 12px 32px -21px rgb(52 38 104 / .24);
+  --aurora-shadow-raised: 0 18px 44px -20px rgb(52 38 104 / .28);
   --aurora-focus: #7758e8;
-  --aurora-atmosphere: radial-gradient(ellipse at 2% 0%, rgb(219 204 255 / .35), transparent 48%), radial-gradient(ellipse at 100% 12%, rgb(210 228 255 / .3), transparent 46%);
-  --aurora-sidebar: linear-gradient(165deg, #252142 0%, #26204f 52%, #332266 100%);
+  --aurora-atmosphere: radial-gradient(ellipse at 4% 0%, rgb(209 191 255 / .48), transparent 48%), radial-gradient(ellipse at 100% 8%, rgb(180 218 255 / .38), transparent 42%), radial-gradient(ellipse at 90% 96%, rgb(210 241 241 / .3), transparent 42%), radial-gradient(ellipse at 30% 82%, rgb(255 216 230 / .24), transparent 42%);
+  --aurora-sidebar: radial-gradient(ellipse at 100% 0%, rgb(126 79 233 / .48), transparent 52%), radial-gradient(ellipse at 0% 100%, rgb(25 89 170 / .32), transparent 48%), linear-gradient(165deg, #262047 0%, #28214d 48%, #241d45 100%);
   --aurora-sidebar-line: rgb(255 255 255 / .11);
   --aurora-sidebar-muted: #c0b9da;
   --aurora-sidebar-text: #e1dcf2;
@@ -46,10 +54,10 @@ html[data-dashboard-theme] {
 }
 
 html[data-dashboard-theme="dark"] {
-  --admin-bg: 14 17 35;
-  --admin-surface: 29 32 56;
-  --admin-surface-2: 36 40 66;
-  --admin-line: 51 55 82;
+  --admin-bg: 13 16 32;
+  --admin-surface: 28 31 55;
+  --admin-surface-2: 37 41 70;
+  --admin-line: 56 60 86;
   --admin-line-strong: 78 82 113;
   --admin-ink: 241 241 252;
   --admin-ink-2: 192 196 222;
@@ -65,7 +73,14 @@ html[data-dashboard-theme="dark"] {
   --admin-status-red-bg: 65 32 48;
   --admin-editable: 66 47 30;
   --aurora-card: #1a1e36;
-  --aurora-card-glass: rgb(26 30 54 / .97);
+  --aurora-card-glass: rgb(26 30 54 / .91);
+  --aurora-glass: rgb(26 30 54 / .86);
+  --aurora-glass-line: rgb(174 163 236 / .16);
+  --aurora-glass-shadow: 0 1px 0 rgb(226 219 255 / .06) inset, 0 16px 40px -24px rgb(0 0 0 / .55);
+  --aurora-accent-violet: #bc9eff;
+  --aurora-accent-cobalt: #8db7ff;
+  --aurora-accent-cyan: #6bd8e3;
+  --aurora-accent-coral: #ff9bb9;
   --aurora-chart-grid: #373c58;
   --aurora-chart-text: #b0b5d1;
   --aurora-chart-violet: #b39afa;
@@ -77,8 +92,8 @@ html[data-dashboard-theme="dark"] {
   --aurora-shadow: 0 8px 30px -16px rgb(0 0 0 / .45);
   --aurora-shadow-raised: 0 18px 48px -16px rgb(0 0 0 / .6);
   --aurora-focus: #c0aaff;
-  --aurora-atmosphere: radial-gradient(ellipse at 0% 0%, rgb(75 46 151 / .16), transparent 48%), radial-gradient(ellipse at 100% 20%, rgb(36 68 124 / .14), transparent 48%);
-  --aurora-sidebar: linear-gradient(165deg, #18172c 0%, #201936 52%, #2a1d4b 100%);
+  --aurora-atmosphere: radial-gradient(ellipse at 0% 0%, rgb(101 57 187 / .25), transparent 46%), radial-gradient(ellipse at 100% 8%, rgb(32 95 152 / .19), transparent 40%), radial-gradient(ellipse at 100% 96%, rgb(24 99 109 / .14), transparent 42%), radial-gradient(ellipse at 24% 90%, rgb(131 57 103 / .09), transparent 46%);
+  --aurora-sidebar: radial-gradient(ellipse at 100% 0%, rgb(124 66 216 / .32), transparent 48%), radial-gradient(ellipse at 0% 100%, rgb(30 82 145 / .22), transparent 48%), linear-gradient(165deg, #1d1933 0%, #201c3a 54%, #1a1930 100%);
   color-scheme: dark;
 }
 
@@ -131,22 +146,22 @@ html[data-dashboard-theme="dark"], html[data-dashboard-theme="dark"] .ops-shell 
 /* The navigation is a deliberate brand anchor in both themes. */
 html[data-dashboard-theme] .ops-sidebar {
   background: var(--aurora-sidebar);
-  border: 0;
-  box-shadow: 8px 0 32px -18px rgb(30 19 64 / .28);
+  border: 1px solid rgb(223 214 255 / .11);
+  box-shadow: 0 1px 0 rgb(255 255 255 / .06) inset, 0 18px 44px -24px rgb(30 19 64 / .56);
   color: var(--aurora-sidebar-text);
 }
 .aurora-brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
-.aurora-brand-mark { width: 42px; height: 42px; flex-shrink: 0; padding: 7px; border-radius: 13px; background: #fff; box-shadow: 0 3px 15px rgb(0 0 0 / .1); }
+.aurora-brand-mark { width: 42px; height: 42px; flex-shrink: 0; padding: 7px; border-radius: 13px; background: #fff; box-shadow: 0 0 0 4px rgb(255 255 255 / .055), 0 5px 18px rgb(0 0 0 / .16); }
 .aurora-brand-copy { min-width: 0; }
 .aurora-brand-name { font-size: 15px; font-weight: 750; letter-spacing: -.025em; white-space: nowrap; color: #fff; }
 .aurora-brand-subtitle { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: #c7b5ff; margin-top: 4px; }
-html[data-dashboard-theme] .aurora-sidebar-toggle { background: rgb(255 255 255 / .06); border: 1px solid var(--aurora-sidebar-line); color: #d4cbed; border-radius: 10px; }
+html[data-dashboard-theme] .aurora-sidebar-toggle { width: 44px; height: 44px; background: rgb(255 255 255 / .06); border: 1px solid var(--aurora-sidebar-line); color: #d4cbed; border-radius: 12px; }
 html[data-dashboard-theme] .aurora-sidebar-toggle:hover { background: rgb(255 255 255 / .13); }
 html[data-dashboard-theme] .ops-nav-caption { color: var(--aurora-sidebar-muted); font-size: 10px; letter-spacing: .15em; padding: 20px 11px 9px; }
-html[data-dashboard-theme] .aurora-nav-button { color: var(--aurora-sidebar-text); border-radius: 12px; height: 46px; font-size: 13px; letter-spacing: .005em; border: 1px solid transparent; }
-html[data-dashboard-theme] .aurora-nav-button:hover { color: #fff; background: rgb(255 255 255 / .075); }
+html[data-dashboard-theme] .aurora-nav-button { color: var(--aurora-sidebar-text); border-radius: 13px; height: 46px; font-size: 13px; letter-spacing: .005em; border: 1px solid transparent; transition: color 160ms var(--aurora-ease), background 160ms var(--aurora-ease), border-color 160ms var(--aurora-ease), box-shadow 160ms var(--aurora-ease), transform 160ms var(--aurora-ease); }
+html[data-dashboard-theme] .aurora-nav-button:hover { color: #fff; background: rgb(255 255 255 / .08); border-color: rgb(255 255 255 / .08); }
 html[data-dashboard-theme] .aurora-nav-button .aurora-nav-icon { width: 29px; height: 29px; border-radius: 8px; display: grid; place-items: center; color: #c0b3e1; flex-shrink: 0; }
-html[data-dashboard-theme] .aurora-nav-button[aria-current="page"] { color: #fff; background: linear-gradient(110deg, #7955d8, #6950bb); border-color: rgb(255 255 255 / .16); box-shadow: 0 5px 15px -9px rgb(130 89 250 / .55); }
+html[data-dashboard-theme] .aurora-nav-button[aria-current="page"] { color: #fff; background: linear-gradient(112deg, #7650d1 0%, #624ab4 55%, #4e5cb7 100%); border-color: rgb(228 218 255 / .23); box-shadow: 0 1px 0 rgb(255 255 255 / .13) inset, 0 8px 20px -12px rgb(159 111 255 / .8); }
 html[data-dashboard-theme] .aurora-nav-button[aria-current="page"] .aurora-nav-icon { color: #fff; background: rgb(255 255 255 / .16); }
 html[data-dashboard-theme] .aurora-nav-button:focus-visible { outline-color: #d1baff; }
 html[data-dashboard-theme] .ops-sidebar-footer { border-color: var(--aurora-sidebar-line); color: var(--aurora-sidebar-muted); margin: 18px; padding-top: 18px; font-size: 11px; }
@@ -155,26 +170,27 @@ html[data-dashboard-theme] .ops-sidebar-footer { border-color: var(--aurora-side
 .aurora-nav-tooltip { position: fixed; z-index: 80; padding: 8px 12px; max-width: 220px; border-radius: 9px; border: 1px solid var(--aurora-line); background: var(--aurora-card); color: var(--aurora-ink); box-shadow: var(--aurora-shadow-raised); font-size: 13px; pointer-events: none; }
 
 /* A compact command bar keeps product controls immediately available. */
-html[data-dashboard-theme] .aurora-header { min-height: 74px; background: var(--aurora-card-glass); border-color: rgb(var(--admin-line) / .65); backdrop-filter: blur(12px); }
+html[data-dashboard-theme] .aurora-header { min-height: 74px; background: var(--aurora-card); border-color: rgb(var(--admin-line) / .65); box-shadow: var(--aurora-glass-shadow); isolation: isolate; }
 .aurora-header-context { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .aurora-header-eyebrow { color: var(--aurora-muted); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; }
 .aurora-header-page { color: var(--aurora-ink); font-size: 14px; font-weight: 650; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.aurora-command-search { border: 1px solid rgb(var(--admin-line) / .6); background: rgb(var(--admin-surface) / .8); height: 40px; border-radius: 12px; min-width: 232px; }
+.aurora-command-search { border: 1px solid rgb(var(--admin-line) / .7); background: rgb(var(--admin-surface) / .78); height: 44px; border-radius: 13px; min-width: 220px; box-shadow: 0 1px 0 rgb(255 255 255 / .05) inset; }
 .aurora-command-search:hover { border-color: rgb(var(--admin-line-strong)); background: rgb(var(--admin-surface-2)); }
 .aurora-header-date { border-right: 1px solid var(--aurora-line); padding-right: 17px; margin-right: 6px; text-align: right; font-size: 12px; color: var(--aurora-ink); line-height: 1.5; }
 .aurora-header-date span { display: block; font-size: 11px; color: var(--aurora-muted); }
-.aurora-theme-control { position: relative; display: flex; align-items: center; border: 1px solid var(--aurora-line); border-radius: 11px; height: 40px; background: rgb(var(--admin-surface) / .65); }
+.aurora-theme-control { position: relative; display: flex; align-items: center; border: 1px solid var(--aurora-line); border-radius: 13px; height: 44px; background: rgb(var(--admin-surface) / .66); box-shadow: 0 1px 0 rgb(255 255 255 / .06) inset; }
 .aurora-theme-control > svg { position: absolute; left: 11px; pointer-events: none; color: rgb(var(--admin-brand)); }
 html[data-dashboard-theme] .aurora-theme-control select { appearance: none; cursor: pointer; width: 112px; background: transparent; border: 0; border-radius: 11px; padding: 7px 20px 7px 34px; font-size: 12px !important; color: var(--aurora-ink); height: 100%; }
 .aurora-theme-control .aurora-theme-chevron { left: auto; right: 6px; color: var(--aurora-muted); }
 html[data-dashboard-theme] .aurora-theme-control select option { background: var(--aurora-card); color: var(--aurora-ink); }
 .aurora-header-action { border-radius: 11px; }
-.aurora-account-avatar { width: 35px; height: 35px; border-radius: 11px; display: grid; place-items: center; font-size: 12px; font-weight: 750; color: rgb(var(--admin-brand)); background: rgb(var(--admin-brand-soft)); border: 1px solid rgb(var(--admin-line)); }
-.aurora-account-menu { background: var(--aurora-card-glass); box-shadow: var(--aurora-shadow-raised); }
+.aurora-account-avatar { width: 35px; height: 35px; border-radius: 12px; display: grid; place-items: center; font-size: 12px; font-weight: 750; color: rgb(var(--admin-brand)); background: linear-gradient(135deg, rgb(var(--admin-brand-soft)), rgb(var(--admin-surface-2))); border: 1px solid rgb(var(--admin-line)); box-shadow: 0 2px 7px -5px rgb(var(--admin-brand) / .35); }
+.aurora-account-menu { background: var(--aurora-card); box-shadow: var(--aurora-shadow-raised); }
 
 
 html[data-dashboard-theme] .ops-shell {
   background: var(--aurora-atmosphere), rgb(var(--admin-bg));
+  background-attachment: fixed;
   color: var(--aurora-ink);
   letter-spacing: -.005em;
   min-width: 0;
@@ -192,17 +208,25 @@ html[data-dashboard-theme] .aurora-nav-button:not(.justify-center) { padding-inl
 html[data-dashboard-theme] .ops-sidebar .aurora-nav-button { color: #e1dcf2; }
 html[data-dashboard-theme] .ops-sidebar .aurora-nav-button[aria-current="page"] { color: #fff; }
 html[data-dashboard-theme] .aurora-nav-button .aurora-nav-icon { width: 20px; height: 20px; color: #c0b3e1; }
+/* Destination accents aid recognition without changing any operational state. */
+html[data-dashboard-theme] .aurora-nav-button:nth-of-type(2):not([aria-current="page"]) .aurora-nav-icon { color: #b7c8ff; }
+html[data-dashboard-theme] .aurora-nav-button:nth-of-type(3):not([aria-current="page"]) .aurora-nav-icon { color: #edb6d3; }
+html[data-dashboard-theme] .aurora-nav-button:nth-of-type(4):not([aria-current="page"]) .aurora-nav-icon { color: #cbbaff; }
+html[data-dashboard-theme] .aurora-nav-button:nth-of-type(5):not([aria-current="page"]) .aurora-nav-icon { color: #ace0d0; }
+html[data-dashboard-theme] .aurora-nav-button:nth-of-type(6):not([aria-current="page"]) .aurora-nav-icon { color: #f0d0a1; }
+html[data-dashboard-theme] .aurora-nav-button:nth-of-type(7):not([aria-current="page"]) .aurora-nav-icon { color: #a3ddeb; }
+html[data-dashboard-theme] .aurora-nav-button:nth-of-type(8):not([aria-current="page"]) .aurora-nav-icon { color: #b6c1ec; }
 html[data-dashboard-theme] .aurora-nav-button[aria-current="page"] .aurora-nav-icon { background: transparent; }
 html[data-dashboard-theme] .aurora-nav-button[aria-current="page"] > span[aria-hidden="true"] { background: #cdb6ff; }
 html[data-dashboard-theme] .ops-main { min-width: 0; }
-html[data-dashboard-theme] .aurora-header { backdrop-filter: none; background: var(--aurora-card); }
 html[data-dashboard-theme] .aurora-header-page { font-size: 18px; font-weight: 650; }
-html[data-dashboard-theme] .aurora-header-controls > button { width: 38px; height: 38px; border-radius: 11px; }
+html[data-dashboard-theme] .aurora-header-controls > button { width: 44px; height: 44px; border-radius: 13px; }
 html[data-dashboard-theme] .aurora-header-controls > button:hover { background: var(--aurora-hover); }
 html[data-dashboard-theme] .aurora-header-controls .aurora-command-search { width: 220px; }
+html[data-dashboard-theme] .aurora-header-controls button[aria-label="Account menu"] { min-width: 44px; min-height: 44px; border-radius: 13px; }
 html[data-dashboard-theme] .aurora-content { min-width: 0; padding: 28px; }
 html[data-dashboard-theme] .aurora-theme-control select { font-family: inherit; }
-html[data-dashboard-theme] .aurora-account-menu { background: var(--aurora-card); }
+html[data-dashboard-theme] .aurora-account-menu { border-color: var(--aurora-line); }
 html[data-dashboard-theme] .bg-white:not(:where(.report-document, .report-document *, .report-preview-document, .report-preview-document *, .report-preview-page, .report-preview-page *, .paper-document, .paper-document *, .print-page, .print-page *, .print-page-container, .print-page-container *, .scenario-print-page, .scenario-print-page *, .analytics-print-page, .analytics-print-page *)) { background-color: var(--aurora-card); }
 html[data-dashboard-theme] :is(.bg-white\/90, .bg-white\/95):not(:where(.report-document, .report-document *, .report-preview-document, .report-preview-document *, .report-preview-page, .report-preview-page *, .paper-document, .paper-document *, .print-page, .print-page *, .print-page-container, .print-page-container *, .scenario-print-page, .scenario-print-page *, .analytics-print-page, .analytics-print-page *)) { background-color: var(--aurora-card-glass); }
 html[data-dashboard-theme] :is(.bg-white\/50, .bg-white\/70, .bg-white\/80):not(:where(.report-document, .report-document *, .report-preview-document, .report-preview-document *, .report-preview-page, .report-preview-page *, .paper-document, .paper-document *, .print-page, .print-page *, .print-page-container, .print-page-container *, .scenario-print-page, .scenario-print-page *, .analytics-print-page, .analytics-print-page *)) { background-color: rgb(var(--aurora-card-rgb, 255 255 255) / .8); }
@@ -343,12 +367,97 @@ html[data-dashboard-theme] :is(.report-document, .report-preview-document, .repo
   --admin-ink: 17 22 32; --admin-ink-2: 88 97 112; --admin-muted: 137 146 158; --admin-brand: 47 99 239; --aurora-card: #fff; --aurora-ink: #111620; --aurora-muted: #89929e; color-scheme: light;
 }
 
+/* Glass is progressive enhancement: the solid surface above remains usable
+ * without backdrop-filter. Content cards and every report paper stay opaque. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  html[data-dashboard-theme] .aurora-header {
+    background: var(--aurora-glass);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    backdrop-filter: blur(20px) saturate(1.2);
+  }
+  html[data-dashboard-theme] .aurora-account-menu {
+    background: var(--aurora-card-glass);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+}
+
+html[data-dashboard-theme] .aurora-header::before {
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: -1px;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--aurora-accent-violet), var(--aurora-accent-cyan), transparent);
+  opacity: .4;
+}
+html[data-dashboard-theme] :is(.aurora-sidebar-toggle, .aurora-header-controls button, .aurora-theme-control, .aurora-account-menu a) {
+  transition: color 160ms var(--aurora-ease), background-color 160ms var(--aurora-ease), border-color 160ms var(--aurora-ease), box-shadow 160ms var(--aurora-ease), transform 160ms var(--aurora-ease);
+}
+html[data-dashboard-theme] .aurora-theme-control:focus-within {
+  border-color: rgb(var(--admin-brand));
+  box-shadow: 0 0 0 3px rgb(var(--admin-brand) / .1);
+}
+html[data-dashboard-theme] .aurora-command-search:hover {
+  border-color: rgb(var(--admin-brand) / .35);
+  box-shadow: 0 3px 10px -7px rgb(var(--admin-brand) / .4);
+}
+/* These controls also carry the original bg-white utility. Keep that generic
+ * surface alias from replacing the sidebar's deliberate dark glass boundary. */
+html[data-dashboard-theme] .ops-sidebar .aurora-sidebar-toggle {
+  background: rgb(255 255 255 / .1);
+  color: #ede6ff;
+  border-color: rgb(228 218 255 / .2);
+}
+html[data-dashboard-theme] .ops-sidebar .aurora-sidebar-toggle:hover {
+  background: rgb(255 255 255 / .17);
+  border-color: rgb(228 218 255 / .34);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html[data-dashboard-theme] .aurora-nav-button:not([aria-current="page"]):hover { transform: translateX(2px); }
+  html[data-dashboard-theme] :is(.aurora-sidebar-toggle, .aurora-header-controls > button):hover { transform: translateY(-1px); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* A single short entrance and pressed feedback, with no perpetual shimmer. */
+  html[data-dashboard-theme] .aurora-header { animation: aurora-header-enter 320ms var(--aurora-ease) both; }
+  html[data-dashboard-theme] :is(.aurora-nav-button, .aurora-sidebar-toggle, .aurora-header-controls > button):active { transform: scale(.98); }
+  @keyframes aurora-header-enter {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
 @media (min-width: 768px) {
   html[data-dashboard-theme] .ops-sidebar:not(.md\:w-20) { width: 224px; }
   html[data-dashboard-theme] .aurora-brand.md\:hidden { display: none; }
 }
+@media (min-width: 768px) and (max-width: 1023px) {
+  html[data-dashboard-theme] .aurora-header { padding-inline: 16px; }
+  html[data-dashboard-theme] .aurora-header > div:first-child { gap: 8px; }
+  html[data-dashboard-theme] .aurora-header-controls { gap: 4px; }
+  html[data-dashboard-theme] .aurora-header-page { font-size: 16px; }
+}
+@media (min-width: 1024px) {
+  html[data-dashboard-theme] .ops-sidebar {
+    height: calc(100vh - 28px);
+    height: calc(100dvh - 28px);
+    top: 14px;
+    margin: 14px 0 14px 14px;
+    border-radius: 22px;
+  }
+  html[data-dashboard-theme] .aurora-header {
+    top: 14px;
+    margin: 14px 28px 0;
+    border: 1px solid var(--aurora-glass-line);
+    border-radius: 18px;
+  }
+}
 @media (max-width: 767px) {
-  html[data-dashboard-theme] .aurora-header { min-height: 64px; padding-inline: 12px; }
+  html[data-dashboard-theme] .aurora-header { min-height: 64px; padding-inline: 12px; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  html[data-dashboard-theme] .ops-shell { background-attachment: scroll; }
   html[data-dashboard-theme] .aurora-header-page { font-size: 14px; max-width: 68px; }
   html[data-dashboard-theme] .aurora-header > div:first-child { gap: 6px; }
   html[data-dashboard-theme] .aurora-header > div:first-child > div { display: none; }
@@ -365,7 +474,23 @@ html[data-dashboard-theme] :is(.report-document, .report-preview-document, .repo
   html[data-dashboard-theme] .aurora-sidebar-close { width: 44px; height: 44px; }
   html[data-dashboard-theme] .aurora-content { padding: 20px 16px; }
 }
+@media (prefers-reduced-transparency: reduce) {
+  html[data-dashboard-theme] :is(.aurora-header, .aurora-account-menu) { background: var(--aurora-card); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (prefers-contrast: more) {
+  html[data-dashboard-theme] .aurora-header { background: var(--aurora-card); border-color: rgb(var(--admin-line-strong)); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  html[data-dashboard-theme] .aurora-nav-button[aria-current="page"] { border-color: #dfd1ff; }
+}
+@media (forced-colors: active) {
+  html[data-dashboard-theme] .ops-shell,
+  html[data-dashboard-theme] .ops-sidebar,
+  html[data-dashboard-theme] .aurora-nav-button[aria-current="page"] { background-image: none; }
+  html[data-dashboard-theme] .aurora-header::before { display: none; }
+  html[data-dashboard-theme] .aurora-header { border-color: CanvasText; }
+  html[data-dashboard-theme] .aurora-nav-button[aria-current="page"] { outline: 2px solid Highlight; outline-offset: -2px; }
+}
 @media (prefers-reduced-motion: reduce) {
   html[data-dashboard-theme] *, html[data-dashboard-theme] *::before, html[data-dashboard-theme] *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  html[data-dashboard-theme] :is(.aurora-nav-button, .aurora-sidebar-toggle, .aurora-header-controls > button):hover { transform: none; }
 }
 }

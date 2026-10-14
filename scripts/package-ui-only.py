@@ -17,17 +17,23 @@ UI_FILES = [
 ]
 
 
-def package(destination):
+def package(destination, glass=False):
+    prefix = "TMV-Glass-UI-Update" if glass else "TMV-UI-Only-Update"
     files = {"web/" + name: ROOT / "web" / name for name in UI_FILES}
     files.update({name: ROOT / "scripts/ui-only" / name for name in
                   ("apply-new-ui.mjs", "ui-update.cmd", "README.md")})
     files.update({"verification/" + name: ROOT / "docs" / name for name in
                   ("ui-only-preservation.json", "ui-only-handoff.md")})
-    screenshots = ROOT / "docs/screenshots/ui-only"
-    for name in ("review-results-workflows.json", "review-results-after.json", "pdf-preservation-results.json"):
+    screenshots = ROOT / ("docs/screenshots/luxe" if glass else "docs/screenshots/ui-only")
+    results = ("luxe-results-final.json", "luxe-results-matrix.json", "review-results-workflows.json") if glass else ("review-results-workflows.json", "review-results-after.json", "pdf-preservation-results.json")
+    for name in results:
         files["verification/" + name] = screenshots / name
+    if glass:
+        for name in ("overview-light-1366-viewport", "overview-dark-1366-viewport", "overview-dark-390-viewport", "report-performance-dark-1366-viewport", "pdf-preview-dark-390-viewport"):
+            files[f"preview/before-{name}.png"] = screenshots / "before" / f"{name}.png"
     for name in ("overview", "report-performance", "pdf-preview"):
-        files[f"preview/before-{name}.png"] = screenshots / "before" / f"{name}-1366.png"
+        if not glass:
+            files[f"preview/before-{name}.png"] = screenshots / "before" / f"{name}-1366.png"
         for theme in ("light", "dark"):
             files[f"preview/{name}-{theme}.png"] = screenshots / "after" / f"{name}-{theme}-1366-viewport.png"
     files["preview/overview-mobile.png"] = screenshots / "after/overview-dark-390-viewport.png"
@@ -42,11 +48,11 @@ def package(destination):
     temporary = destination.with_suffix(".building.zip")
     with ZipFile(temporary, "w", ZIP_DEFLATED) as archive:
         for name, file in sorted(files.items()):
-            archive.write(file, "TMV-UI-Only-Update/" + name)
-        archive.writestr("TMV-UI-Only-Update/verification/package-sha256.json", json.dumps(manifest, indent=2) + "\n")
+            archive.write(file, prefix + "/" + name)
+        archive.writestr(prefix + "/verification/package-sha256.json", json.dumps(manifest, indent=2) + "\n")
     with ZipFile(temporary) as archive:
         assert archive.testzip() is None
-        assert sum(name.startswith("TMV-UI-Only-Update/web/") for name in archive.namelist()) == 7
+        assert sum(name.startswith(prefix + "/web/") for name in archive.namelist()) == 7
         assert all(not Path(name).name.startswith(".env") for name in archive.namelist())
     temporary.replace(destination)
     destination.chmod(0o644)
@@ -56,4 +62,6 @@ def package(destination):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("output", type=Path)
-    package(parser.parse_args().output)
+    parser.add_argument("--glass", action="store_true", help="Package the refreshed glass UI and its current browser evidence")
+    args = parser.parse_args()
+    package(args.output, args.glass)

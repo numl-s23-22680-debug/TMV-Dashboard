@@ -1,0 +1,467 @@
+{
+  "matrix": [],
+  "workflows": [],
+  "wide": [],
+  "contrast": [
+    {
+      "name": "overview",
+      "theme": "light",
+      "position": "top",
+      "checked": 79,
+      "minimum": 5.12,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 79,
+      "minimum": 5.12,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "position": "top",
+      "checked": 152,
+      "minimum": 5.3,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "light",
+      "position": "top",
+      "checked": 100,
+      "minimum": 4.82,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "light",
+      "position": "top",
+      "checked": 75,
+      "minimum": 4.75,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "light",
+      "position": "top",
+      "checked": 54,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "light",
+      "position": "top",
+      "checked": 53,
+      "minimum": 5.3,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "position": "top",
+      "checked": 33,
+      "minimum": 5.3,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "light",
+      "position": "top",
+      "checked": 55,
+      "minimum": 5.3,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "light",
+      "position": "top",
+      "checked": 52,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "position": "top",
+      "checked": 67,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 139,
+      "minimum": 5.51,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "position": "top",
+      "checked": 53,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 71,
+      "minimum": 5.51,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "position": "top",
+      "checked": 49,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 53,
+      "minimum": 5.13,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "light",
+      "position": "top",
+      "checked": 54,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "light",
+      "position": "top",
+      "checked": 47,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "position": "top",
+      "checked": 79,
+      "minimum": 5.86,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 79,
+      "minimum": 5.86,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "position": "top",
+      "checked": 152,
+      "minimum": 6.02,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "dark",
+      "position": "top",
+      "checked": 100,
+      "minimum": 6.04,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "dark",
+      "position": "top",
+      "checked": 75,
+      "minimum": 4.75,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "dark",
+      "position": "top",
+      "checked": 54,
+      "minimum": 3.17,
+      "failures": [
+        {
+          "text": "DEMO-001",
+          "selector": "button.font-medium text-[#2563EB] hover:underline text-[14px]",
+          "fg": [
+            37,
+            99,
+            235,
+            1
+          ],
+          "color": "rgb(37, 99, 235)",
+          "fontSize": 14,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 3.17,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ]
+          ]
+        },
+        {
+          "text": "DEMO-002",
+          "selector": "button.font-medium text-[#2563EB] hover:underline text-[14px]",
+          "fg": [
+            37,
+            99,
+            235,
+            1
+          ],
+          "color": "rgb(37, 99, 235)",
+          "fontSize": 14,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 3.17,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ]
+          ]
+        }
+      ],
+      "passed": false
+    },
+    {
+      "name": "alerts",
+      "theme": "dark",
+      "position": "top",
+      "checked": 53,
+      "minimum": 6.09,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "position": "top",
+      "checked": 33,
+      "minimum": 6.08,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "dark",
+      "position": "top",
+      "checked": 55,
+      "minimum": 6.04,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "dark",
+      "position": "top",
+      "checked": 52,
+      "minimum": 6.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "position": "top",
+      "checked": 67,
+      "minimum": 7.07,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 139,
+      "minimum": 7.66,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "position": "top",
+      "checked": 53,
+      "minimum": 7.13,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 71,
+      "minimum": 7.54,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "position": "top",
+      "checked": 49,
+      "minimum": 7.21,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 53,
+      "minimum": 1.14,
+      "failures": [
+        {
+          "text": "£3,466.24",
+          "selector": "strong.",
+          "fg": [
+            241,
+            241,
+            252,
+            1
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 14,
+          "fontWeight": 600,
+          "required": 4.5,
+          "minimum": 1.14,
+          "backgroundSamples": [
+            [
+              25,
+              30,
+              54
+            ],
+            [
+              25,
+              30,
+              54
+            ],
+            [
+              155,
+              187,
+              198
+            ],
+            [
+              215,
+              230,
+              233
+            ],
+            [
+              25,
+              30,
+              54
+            ]
+          ]
+        }
+      ],
+      "passed": false
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "dark",
+      "position": "top",
+      "checked": 54,
+      "minimum": 7.25,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "dark",
+      "position": "top",
+      "checked": 47,
+      "minimum": 6.79,
+      "failures": [],
+      "passed": true
+    }
+  ],
+  "papers": [],
+  "sanitizedFixture": true,
+  "base": "http://localhost:3013",
+  "baseline": "http://localhost:3014",
+  "runtimeErrors": [],
+  "unhandledApiPaths": [],
+  "mutations": [],
+  "contrastMethod": "Visible direct text-node runs; foreground from computed styles; five rendered background pixels per line after temporarily hiding glyphs, preserving color/currentColor and layout. Includes gradients and translucent/backdrop surfaces. WCAG AA 4.5 normal / 3 large; disabled controls excluded."
+}

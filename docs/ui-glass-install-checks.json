@@ -1,0 +1,57 @@
+{
+  "generatedAtUtc": "2026-10-14T17:23:44.989652+00:00",
+  "publicPackage": "TMV-Glass-UI-Update.zip",
+  "publicPackageSha256": "1f1022956b2d4caa71eaacc052169f90127d8eec2d2d0fae71240f1a70d28801",
+  "platformExecuted": "Linux; Node.js packaged installer with Python standard-library ZIP handling",
+  "windowsRuntimeExecuted": false,
+  "installerTests": {
+    "passed": 12,
+    "failed": 0,
+    "skipped": 0
+  },
+  "publicPackageCrcValid": true,
+  "publicPackageManifestValid": true,
+  "publicPackageContainsExactlySevenApplicationFiles": true,
+  "publicPackageContainsNoPrivateConfiguration": true,
+  "originalArchive": {
+    "inputZipUnchanged": true,
+    "originalFilesCompared": 365,
+    "unchangedFiles": 363,
+    "changedFiles": [
+      "web/src/screens/admin/dashboard/Layout.tsx",
+      "web/src/screens/admin/dashboard/pages/OverviewPage.tsx"
+    ],
+    "addedFiles": [
+      "web/src/screens/admin/dashboard/aurora.css",
+      "web/src/screens/admin/dashboard/hooks/useDashboardTheme.ts",
+      "web/src/screens/admin/dashboard/styles/ui-only-common.css",
+      "web/src/screens/admin/dashboard/styles/ui-only-overview.css",
+      "web/src/screens/admin/dashboard/styles/ui-only-reports.css"
+    ],
+    "privateConfigurationUnchanged": true,
+    "allSevenOverlayFilesMatch": true,
+    "zipMatchesFolder": true,
+    "zipCrcValid": true,
+    "oldGeneratedDistExcluded": true,
+    "pathsWithSpaces": true
+  },
+  "previousUiUpgrade": {
+    "inputZipUnchanged": true,
+    "originalFilesCompared": 370,
+    "unchangedFiles": 366,
+    "changedFiles": [
+      "web/src/screens/admin/dashboard/aurora.css",
+      "web/src/screens/admin/dashboard/styles/ui-only-common.css",
+      "web/src/screens/admin/dashboard/styles/ui-only-overview.css",
+      "web/src/screens/admin/dashboard/styles/ui-only-reports.css"
+    ],
+    "addedFiles": [],
+    "privateConfigurationUnchanged": true,
+    "allSevenOverlayFilesMatch": true,
+    "zipMatchesFolder": true,
+    "zipCrcValid": true,
+    "oldGeneratedDistExcluded": true,
+    "pathsWithSpaces": true
+  },
+  "privateTemporaryOutputsRemoved": true
+}

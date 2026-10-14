@@ -1,0 +1,3762 @@
+{
+  "workflows": [
+    {
+      "name": "Motion enabled entrances settle visibly without persistent content transforms",
+      "theme": "light",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion keeps metrics and report content static and visible",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Reduced transparency uses opaque glass fallback",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 768,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 1920,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Keyboard focus, account popup and notification popup remain visible above glass",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "light",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "light",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": false,
+      "error": "open-menu card stops hover transform\n+ actual - expected\n\n+ 'matrix(1, 0, 0, 1, 0, -0.0036666)'\n- 'none'\n"
+    },
+    {
+      "name": "Motion enabled entrances settle visibly without persistent content transforms",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion keeps metrics and report content static and visible",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Reduced transparency uses opaque glass fallback",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 768,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 1920,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Keyboard focus, account popup and notification popup remain visible above glass",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "dark",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Preview and print text stay identical to the uploaded original",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    }
+  ],
+  "wide": [
+    {
+      "name": "overview",
+      "theme": "light",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "clippedHeadings": [],
+      "passed": true
+    }
+  ],
+  "contrast": [
+    {
+      "name": "overview",
+      "theme": "light",
+      "position": "top",
+      "checked": 79,
+      "minimum": 5.12,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 79,
+      "minimum": 5.12,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "position": "top",
+      "checked": 152,
+      "minimum": 3.24,
+      "failures": [
+        {
+          "text": "Sample Driver",
+          "fg": [
+            27,
+            27,
+            53
+          ],
+          "color": "rgb(27, 27, 53)",
+          "fontSize": 15,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 3.24,
+          "backgroundSamples": [
+            [
+              254,
+              253,
+              254
+            ],
+            [
+              254,
+              253,
+              254
+            ],
+            [
+              254,
+              253,
+              254
+            ],
+            [
+              254,
+              253,
+              254
+            ],
+            [
+              27,
+              123,
+              101
+            ]
+          ]
+        },
+        {
+          "text": "Sample Driver",
+          "fg": [
+            27,
+            27,
+            53
+          ],
+          "color": "rgb(27, 27, 53)",
+          "fontSize": 15,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 3.24,
+          "backgroundSamples": [
+            [
+              254,
+              253,
+              254
+            ],
+            [
+              254,
+              253,
+              254
+            ],
+            [
+              254,
+              253,
+              254
+            ],
+            [
+              254,
+              253,
+              254
+            ],
+            [
+              27,
+              123,
+              101
+            ]
+          ]
+        }
+      ],
+      "passed": false
+    },
+    {
+      "name": "drivers",
+      "theme": "light",
+      "position": "top",
+      "checked": 100,
+      "minimum": 4.82,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "light",
+      "position": "top",
+      "checked": 75,
+      "minimum": 4.75,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "light",
+      "position": "top",
+      "checked": 54,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "light",
+      "position": "top",
+      "checked": 53,
+      "minimum": 5.3,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "position": "top",
+      "checked": 33,
+      "minimum": 5.3,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "light",
+      "position": "top",
+      "checked": 55,
+      "minimum": 5.3,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "light",
+      "position": "top",
+      "checked": 53,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "position": "top",
+      "checked": 68,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 68,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "position": "top",
+      "checked": 54,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 54,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "position": "top",
+      "checked": 50,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "position": "scrolled",
+      "checked": 50,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "light",
+      "position": "top",
+      "checked": 55,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "light",
+      "position": "top",
+      "checked": 48,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "position": "top",
+      "checked": 79,
+      "minimum": 5.86,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 79,
+      "minimum": 1,
+      "failures": [
+        {
+          "text": "The",
+          "fg": [
+            199,
+            181,
+            255
+          ],
+          "color": "rgb(199, 181, 255)",
+          "fontSize": 10,
+          "fontWeight": 600,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              147,
+              133,
+              193
+            ],
+            [
+              31,
+              25,
+              55
+            ],
+            [
+              199,
+              181,
+              255
+            ],
+            [
+              131,
+              117,
+              174
+            ],
+            [
+              36,
+              28,
+              62
+            ]
+          ]
+        },
+        {
+          "text": "Man Van",
+          "fg": [
+            255,
+            255,
+            255
+          ],
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20,
+          "fontWeight": 750,
+          "required": 3,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              242,
+              242,
+              244
+            ],
+            [
+              36,
+              28,
+              62
+            ],
+            [
+              103,
+              98,
+              123
+            ],
+            [
+              253,
+              253,
+              253
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ]
+        },
+        {
+          "text": "Overview",
+          "fg": [
+            255,
+            255,
+            255
+          ],
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 13,
+          "fontWeight": 600,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              108,
+              77,
+              194
+            ],
+            [
+              106,
+              76,
+              191
+            ],
+            [
+              104,
+              76,
+              188
+            ],
+            [
+              118,
+              94,
+              192
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ]
+        },
+        {
+          "text": "Jobs",
+          "fg": [
+            225,
+            220,
+            242
+          ],
+          "color": "rgb(225, 220, 242)",
+          "fontSize": 13,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.03,
+          "backgroundSamples": [
+            [
+              30,
+              26,
+              53
+            ],
+            [
+              222,
+              217,
+              239
+            ],
+            [
+              38,
+              34,
+              61
+            ],
+            [
+              174,
+              170,
+              194
+            ],
+            [
+              103,
+              97,
+              125
+            ]
+          ]
+        },
+        {
+          "text": "Liability",
+          "fg": [
+            225,
+            220,
+            242
+          ],
+          "color": "rgb(225, 220, 242)",
+          "fontSize": 13,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.67,
+          "backgroundSamples": [
+            [
+              31,
+              27,
+              55
+            ],
+            [
+              30,
+              26,
+              54
+            ],
+            [
+              175,
+              171,
+              194
+            ],
+            [
+              64,
+              59,
+              89
+            ],
+            [
+              90,
+              84,
+              114
+            ]
+          ]
+        },
+        {
+          "text": "Drivers",
+          "fg": [
+            225,
+            220,
+            242
+          ],
+          "color": "rgb(225, 220, 242)",
+          "fontSize": 13,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.28,
+          "backgroundSamples": [
+            [
+              31,
+              27,
+              55
+            ],
+            [
+              31,
+              27,
+              55
+            ],
+            [
+              74,
+              69,
+              96
+            ],
+            [
+              200,
+              195,
+              218
+            ],
+            [
+              185,
+              180,
+              204
+            ]
+          ]
+        },
+        {
+          "text": "Van",
+          "fg": [
+            225,
+            220,
+            242
+          ],
+          "color": "rgb(225, 220, 242)",
+          "fontSize": 13,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.32,
+          "backgroundSamples": [
+            [
+              198,
+              192,
+              215
+            ],
+            [
+              127,
+              123,
+              148
+            ],
+            [
+              31,
+              27,
+              55
+            ],
+            [
+              62,
+              57,
+              84
+            ],
+            [
+              31,
+              27,
+              55
+            ]
+          ]
+        },
+        {
+          "text": "Notifications & Alerts",
+          "fg": [
+            225,
+            220,
+            242
+          ],
+          "color": "rgb(225, 220, 242)",
+          "fontSize": 13,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.03,
+          "backgroundSamples": [
+            [
+              31,
+              28,
+              58
+            ],
+            [
+              64,
+              60,
+              88
+            ],
+            [
+              222,
+              217,
+              239
+            ],
+            [
+              38,
+              30,
+              67
+            ],
+            [
+              39,
+              31,
+              71
+            ]
+          ]
+        },
+        {
+          "text": "Live Fleet",
+          "fg": [
+            225,
+            220,
+            242
+          ],
+          "color": "rgb(225, 220, 242)",
+          "fontSize": 13,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              31,
+              28,
+              59
+            ],
+            [
+              44,
+              40,
+              72
+            ],
+            [
+              225,
+              220,
+              242
+            ],
+            [
+              172,
+              167,
+              191
+            ],
+            [
+              200,
+              195,
+              218
+            ]
+          ]
+        },
+        {
+          "text": "LIVE",
+          "fg": [
+            102,
+            221,
+            186
+          ],
+          "color": "rgb(102, 221, 186)",
+          "fontSize": 9,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              49,
+              115,
+              100
+            ],
+            [
+              20,
+              53,
+              49
+            ],
+            [
+              21,
+              56,
+              52
+            ],
+            [
+              55,
+              125,
+              107
+            ],
+            [
+              102,
+              221,
+              186
+            ]
+          ]
+        },
+        {
+          "text": "Configurations",
+          "fg": [
+            225,
+            220,
+            242
+          ],
+          "color": "rgb(225, 220, 242)",
+          "fontSize": 13,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.57,
+          "backgroundSamples": [
+            [
+              31,
+              31,
+              61
+            ],
+            [
+              156,
+              152,
+              177
+            ],
+            [
+              181,
+              176,
+              200
+            ],
+            [
+              173,
+              168,
+              192
+            ],
+            [
+              32,
+              28,
+              57
+            ]
+          ]
+        },
+        {
+          "text": "Overview",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 18,
+          "fontWeight": 650,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              25,
+              29,
+              54
+            ],
+            [
+              54,
+              56,
+              80
+            ],
+            [
+              51,
+              53,
+              77
+            ],
+            [
+              25,
+              29,
+              54
+            ],
+            [
+              241,
+              241,
+              252
+            ]
+          ]
+        },
+        {
+          "text": "⌘K",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 11,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.06,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              168,
+              172,
+              199
+            ],
+            [
+              26,
+              30,
+              54
+            ]
+          ]
+        },
+        {
+          "text": "Operations overview",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 28,
+          "fontWeight": 700,
+          "required": 3,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              169,
+              168,
+              186
+            ],
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              138,
+              137,
+              156
+            ],
+            [
+              72,
+              71,
+              95
+            ]
+          ]
+        },
+        {
+          "text": "to",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.43,
+          "backgroundSamples": [
+            [
+              126,
+              130,
+              157
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              127,
+              132,
+              158
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              142,
+              147,
+              173
+            ]
+          ]
+        },
+        {
+          "text": "Gross Revenue",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 13,
+          "fontWeight": 550,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              139,
+              143,
+              170
+            ],
+            [
+              34,
+              38,
+              64
+            ],
+            [
+              123,
+              127,
+              153
+            ],
+            [
+              36,
+              39,
+              66
+            ],
+            [
+              173,
+              177,
+              204
+            ]
+          ]
+        },
+        {
+          "text": "£",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 32,
+          "fontWeight": 700,
+          "required": 3,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              154,
+              156,
+              172
+            ],
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              30,
+              34,
+              57
+            ]
+          ]
+        },
+        {
+          "text": "9,749",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 32,
+          "fontWeight": 700,
+          "required": 3,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              29,
+              33,
+              57
+            ],
+            [
+              29,
+              33,
+              57
+            ],
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              241,
+              241,
+              252
+            ]
+          ]
+        },
+        {
+          "text": "Cash £",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              28,
+              32,
+              56
+            ],
+            [
+              87,
+              91,
+              117
+            ],
+            [
+              66,
+              70,
+              96
+            ],
+            [
+              170,
+              174,
+              201
+            ],
+            [
+              173,
+              177,
+              204
+            ]
+          ]
+        },
+        {
+          "text": "2,824",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.43,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              86,
+              90,
+              115
+            ],
+            [
+              144,
+              147,
+              174
+            ],
+            [
+              133,
+              137,
+              163
+            ]
+          ]
+        },
+        {
+          "text": "Card/bank £",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.38,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              145,
+              150,
+              177
+            ],
+            [
+              128,
+              132,
+              158
+            ],
+            [
+              52,
+              55,
+              80
+            ],
+            [
+              29,
+              32,
+              57
+            ]
+          ]
+        },
+        {
+          "text": "3,257",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.16,
+          "backgroundSamples": [
+            [
+              160,
+              164,
+              191
+            ],
+            [
+              28,
+              32,
+              58
+            ],
+            [
+              144,
+              148,
+              175
+            ],
+            [
+              73,
+              78,
+              104
+            ],
+            [
+              82,
+              85,
+              111
+            ]
+          ]
+        },
+        {
+          "text": "Total Moves",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 13,
+          "fontWeight": 550,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              145,
+              149,
+              176
+            ],
+            [
+              33,
+              38,
+              63
+            ],
+            [
+              37,
+              42,
+              67
+            ],
+            [
+              173,
+              177,
+              204
+            ],
+            [
+              115,
+              120,
+              146
+            ]
+          ]
+        },
+        {
+          "text": "36",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 32,
+          "fontWeight": 700,
+          "required": 3,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              29,
+              33,
+              57
+            ],
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              30,
+              34,
+              57
+            ],
+            [
+              65,
+              68,
+              89
+            ],
+            [
+              241,
+              241,
+              252
+            ]
+          ]
+        },
+        {
+          "text": "30",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              28,
+              32,
+              56
+            ],
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              27,
+              31,
+              55
+            ],
+            [
+              27,
+              31,
+              55
+            ],
+            [
+              111,
+              113,
+              132
+            ]
+          ]
+        },
+        {
+          "text": "delivered",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.1,
+          "backgroundSamples": [
+            [
+              157,
+              158,
+              175
+            ],
+            [
+              40,
+              44,
+              67
+            ],
+            [
+              96,
+              99,
+              118
+            ],
+            [
+              159,
+              161,
+              177
+            ],
+            [
+              230,
+              230,
+              242
+            ]
+          ]
+        },
+        {
+          "text": "•",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.84,
+          "backgroundSamples": [
+            [
+              72,
+              76,
+              101
+            ],
+            [
+              123,
+              128,
+              154
+            ],
+            [
+              45,
+              50,
+              73
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ]
+          ]
+        },
+        {
+          "text": "2",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.87,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              91,
+              95,
+              120
+            ],
+            [
+              122,
+              127,
+              153
+            ]
+          ]
+        },
+        {
+          "text": "active",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.11,
+          "backgroundSamples": [
+            [
+              40,
+              44,
+              68
+            ],
+            [
+              157,
+              162,
+              188
+            ],
+            [
+              122,
+              126,
+              152
+            ],
+            [
+              163,
+              168,
+              195
+            ],
+            [
+              36,
+              41,
+              64
+            ]
+          ]
+        },
+        {
+          "text": "Completion Rate",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 13,
+          "fontWeight": 550,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              42,
+              47,
+              70
+            ],
+            [
+              138,
+              143,
+              170
+            ],
+            [
+              71,
+              77,
+              101
+            ],
+            [
+              33,
+              42,
+              63
+            ],
+            [
+              173,
+              177,
+              204
+            ]
+          ]
+        },
+        {
+          "text": "83%",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 32,
+          "fontWeight": 700,
+          "required": 3,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              98,
+              101,
+              119
+            ],
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              28,
+              33,
+              57
+            ],
+            [
+              29,
+              34,
+              57
+            ]
+          ]
+        },
+        {
+          "text": "30",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              28,
+              32,
+              56
+            ],
+            [
+              173,
+              177,
+              204
+            ],
+            [
+              27,
+              31,
+              55
+            ],
+            [
+              27,
+              31,
+              55
+            ],
+            [
+              79,
+              83,
+              109
+            ]
+          ]
+        },
+        {
+          "text": "completed",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.1,
+          "backgroundSamples": [
+            [
+              37,
+              40,
+              65
+            ],
+            [
+              127,
+              131,
+              157
+            ],
+            [
+              61,
+              65,
+              90
+            ],
+            [
+              32,
+              36,
+              60
+            ],
+            [
+              165,
+              169,
+              195
+            ]
+          ]
+        },
+        {
+          "text": "of",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.19,
+          "backgroundSamples": [
+            [
+              158,
+              162,
+              189
+            ],
+            [
+              82,
+              86,
+              111
+            ],
+            [
+              30,
+              34,
+              58
+            ],
+            [
+              44,
+              48,
+              73
+            ],
+            [
+              26,
+              31,
+              55
+            ]
+          ]
+        },
+        {
+          "text": "36",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              173,
+              177,
+              204
+            ],
+            [
+              27,
+              31,
+              55
+            ],
+            [
+              36,
+              41,
+              66
+            ],
+            [
+              150,
+              154,
+              181
+            ]
+          ]
+        },
+        {
+          "text": "total",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.19,
+          "backgroundSamples": [
+            [
+              26,
+              31,
+              55
+            ],
+            [
+              158,
+              162,
+              189
+            ],
+            [
+              31,
+              37,
+              59
+            ],
+            [
+              75,
+              80,
+              104
+            ],
+            [
+              27,
+              33,
+              55
+            ]
+          ]
+        },
+        {
+          "text": "Avg Arrival Delay",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 13,
+          "fontWeight": 550,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              85,
+              88,
+              112
+            ],
+            [
+              173,
+              177,
+              204
+            ],
+            [
+              37,
+              39,
+              59
+            ],
+            [
+              57,
+              57,
+              78
+            ],
+            [
+              41,
+              42,
+              59
+            ]
+          ]
+        },
+        {
+          "text": "5",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 32,
+          "fontWeight": 700,
+          "required": 3,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              30,
+              34,
+              58
+            ],
+            [
+              119,
+              121,
+              139
+            ],
+            [
+              30,
+              34,
+              57
+            ],
+            [
+              31,
+              35,
+              58
+            ],
+            [
+              241,
+              241,
+              252
+            ]
+          ]
+        },
+        {
+          "text": "min",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 16,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.16,
+          "backgroundSamples": [
+            [
+              149,
+              154,
+              180
+            ],
+            [
+              126,
+              130,
+              155
+            ],
+            [
+              65,
+              70,
+              95
+            ],
+            [
+              160,
+              164,
+              191
+            ],
+            [
+              158,
+              162,
+              189
+            ]
+          ]
+        },
+        {
+          "text": "Within tolerance",
+          "fg": [
+            102,
+            221,
+            186
+          ],
+          "color": "rgb(102, 221, 186)",
+          "fontSize": 12,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 1.03,
+          "backgroundSamples": [
+            [
+              34,
+              54,
+              70
+            ],
+            [
+              100,
+              218,
+              184
+            ],
+            [
+              72,
+              149,
+              136
+            ],
+            [
+              37,
+              61,
+              75
+            ],
+            [
+              61,
+              120,
+              116
+            ]
+          ]
+        },
+        {
+          "text": "24",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.63,
+          "backgroundSamples": [
+            [
+              28,
+              32,
+              55
+            ],
+            [
+              28,
+              32,
+              55
+            ],
+            [
+              28,
+              31,
+              55
+            ],
+            [
+              48,
+              51,
+              75
+            ],
+            [
+              133,
+              137,
+              163
+            ]
+          ]
+        },
+        {
+          "text": "late starts",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 4.05,
+          "backgroundSamples": [
+            [
+              43,
+              47,
+              70
+            ],
+            [
+              71,
+              75,
+              98
+            ],
+            [
+              30,
+              34,
+              55
+            ],
+            [
+              50,
+              54,
+              77
+            ],
+            [
+              31,
+              34,
+              56
+            ]
+          ]
+        },
+        {
+          "text": "Top Drivers",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 19,
+          "fontWeight": 600,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              34,
+              37,
+              61
+            ],
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              185,
+              186,
+              202
+            ],
+            [
+              234,
+              234,
+              246
+            ],
+            [
+              28,
+              32,
+              56
+            ]
+          ]
+        },
+        {
+          "text": "View all",
+          "fg": [
+            183,
+            164,
+            255
+          ],
+          "color": "rgb(183, 164, 255)",
+          "fontSize": 14.5,
+          "fontWeight": 600,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              30,
+              37,
+              63
+            ],
+            [
+              147,
+              134,
+              210
+            ],
+            [
+              183,
+              164,
+              255
+            ],
+            [
+              32,
+              38,
+              63
+            ],
+            [
+              114,
+              107,
+              169
+            ]
+          ]
+        },
+        {
+          "text": "Sample Driver",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 17,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 1.12,
+          "backgroundSamples": [
+            [
+              27,
+              31,
+              55
+            ],
+            [
+              118,
+              121,
+              140
+            ],
+            [
+              228,
+              228,
+              241
+            ],
+            [
+              98,
+              102,
+              122
+            ],
+            [
+              196,
+              197,
+              210
+            ]
+          ]
+        },
+        {
+          "text": "21",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 4.16,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              48,
+              51,
+              76
+            ],
+            [
+              26,
+              30,
+              55
+            ],
+            [
+              27,
+              31,
+              55
+            ],
+            [
+              70,
+              73,
+              98
+            ]
+          ]
+        },
+        {
+          "text": "delivered",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.07,
+          "backgroundSamples": [
+            [
+              27,
+              32,
+              57
+            ],
+            [
+              167,
+              171,
+              198
+            ],
+            [
+              112,
+              116,
+              142
+            ],
+            [
+              128,
+              132,
+              158
+            ],
+            [
+              96,
+              100,
+              126
+            ]
+          ]
+        },
+        {
+          "text": "24",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 14,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 1.01,
+          "backgroundSamples": [
+            [
+              30,
+              36,
+              62
+            ],
+            [
+              240,
+              240,
+              251
+            ],
+            [
+              68,
+              73,
+              96
+            ],
+            [
+              30,
+              36,
+              62
+            ],
+            [
+              132,
+              135,
+              154
+            ]
+          ]
+        },
+        {
+          "text": "Second Sample Driver",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 17,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              27,
+              31,
+              56
+            ],
+            [
+              27,
+              32,
+              56
+            ],
+            [
+              27,
+              32,
+              57
+            ],
+            [
+              94,
+              98,
+              118
+            ]
+          ]
+        },
+        {
+          "text": "9",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              81,
+              85,
+              110
+            ],
+            [
+              156,
+              160,
+              187
+            ],
+            [
+              173,
+              177,
+              204
+            ],
+            [
+              101,
+              105,
+              131
+            ]
+          ]
+        },
+        {
+          "text": "delivered",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.67,
+          "backgroundSamples": [
+            [
+              95,
+              99,
+              125
+            ],
+            [
+              119,
+              123,
+              149
+            ],
+            [
+              74,
+              78,
+              103
+            ],
+            [
+              54,
+              58,
+              82
+            ],
+            [
+              131,
+              135,
+              161
+            ]
+          ]
+        },
+        {
+          "text": "11",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 14,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              28,
+              34,
+              60
+            ],
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              28,
+              34,
+              60
+            ],
+            [
+              29,
+              34,
+              60
+            ],
+            [
+              28,
+              34,
+              60
+            ]
+          ]
+        },
+        {
+          "text": "Driver Without Jobs",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 17,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              27,
+              31,
+              55
+            ],
+            [
+              27,
+              31,
+              56
+            ],
+            [
+              241,
+              241,
+              252
+            ]
+          ]
+        },
+        {
+          "text": "0",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.03,
+          "backgroundSamples": [
+            [
+              79,
+              83,
+              108
+            ],
+            [
+              133,
+              137,
+              163
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              170,
+              174,
+              201
+            ]
+          ]
+        },
+        {
+          "text": "delivered",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.67,
+          "backgroundSamples": [
+            [
+              95,
+              99,
+              125
+            ],
+            [
+              119,
+              123,
+              149
+            ],
+            [
+              74,
+              78,
+              103
+            ],
+            [
+              53,
+              57,
+              82
+            ],
+            [
+              131,
+              135,
+              161
+            ]
+          ]
+        },
+        {
+          "text": "0",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 14,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              241,
+              241,
+              252
+            ],
+            [
+              160,
+              162,
+              178
+            ],
+            [
+              28,
+              33,
+              57
+            ],
+            [
+              87,
+              90,
+              111
+            ],
+            [
+              157,
+              159,
+              175
+            ]
+          ]
+        },
+        {
+          "text": "Revenue Velocity",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 19,
+          "fontWeight": 600,
+          "required": 4.5,
+          "minimum": 1.03,
+          "backgroundSamples": [
+            [
+              34,
+              36,
+              64
+            ],
+            [
+              238,
+              238,
+              249
+            ],
+            [
+              34,
+              36,
+              63
+            ],
+            [
+              155,
+              156,
+              173
+            ],
+            [
+              202,
+              202,
+              216
+            ]
+          ]
+        },
+        {
+          "text": "Daily billed move turnover",
+          "fg": [
+            173,
+            177,
+            204
+          ],
+          "color": "rgb(173, 177, 204)",
+          "fontSize": 14,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.22,
+          "backgroundSamples": [
+            [
+              33,
+              36,
+              63
+            ],
+            [
+              33,
+              36,
+              62
+            ],
+            [
+              155,
+              160,
+              187
+            ],
+            [
+              32,
+              35,
+              62
+            ],
+            [
+              32,
+              35,
+              61
+            ]
+          ]
+        },
+        {
+          "text": "05/10/26",
+          "fg": [
+            176,
+            181,
+            209
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.48,
+          "backgroundSamples": [
+            [
+              140,
+              144,
+              172
+            ],
+            [
+              62,
+              66,
+              91
+            ],
+            [
+              82,
+              86,
+              112
+            ],
+            [
+              143,
+              148,
+              175
+            ],
+            [
+              137,
+              142,
+              168
+            ]
+          ]
+        },
+        {
+          "text": "06/10/26",
+          "fg": [
+            176,
+            181,
+            209
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 2.55,
+          "backgroundSamples": [
+            [
+              103,
+              108,
+              134
+            ],
+            [
+              32,
+              36,
+              60
+            ],
+            [
+              42,
+              45,
+              70
+            ],
+            [
+              44,
+              49,
+              73
+            ],
+            [
+              95,
+              100,
+              125
+            ]
+          ]
+        },
+        {
+          "text": "07/10/26",
+          "fg": [
+            176,
+            181,
+            209
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.88,
+          "backgroundSamples": [
+            [
+              65,
+              69,
+              94
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              82,
+              86,
+              112
+            ],
+            [
+              124,
+              130,
+              156
+            ]
+          ]
+        },
+        {
+          "text": "08/10/26",
+          "fg": [
+            176,
+            181,
+            209
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.48,
+          "backgroundSamples": [
+            [
+              140,
+              144,
+              172
+            ],
+            [
+              62,
+              66,
+              91
+            ],
+            [
+              82,
+              86,
+              112
+            ],
+            [
+              143,
+              148,
+              175
+            ],
+            [
+              137,
+              142,
+              168
+            ]
+          ]
+        },
+        {
+          "text": "09/10/26",
+          "fg": [
+            176,
+            181,
+            209
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 2.55,
+          "backgroundSamples": [
+            [
+              103,
+              108,
+              134
+            ],
+            [
+              32,
+              36,
+              60
+            ],
+            [
+              42,
+              45,
+              70
+            ],
+            [
+              44,
+              49,
+              73
+            ],
+            [
+              95,
+              100,
+              125
+            ]
+          ]
+        },
+        {
+          "text": "11/10/26",
+          "fg": [
+            176,
+            181,
+            209
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.88,
+          "backgroundSamples": [
+            [
+              29,
+              33,
+              56
+            ],
+            [
+              32,
+              36,
+              60
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              44,
+              49,
+              73
+            ],
+            [
+              124,
+              130,
+              156
+            ]
+          ]
+        },
+        {
+          "text": "£0",
+          "fg": [
+            176,
+            181,
+            209
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1.55,
+          "backgroundSamples": [
+            [
+              62,
+              66,
+              91
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              40,
+              44,
+              68
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              140,
+              144,
+              172
+            ]
+          ]
+        },
+        {
+          "text": "£450",
+          "fg": [
+            176,
+            181,
+            209
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              176,
+              181,
+              209
+            ],
+            [
+              98,
+              103,
+              130
+            ],
+            [
+              27,
+              31,
+              56
+            ],
+            [
+              121,
+              125,
+              152
+            ],
+            [
+              27,
+              31,
+              55
+            ]
+          ]
+        },
+        {
+          "text": "£900",
+          "fg": [
+            176,
+            181,
+            209
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              176,
+              181,
+              209
+            ],
+            [
+              159,
+              164,
+              192
+            ],
+            [
+              48,
+              50,
+              77
+            ],
+            [
+              150,
+              154,
+              182
+            ],
+            [
+              29,
+              33,
+              57
+            ]
+          ]
+        },
+        {
+          "text": "£1350",
+          "fg": [
+            176,
+            181,
+            209
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "required": 4.5,
+          "minimum": 1,
+          "backgroundSamples": [
+            [
+              176,
+              181,
+              209
+            ],
+            [
+              33,
+              37,
+              62
+            ],
+            [
+              176,
+              181,
+              209
+            ],
+            [
+              44,
+              48,
+              75
+            ],
+            [
+              30,
+              34,
+              60
+            ]
+          ]
+        }
+      ],
+      "passed": false
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "position": "top",
+      "checked": 152,
+      "minimum": 1.7,
+      "failures": [
+        {
+          "text": "Sample Driver",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 15,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 1.7,
+          "backgroundSamples": [
+            [
+              24,
+              28,
+              51
+            ],
+            [
+              24,
+              28,
+              51
+            ],
+            [
+              24,
+              28,
+              51
+            ],
+            [
+              24,
+              28,
+              51
+            ],
+            [
+              95,
+              207,
+              176
+            ]
+          ]
+        },
+        {
+          "text": "Sample Driver",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 15,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 1.7,
+          "backgroundSamples": [
+            [
+              25,
+              28,
+              51
+            ],
+            [
+              25,
+              28,
+              51
+            ],
+            [
+              25,
+              28,
+              51
+            ],
+            [
+              25,
+              28,
+              51
+            ],
+            [
+              95,
+              207,
+              176
+            ]
+          ]
+        }
+      ],
+      "passed": false
+    },
+    {
+      "name": "drivers",
+      "theme": "dark",
+      "position": "top",
+      "checked": 100,
+      "minimum": 2.46,
+      "failures": [
+        {
+          "text": "Second Sample Driver",
+          "fg": [
+            241,
+            241,
+            252
+          ],
+          "color": "rgb(241, 241, 252)",
+          "fontSize": 16,
+          "fontWeight": 700,
+          "required": 4.5,
+          "minimum": 2.46,
+          "backgroundSamples": [
+            [
+              23,
+              28,
+              50
+            ],
+            [
+              23,
+              28,
+              50
+            ],
+            [
+              23,
+              28,
+              50
+            ],
+            [
+              23,
+              28,
+              51
+            ],
+            [
+              16,
+              177,
+              124
+            ]
+          ]
+        }
+      ],
+      "passed": false
+    },
+    {
+      "name": "vehicles",
+      "theme": "dark",
+      "position": "top",
+      "checked": 75,
+      "minimum": 4.75,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "dark",
+      "position": "top",
+      "checked": 54,
+      "minimum": 3.17,
+      "failures": [
+        {
+          "text": "DEMO-001",
+          "fg": [
+            37,
+            99,
+            235
+          ],
+          "color": "rgb(37, 99, 235)",
+          "fontSize": 14,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 3.17,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ]
+          ]
+        },
+        {
+          "text": "DEMO-002",
+          "fg": [
+            37,
+            99,
+            235
+          ],
+          "color": "rgb(37, 99, 235)",
+          "fontSize": 14,
+          "fontWeight": 500,
+          "required": 4.5,
+          "minimum": 3.17,
+          "backgroundSamples": [
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ],
+            [
+              26,
+              30,
+              54
+            ]
+          ]
+        }
+      ],
+      "passed": false
+    },
+    {
+      "name": "alerts",
+      "theme": "dark",
+      "position": "top",
+      "checked": 53,
+      "minimum": 6.09,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "position": "top",
+      "checked": 33,
+      "minimum": 6.08,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "dark",
+      "position": "top",
+      "checked": 55,
+      "minimum": 6.04,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "dark",
+      "position": "top",
+      "checked": 53,
+      "minimum": 6.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "position": "top",
+      "checked": 68,
+      "minimum": 7.07,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 68,
+      "minimum": 7.07,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "position": "top",
+      "checked": 54,
+      "minimum": 7.13,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 54,
+      "minimum": 7.13,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "position": "top",
+      "checked": 50,
+      "minimum": 7.21,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 50,
+      "minimum": 7.21,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "dark",
+      "position": "top",
+      "checked": 55,
+      "minimum": 7.25,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "dark",
+      "position": "top",
+      "checked": 48,
+      "minimum": 6.79,
+      "failures": [],
+      "passed": true
+    }
+  ],
+  "papers": [
+    {
+      "theme": "light",
+      "width": 390,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 390,
+        "bottom": 844,
+        "width": 390,
+        "height": 844,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "width": 768,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 768,
+        "bottom": 1000,
+        "width": 768,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1366,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 1366,
+        "bottom": 1000,
+        "width": 1366,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 1920,
+        "bottom": 1000,
+        "width": 1920,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 390,
+        "bottom": 844,
+        "width": 390,
+        "height": 844,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 768,
+        "bottom": 1000,
+        "width": 768,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1366,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 1366,
+        "bottom": 1000,
+        "width": 1366,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 1920,
+        "bottom": 1000,
+        "width": 1920,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "dossier",
+      "pages": 2,
+      "previewTextMatchesOriginal": true,
+      "printTextMatchesOriginal": true
+    },
+    {
+      "kind": "submission",
+      "pages": 2,
+      "previewTextMatchesOriginal": true,
+      "printTextMatchesOriginal": true
+    }
+  ],
+  "sanitizedFixture": true,
+  "base": "http://localhost:3013",
+  "baseline": "http://localhost:3014",
+  "runtimeErrors": [],
+  "unhandledApiPaths": [],
+  "mutations": [],
+  "contrastMethod": "Visible direct text-node runs; foreground from computed styles; five rendered background pixels per line after temporarily hiding glyphs, preserving color/currentColor and layout. Includes gradients and translucent/backdrop surfaces. WCAG AA 4.5 normal / 3 large; disabled controls excluded."
+}

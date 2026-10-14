@@ -2,8 +2,15 @@
  * the existing report/PDF renderers and print styling unchanged. */
 @media screen {
   .ui-only-overview {
+    --ui-only-overview-glass: var(--aurora-glass, color-mix(in srgb, var(--aurora-card, #fff) 89%, transparent));
+    --ui-only-overview-rim: rgb(255 255 255 / 72%);
     min-width: 0;
     max-width: 1520px;
+  }
+
+  html[data-dashboard-theme="dark"] .ui-only-overview {
+    --ui-only-overview-glass: var(--aurora-glass, color-mix(in srgb, var(--aurora-card, #1a1e36) 87%, transparent));
+    --ui-only-overview-rim: rgb(255 255 255 / 7%);
   }
 
   .ui-only-overview-header {
@@ -16,39 +23,45 @@
 
   .ui-only-overview-title {
     font-size: 28px;
-    font-weight: 650;
+    font-weight: 700;
     line-height: 1.25;
     letter-spacing: -0.9px;
     color: var(--aurora-ink, #1b1b35);
   }
 
   .ui-only-overview-tabs {
-    border-color: var(--aurora-line, #e2e2ef);
-    background: rgb(var(--admin-surface, 244 243 251));
+    border-color: color-mix(in srgb, var(--aurora-line, #e2e2ef) 85%, transparent);
+    background: color-mix(in srgb, var(--aurora-card, #fff) 70%, transparent);
     padding: 4px;
-    border-radius: 13px;
+    border-radius: 15px;
     gap: 4px;
+    box-shadow: var(--aurora-glass-shadow, var(--aurora-shadow, none));
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
   .ui-only-overview-tabs [role="radio"] {
     height: 42px;
     padding: 0 18px;
-    border-radius: 10px;
+    border-radius: 11px;
     font-size: 14px;
+    transition: background-color 160ms ease, box-shadow 160ms ease;
   }
 
   html[data-dashboard-theme] .ui-only-overview .ui-only-overview-tabs [role="radio"][aria-checked="true"] {
-    background: #6946c8;
+    background: linear-gradient(120deg, #7650d8, #6040bd);
     color: #fff;
-    box-shadow: 0 3px 8px rgb(75 48 153 / 18%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 18%), 0 4px 10px rgb(75 48 153 / 23%);
   }
 
   .ui-only-overview-filters > div {
     padding: 12px 16px;
     border-radius: 16px;
     border-color: var(--aurora-line, #e2e2ef);
-    background: var(--aurora-card, #fff);
-    box-shadow: var(--aurora-shadow, none);
+    background: var(--ui-only-overview-glass);
+    box-shadow: var(--aurora-glass-shadow, var(--aurora-shadow, none));
+    -webkit-backdrop-filter: blur(12px) saturate(115%);
+    backdrop-filter: blur(12px) saturate(115%);
   }
 
   .ui-only-overview-summary {
@@ -78,16 +91,31 @@
 
   .ui-only-overview .ui-only-overview-metric {
     --ui-only-overview-tone: var(--aurora-chart-violet, #7453df);
+    position: relative;
+    isolation: isolate;
     min-width: 0;
     min-height: 157px;
     justify-content: flex-start;
     gap: 6px;
     padding: 20px;
-    border: 1px solid var(--aurora-line, #e2e2ef);
+    border: 1px solid color-mix(in srgb, var(--ui-only-overview-tone) 22%, var(--aurora-line, #e2e2ef));
     border-radius: 19px;
-    background: var(--aurora-card, #fff);
-    background-image: radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--ui-only-overview-tone) 11%, transparent), transparent 72%);
-    box-shadow: var(--aurora-shadow, none);
+    background: var(--ui-only-overview-glass);
+    background-image: radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--ui-only-overview-tone) 15%, transparent), transparent 69%), linear-gradient(140deg, rgb(255 255 255 / 5%), transparent 45%);
+    box-shadow: var(--aurora-glass-shadow, var(--aurora-shadow, none));
+    -webkit-backdrop-filter: blur(12px) saturate(115%);
+    backdrop-filter: blur(12px) saturate(115%);
+    transition: transform 180ms var(--aurora-ease, ease), box-shadow 180ms var(--aurora-ease, ease), border-color 180ms var(--aurora-ease, ease);
+  }
+
+  .ui-only-overview .ui-only-overview-metric::before {
+    content: "";
+    position: absolute;
+    inset: -1px 20px auto;
+    height: 3px;
+    border-radius: 0 0 4px 4px;
+    background: linear-gradient(90deg, var(--ui-only-overview-tone), color-mix(in srgb, var(--ui-only-overview-tone) 18%, transparent));
+    pointer-events: none;
   }
 
   .ui-only-overview .ui-only-overview-metric-moves {
@@ -116,13 +144,15 @@
   }
 
   .ui-only-overview-metric-label > svg {
-    width: 31px;
-    height: 31px;
+    width: 35px;
+    height: 35px;
     flex-shrink: 0;
-    padding: 7px;
+    padding: 8px;
     color: var(--ui-only-overview-tone);
-    background: color-mix(in srgb, var(--ui-only-overview-tone) 11%, transparent);
-    border-radius: 9px;
+    background: color-mix(in srgb, var(--ui-only-overview-tone) 13%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ui-only-overview-tone) 16%, transparent);
+    border-radius: 11px;
+    box-shadow: inset 0 1px 0 var(--ui-only-overview-rim);
   }
 
   .ui-only-overview-metric-value {
@@ -151,20 +181,24 @@
     min-width: 0;
     margin: 0;
     padding: 23px;
-    border: 1px solid var(--aurora-line, #e2e2ef);
+    border: 1px solid color-mix(in srgb, var(--aurora-line, #e2e2ef) 85%, transparent);
     border-radius: 20px;
-    background: var(--aurora-card, #fff);
-    box-shadow: var(--aurora-shadow, none);
+    background: var(--ui-only-overview-glass);
+    box-shadow: var(--aurora-glass-shadow, var(--aurora-shadow, none));
+    -webkit-backdrop-filter: blur(12px) saturate(115%);
+    backdrop-filter: blur(12px) saturate(115%);
   }
 
   .ui-only-overview-revenue {
     grid-column: 1 / span 8;
     grid-row: 2;
+    background-image: radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--aurora-chart-violet, #7453df) 6%, transparent), transparent 56%);
   }
 
   .ui-only-overview-drivers {
     grid-column: 9 / -1;
     grid-row: 2;
+    background-image: radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--aurora-chart-blue, #3774de) 6%, transparent), transparent 60%);
   }
 
   .ui-only-overview :is(.ui-only-overview-revenue, .ui-only-overview-drivers) h3 {
@@ -183,6 +217,14 @@
     height: 285px;
   }
 
+  .ui-only-overview-revenue-chart .recharts-area-curve {
+    filter: drop-shadow(0 3px 4px color-mix(in srgb, var(--aurora-chart-violet, #7453df) 15%, transparent));
+  }
+
+  .ui-only-overview-revenue-chart .recharts-tooltip-wrapper {
+    z-index: 2;
+  }
+
   .ui-only-overview-drivers > :first-child {
     gap: 12px;
     margin-bottom: 18px;
@@ -198,9 +240,28 @@
   }
 
   .ui-only-overview-driver-row {
+    --ui-only-overview-driver-tone: var(--aurora-chart-violet, #7453df);
     min-height: 58px;
     gap: 12px;
-    padding: 10px 0;
+    padding: 10px 4px;
+    border-radius: 11px;
+    transition: background-color 160ms ease;
+  }
+
+  .ui-only-overview-driver-row:nth-child(2) {
+    --ui-only-overview-driver-tone: var(--aurora-chart-blue, #3774de);
+  }
+
+  .ui-only-overview-driver-row:nth-child(3) {
+    --ui-only-overview-driver-tone: var(--aurora-chart-teal, #149c80);
+  }
+
+  .ui-only-overview-driver-row:nth-child(4) {
+    --ui-only-overview-driver-tone: var(--aurora-chart-amber, #c18117);
+  }
+
+  .ui-only-overview-driver-row:nth-child(5) {
+    --ui-only-overview-driver-tone: var(--aurora-chart-coral, #d4496b);
   }
 
   .ui-only-overview-driver-row + .ui-only-overview-driver-row {
@@ -219,7 +280,9 @@
   .ui-only-overview .ui-only-overview-driver-avatar {
     flex-shrink: 0;
     color: rgb(var(--admin-brand, 101 72 213));
-    background: rgb(var(--admin-brand-soft, 237 231 255));
+    background: color-mix(in srgb, var(--ui-only-overview-driver-tone) 12%, var(--aurora-card, #fff));
+    border: 1px solid color-mix(in srgb, var(--ui-only-overview-driver-tone) 25%, transparent);
+    box-shadow: inset 0 1px 0 var(--ui-only-overview-rim);
   }
 
   .ui-only-overview .rpt-breakdown-summary {
@@ -227,8 +290,10 @@
     padding: 22px;
     border: 1px solid var(--aurora-line, #e2e2ef);
     border-radius: 20px;
-    background: var(--aurora-card, #fff);
-    box-shadow: var(--aurora-shadow, none);
+    background: var(--ui-only-overview-glass);
+    box-shadow: var(--aurora-glass-shadow, var(--aurora-shadow, none));
+    -webkit-backdrop-filter: blur(12px) saturate(115%);
+    backdrop-filter: blur(12px) saturate(115%);
   }
 
   .ui-only-overview .rpt-breakdown-summary > .overflow-x-auto {
@@ -252,6 +317,65 @@
     min-height: 42px;
     border-radius: 10px;
     background: rgb(var(--admin-brand-soft, 237 231 255));
+  }
+
+  @keyframes ui-only-overview-entrance {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  .ui-only-overview .ui-only-overview-metric,
+  .ui-only-overview .rpt-breakdown-summary {
+    animation: ui-only-overview-entrance 420ms var(--aurora-ease, cubic-bezier(.2, .7, .2, 1)) backwards;
+  }
+
+  .ui-only-overview .ui-only-overview-metric:nth-child(2) {
+    animation-delay: 35ms;
+  }
+
+  .ui-only-overview .ui-only-overview-metric:nth-child(3) {
+    animation-delay: 70ms;
+  }
+
+  .ui-only-overview .ui-only-overview-metric:nth-child(4) {
+    animation-delay: 105ms;
+  }
+
+  .ui-only-overview .ui-only-overview-revenue,
+  .ui-only-overview .ui-only-overview-drivers {
+    animation: ui-only-overview-entrance 460ms var(--aurora-ease, cubic-bezier(.2, .7, .2, 1)) backwards;
+  }
+
+  .ui-only-overview .ui-only-overview-revenue {
+    animation-delay: 90ms;
+  }
+
+  .ui-only-overview .ui-only-overview-drivers {
+    animation-delay: 120ms;
+  }
+}
+
+@media screen and (hover: hover) and (pointer: fine) {
+  .ui-only-overview .ui-only-overview-metric:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--ui-only-overview-tone) 38%, var(--aurora-line, #e2e2ef));
+    box-shadow: inset 0 1px 0 var(--ui-only-overview-rim), var(--aurora-shadow-raised, none);
+  }
+
+  .ui-only-overview-driver-row:hover {
+    background: color-mix(in srgb, var(--ui-only-overview-driver-tone) 5%, transparent);
+  }
+
+  html[data-dashboard-theme] .ui-only-overview-tabs [role="radio"][aria-checked="false"]:hover {
+    background: color-mix(in srgb, var(--aurora-chart-violet, #7453df) 9%, transparent);
   }
 }
 
@@ -321,8 +445,8 @@
   }
 
   .ui-only-overview-metric-label > svg {
-    width: 27px;
-    height: 27px;
+    width: 29px;
+    height: 29px;
     padding: 5px;
   }
 
@@ -347,5 +471,56 @@
 @media screen and (max-width: 359px) {
   .ui-only-overview-metrics {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .ui-only-overview .ui-only-overview-metric,
+  .ui-only-overview .ui-only-overview-revenue,
+  .ui-only-overview .ui-only-overview-drivers,
+  .ui-only-overview .rpt-breakdown-summary {
+    animation: none;
+    transform: none;
+  }
+
+  .ui-only-overview .ui-only-overview-metric,
+  .ui-only-overview .ui-only-overview-tabs [role="radio"],
+  .ui-only-overview .ui-only-overview-driver-row,
+  .ui-only-overview .ui-only-overview-driver-avatar {
+    transition: none;
+  }
+
+  .ui-only-overview .ui-only-overview-metric:hover {
+    transform: none;
+  }
+}
+
+/* The surface stays usable when a browser cannot blur it or the user asks for
+ * opaque presentation. These rules cover only Overview UI, never PDF pages. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  @media screen {
+    .ui-only-overview .ui-only-overview-tabs,
+    .ui-only-overview .ui-only-overview-filters > div,
+    .ui-only-overview .ui-only-overview-metric,
+    .ui-only-overview .ui-only-overview-revenue,
+    .ui-only-overview .ui-only-overview-drivers,
+    .ui-only-overview .rpt-breakdown-summary {
+      background-color: var(--aurora-card, #fff);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+}
+
+@media screen and (prefers-reduced-transparency: reduce) {
+  .ui-only-overview .ui-only-overview-tabs,
+  .ui-only-overview .ui-only-overview-filters > div,
+  .ui-only-overview .ui-only-overview-metric,
+  .ui-only-overview .ui-only-overview-revenue,
+  .ui-only-overview .ui-only-overview-drivers,
+  .ui-only-overview .rpt-breakdown-summary {
+    background-color: var(--aurora-card, #fff);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }

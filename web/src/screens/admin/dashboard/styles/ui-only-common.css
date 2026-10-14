@@ -22,16 +22,17 @@
 
   html[data-dashboard-theme] .ops-shell main [class~="rounded-[6px]"] {
     border-radius: 18px;
-    border-color: var(--aurora-line);
-    box-shadow: var(--aurora-shadow);
+    border-color: var(--aurora-glass-line, var(--aurora-line));
+    background: var(--aurora-glass, var(--aurora-card));
+    box-shadow: var(--aurora-glass-shadow, var(--aurora-shadow));
   }
 
   html[data-dashboard-theme] .ops-shell main div:has(> [role="group"][aria-label="Date filters"]) {
     padding: 14px 16px;
     border-radius: 16px;
-    background: var(--aurora-card);
-    border-color: var(--aurora-line);
-    box-shadow: var(--aurora-shadow);
+    background: var(--aurora-glass, var(--aurora-card));
+    border-color: var(--aurora-glass-line, var(--aurora-line));
+    box-shadow: var(--aurora-glass-shadow, var(--aurora-shadow));
   }
 
   html[data-dashboard-theme] .ops-shell main [role="group"][aria-label="Other filters"] {
@@ -42,6 +43,10 @@
 
   html[data-dashboard-theme] .ops-shell main [role="group"][aria-label="Date filters"] {
     gap: 12px;
+  }
+
+  html[data-dashboard-theme] .ops-shell main :is(.text-blue-600, [class~="text-[#2563EB]"]):not(:where(.report-document, .report-document *, .report-preview-document *)) {
+    color: rgb(var(--admin-brand));
   }
 
   html[data-dashboard-theme] .ops-shell main table:not(.report-document table) {
@@ -98,6 +103,69 @@
 
   html[data-dashboard-theme] .ops-shell main [class~="shadow-sm"]:not(.report-document *) {
     box-shadow: var(--aurora-shadow);
+  }
+
+  html[data-dashboard-theme] .ops-shell main article:not(:where(.report-document, .report-document *, .report-preview-document *)) {
+    border-color: var(--aurora-glass-line, var(--aurora-line));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--aurora-accent-violet, #8055eb) 4%, transparent), transparent 50%), var(--aurora-glass, var(--aurora-card));
+    box-shadow: var(--aurora-glass-shadow, var(--aurora-shadow));
+    transition: transform 180ms var(--aurora-ease, ease), border-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  /* A hovering card creates a stacking context. Keep an open action menu above
+   * neighbouring cards and hold its position while the user chooses an action. */
+  html[data-dashboard-theme] .ops-shell main article:has(button[aria-label^="Actions for job"] + div) {
+    position: relative;
+    z-index: 3;
+    transform: none;
+  }
+
+  html[data-dashboard-theme] .ops-shell main :is(input, select, textarea):focus-visible:not(.report-document *) {
+    border-color: rgb(var(--admin-brand));
+    box-shadow: 0 0 0 4px rgb(var(--admin-brand) / .1);
+  }
+
+  html[data-dashboard-theme] .ops-shell main [role="radiogroup"] {
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .08);
+  }
+
+  html[data-dashboard-theme] .ops-shell main [role="radiogroup"] [role="radio"][aria-checked="true"] {
+    background: linear-gradient(135deg, #6946c8, #5533af);
+    box-shadow: 0 4px 12px -5px rgb(105 70 200 / .6), inset 0 1px 0 rgb(255 255 255 / .24);
+  }
+}
+
+/* Restrict blur to the top filter surface; dense record lists remain inexpensive.
+ * These panels do not contain the application's fixed record/PDF drawers. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  @media screen and (min-width: 768px) {
+    html[data-dashboard-theme] .ops-shell main div:has(> [role="group"][aria-label="Date filters"]) {
+      -webkit-backdrop-filter: blur(14px) saturate(130%);
+      backdrop-filter: blur(14px) saturate(130%);
+    }
+  }
+}
+
+@media screen and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html[data-dashboard-theme] .ops-shell main article:hover:not(:where(.report-document, .report-document *, .report-preview-document *)) {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--aurora-accent-violet, #8055eb) 30%, var(--aurora-line));
+    box-shadow: var(--aurora-shadow-raised);
+  }
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  html[data-dashboard-theme] .ops-shell main article { transition: none; transform: none; }
+}
+
+@media screen and (prefers-reduced-transparency: reduce) {
+  html[data-dashboard-theme] .ops-shell main :is(article, [class~="rounded-[6px]"]) {
+    background: var(--aurora-card);
+  }
+  html[data-dashboard-theme] .ops-shell main div:has(> [role="group"][aria-label="Date filters"]) {
+    background: var(--aurora-card);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 

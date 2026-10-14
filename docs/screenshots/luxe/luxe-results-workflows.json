@@ -1,0 +1,272 @@
+{
+  "workflows": [
+    {
+      "name": "Motion enabled entrances settle visibly without persistent content transforms",
+      "theme": "light",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion keeps metrics and report content static and visible",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Reduced transparency uses opaque glass fallback",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": false,
+      "error": "inline-flex items-center gap-0.5 rounded-control border border-line bg-surface-sunken p-0.5 ui-only-overview-tabs disables backdrop\n+ actual - expected\n\n+ 'blur(12px)'\n- 'none'\n"
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": false,
+      "error": "locator.waitFor: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('main').getByRole('button').filter({ hasText: 'DEMO-001' }).first() to be visible\u001b[22m\n"
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 768,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "light",
+      "width": 1920,
+      "motion": "no-preference",
+      "passed": false,
+      "error": "locator.waitFor: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('main').getByRole('button').filter({ hasText: 'DEMO-001' }).first() to be visible\u001b[22m\n"
+    },
+    {
+      "name": "Keyboard focus, account popup and notification popup remain visible above glass",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Motion enabled entrances settle visibly without persistent content transforms",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": false,
+      "error": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('radio', { name: 'Overview', exact: true })\u001b[22m\n"
+    },
+    {
+      "name": "Reduced motion keeps metrics and report content static and visible",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Reduced transparency uses opaque glass fallback",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": false,
+      "error": "inline-flex items-center gap-0.5 rounded-control border border-line bg-surface-sunken p-0.5 ui-only-overview-tabs disables backdrop\n+ actual - expected\n\n+ 'blur(12px)'\n- 'none'\n"
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 768,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job and PDF overlays stay anchored to the entire viewport",
+      "theme": "dark",
+      "width": 1920,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Keyboard focus, account popup and notification popup remain visible above glass",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": true
+    },
+    {
+      "name": "Preview and print text stay identical to the uploaded original",
+      "theme": "light",
+      "width": 1366,
+      "motion": "reduce",
+      "passed": false,
+      "error": "locator.waitFor: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('main').getByRole('button').filter({ hasText: 'DEMO-001' }).first() to be visible\u001b[22m\n"
+    }
+  ],
+  "wide": [],
+  "contrast": [],
+  "papers": [
+    {
+      "theme": "light",
+      "width": 768,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 768,
+        "bottom": 1000,
+        "width": 768,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1366,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 1366,
+        "bottom": 1000,
+        "width": 1366,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 390,
+        "bottom": 844,
+        "width": 390,
+        "height": 844,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 768,
+        "bottom": 1000,
+        "width": 768,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1366,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 1366,
+        "bottom": 1000,
+        "width": 1366,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "pages": 2,
+      "overlay": {
+        "left": 0,
+        "top": 0,
+        "right": 1920,
+        "bottom": 1000,
+        "width": 1920,
+        "height": 1000,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "className": "fixed inset-0 z-[100] overflow-hidden bg-admin-ink/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6",
+            "transform": "none",
+            "backdropFilter": "blur(4px)",
+            "filter": "none"
+          }
+        ]
+      }
+    }
+  ],
+  "sanitizedFixture": true,
+  "base": "http://localhost:3013",
+  "baseline": "http://localhost:3014",
+  "runtimeErrors": [],
+  "unhandledApiPaths": [],
+  "mutations": [],
+  "contrastMethod": "Visible direct text-node runs; foreground from computed styles; five rendered background pixels per line after temporarily hiding glyphs, preserving color/currentColor and layout. Includes gradients and translucent/backdrop surfaces. WCAG AA 4.5 normal / 3 large; disabled controls excluded."
+}

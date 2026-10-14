@@ -8,6 +8,9 @@
     --ui-rpt-muted: var(--aurora-muted, #626b82);
     --ui-rpt-line: var(--aurora-line, #e2e6f2);
     --ui-rpt-subtle: color-mix(in srgb, var(--ui-rpt-card) 96%, var(--aurora-chart-violet, #725cff) 4%);
+    --ui-rpt-glass: rgb(255 255 255 / .9);
+    --ui-rpt-rim: rgb(255 255 255 / .82);
+    --ui-rpt-shadow: 0 8px 26px rgb(40 50 99 / .055), inset 0 1px 0 var(--ui-rpt-rim);
     --ui-rpt-link: #5c42cf;
     --ui-rpt-link-soft: #eeeaff;
     --ui-rpt-good: #197253;
@@ -35,6 +38,9 @@
     --ui-rpt-bad-soft: #482933;
     --ui-rpt-info: #b5d1ff;
     --ui-rpt-info-soft: #222f47;
+    --ui-rpt-glass: rgb(26 30 54 / .94);
+    --ui-rpt-rim: rgb(211 214 255 / .08);
+    --ui-rpt-shadow: 0 8px 26px rgb(8 11 27 / .2), inset 0 1px 0 var(--ui-rpt-rim);
   }
 
   html[data-dashboard-theme] .ops-shell .rpt-header {
@@ -50,6 +56,7 @@
     border-radius: 14px;
     background: #fff;
     border: 1px solid var(--ui-rpt-line);
+    box-shadow: 0 5px 14px rgb(73 49 141 / .09);
   }
   html[data-dashboard-theme] .ops-shell .rpt-title h1 {
     color: var(--ui-rpt-ink);
@@ -78,6 +85,8 @@
     background: var(--ui-rpt-card);
     color: var(--ui-rpt-ink);
     padding: 10px;
+    box-shadow: inset 0 1px 0 var(--ui-rpt-rim);
+    transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
   }
   html[data-dashboard-theme] .ops-shell .rpt-header button:hover:not(:disabled),
   html[data-dashboard-theme] .ops-shell .rpt-pager button:hover:not(:disabled) {
@@ -102,6 +111,7 @@
     padding: 14px 16px;
     margin-bottom: 16px;
     gap: 14px;
+    box-shadow: var(--ui-rpt-shadow);
   }
   html[data-dashboard-theme] .ops-shell .rpt-toolbar > div { max-width: 100%; }
   html[data-dashboard-theme] .ops-shell .rpt-coverage { color: var(--ui-rpt-muted); }
@@ -115,8 +125,11 @@
     margin-bottom: 4px;
     width: max-content;
     max-width: 100%;
+    box-shadow: inset 0 1px 0 var(--ui-rpt-rim);
   }
   html[data-dashboard-theme] .ops-shell .rpt-tabs button {
+    --ui-rpt-tab-ink: var(--ui-rpt-link);
+    --ui-rpt-tab-soft: var(--ui-rpt-link-soft);
     color: var(--ui-rpt-muted);
     font-size: 13px;
     font-weight: 600;
@@ -124,29 +137,49 @@
     border-radius: 10px;
     padding: 11px 13px;
     min-height: 44px;
+    position: relative;
+    transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
   }
+  html[data-dashboard-theme] .ops-shell #report-tab-performance { --ui-rpt-tab-ink: var(--ui-rpt-info); --ui-rpt-tab-soft: var(--ui-rpt-info-soft); }
+  html[data-dashboard-theme] .ops-shell #report-tab-payments { --ui-rpt-tab-ink: var(--ui-rpt-good); --ui-rpt-tab-soft: var(--ui-rpt-good-soft); }
+  html[data-dashboard-theme] .ops-shell #report-tab-comparison { --ui-rpt-tab-ink: var(--ui-rpt-bad); --ui-rpt-tab-soft: var(--ui-rpt-bad-soft); }
+  html[data-dashboard-theme] .ops-shell #report-tab-tunnels { --ui-rpt-tab-ink: var(--ui-rpt-warning); --ui-rpt-tab-soft: var(--ui-rpt-warning-soft); }
   html[data-dashboard-theme] .ops-shell .rpt-tabs button:hover { background: var(--ui-rpt-card); }
   html[data-dashboard-theme] .ops-shell .rpt-tabs button[aria-selected=true] {
-    background: var(--ui-rpt-card);
-    color: var(--ui-rpt-link);
-    border-color: var(--ui-rpt-line);
-    box-shadow: 0 2px 5px #13213b08;
+    background: var(--ui-rpt-tab-soft);
+    color: var(--ui-rpt-tab-ink);
+    border-color: color-mix(in srgb, var(--ui-rpt-line) 70%, var(--ui-rpt-tab-ink) 30%);
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--ui-rpt-tab-ink) 9%, transparent), inset 0 1px 0 var(--ui-rpt-rim);
   }
 
   html[data-dashboard-theme] .ops-shell .rpt-metrics { gap: 14px; padding: 20px 0; }
   html[data-dashboard-theme] .ops-shell .rpt-metric {
     --ui-rpt-accent: var(--aurora-chart-violet, #725cff);
+    --ui-rpt-accent-ink: var(--ui-rpt-link);
+    --ui-rpt-accent-soft: var(--ui-rpt-link-soft);
     position: relative;
-    background: linear-gradient(145deg, color-mix(in srgb, var(--ui-rpt-card) 96%, var(--ui-rpt-accent) 4%), var(--ui-rpt-card) 75%);
-    border-color: var(--ui-rpt-line);
+    background: radial-gradient(ellipse at 105% -15%, color-mix(in srgb, var(--ui-rpt-accent) 11%, var(--ui-rpt-card)), transparent 65%), var(--ui-rpt-card);
+    border-color: color-mix(in srgb, var(--ui-rpt-line) 91%, var(--ui-rpt-accent) 9%);
     border-radius: 17px;
     padding: 18px;
     min-height: 132px;
-    box-shadow: 0 5px 18px #28326304;
+    box-shadow: var(--ui-rpt-shadow);
+    transition: border-color 180ms ease, box-shadow 180ms ease;
   }
-  html[data-dashboard-theme] .ops-shell .rpt-metric:nth-child(4n + 2) { --ui-rpt-accent: var(--aurora-chart-blue, #599efb); }
-  html[data-dashboard-theme] .ops-shell .rpt-metric:nth-child(4n + 3) { --ui-rpt-accent: var(--aurora-chart-teal, #1ccfb0); }
-  html[data-dashboard-theme] .ops-shell .rpt-metric:nth-child(4n) { --ui-rpt-accent: var(--aurora-chart-amber, #ffba49); }
+  html[data-dashboard-theme] .ops-shell .rpt-metric::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 18px;
+    right: 18px;
+    height: 3px;
+    border-radius: 0 0 4px 4px;
+    background: linear-gradient(90deg, var(--ui-rpt-accent), color-mix(in srgb, var(--ui-rpt-accent) 25%, transparent));
+    pointer-events: none;
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-metric:nth-child(4n + 2) { --ui-rpt-accent: var(--aurora-chart-blue, #599efb); --ui-rpt-accent-ink: var(--ui-rpt-info); --ui-rpt-accent-soft: var(--ui-rpt-info-soft); }
+  html[data-dashboard-theme] .ops-shell .rpt-metric:nth-child(4n + 3) { --ui-rpt-accent: var(--aurora-chart-teal, #1ccfb0); --ui-rpt-accent-ink: var(--ui-rpt-good); --ui-rpt-accent-soft: var(--ui-rpt-good-soft); }
+  html[data-dashboard-theme] .ops-shell .rpt-metric:nth-child(4n) { --ui-rpt-accent: var(--aurora-chart-amber, #ffba49); --ui-rpt-accent-ink: var(--ui-rpt-warning); --ui-rpt-accent-soft: var(--ui-rpt-warning-soft); }
   html[data-dashboard-theme] .ops-shell .rpt-metric-label {
     color: var(--ui-rpt-muted);
     font-size: 13px;
@@ -161,9 +194,10 @@
     width: 18px;
     height: 18px;
     padding: 7px;
-    color: var(--ui-rpt-link);
-    background: var(--ui-rpt-link-soft);
+    color: var(--ui-rpt-accent-ink);
+    background: var(--ui-rpt-accent-soft);
     border-radius: 10px;
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--ui-rpt-accent) 7%, transparent), inset 0 1px 0 var(--ui-rpt-rim);
   }
   html[data-dashboard-theme] .ops-shell .rpt-metric > strong {
     color: var(--ui-rpt-ink);
@@ -181,20 +215,20 @@
     font-size: 12px;
     line-height: 1.55;
   }
-  html[data-dashboard-theme] .ops-shell .rpt-metric-incomplete { border-color: color-mix(in srgb, var(--ui-rpt-line) 45%, var(--ui-rpt-bad) 55%); }
+  html[data-dashboard-theme] .ops-shell .rpt-metric.rpt-metric-incomplete { --ui-rpt-accent: var(--ui-rpt-bad); --ui-rpt-accent-ink: var(--ui-rpt-bad); --ui-rpt-accent-soft: var(--ui-rpt-bad-soft); border-color: color-mix(in srgb, var(--ui-rpt-line) 45%, var(--ui-rpt-bad) 55%); }
   html[data-dashboard-theme] .ops-shell .rpt-metric-incomplete > strong,
   html[data-dashboard-theme] .ops-shell .rpt-metric-incomplete > small,
   html[data-dashboard-theme] .ops-shell .rpt-page .rpt-unavailable-count { color: var(--ui-rpt-bad); }
 
   html[data-dashboard-theme] .ops-shell .rpt-section {
-    background: var(--ui-rpt-card);
+    background: linear-gradient(145deg, color-mix(in srgb, var(--ui-rpt-card) 98%, var(--aurora-chart-violet, #725cff) 2%), var(--ui-rpt-card) 70%);
     color: var(--ui-rpt-ink);
     border: 1px solid var(--ui-rpt-line);
     border-radius: 18px;
     padding: 21px;
     margin-bottom: 18px;
     min-width: 0;
-    box-shadow: 0 5px 18px #28326304;
+    box-shadow: var(--ui-rpt-shadow);
   }
   html[data-dashboard-theme] .ops-shell .rpt-section h2 {
     color: var(--ui-rpt-ink);
@@ -240,6 +274,9 @@
     font-size: 14px;
     padding: 14px 12px;
   }
+  html[data-dashboard-theme] .ops-shell :is(.rpt-page, .rpt-breakdown-summary) tbody tr { background: var(--ui-rpt-card); }
+  html[data-dashboard-theme] .ops-shell :is(.rpt-page, .rpt-breakdown-summary) tbody tr:nth-child(even) { background: color-mix(in srgb, var(--ui-rpt-card) 98%, var(--aurora-chart-violet, #725cff) 2%); }
+  html[data-dashboard-theme] .ops-shell :is(.rpt-page, .rpt-breakdown-summary) tbody tr:hover { background: var(--ui-rpt-subtle); }
   html[data-dashboard-theme] .ops-shell .rpt-page tbody th { background: transparent; border-color: var(--ui-rpt-line); color: var(--ui-rpt-ink); }
   html[data-dashboard-theme] .ops-shell .rpt-page tfoot :is(th, td) { background: var(--ui-rpt-subtle); border-color: var(--ui-rpt-line); color: var(--ui-rpt-ink); }
   html[data-dashboard-theme] .ops-shell .rpt-table-scroll { max-width: 100%; overscroll-behavior-x: contain; }
@@ -265,6 +302,7 @@
     border-color: var(--ui-rpt-line);
     border-radius: 13px;
     margin-bottom: 12px;
+    box-shadow: inset 0 1px 0 var(--ui-rpt-rim);
   }
   html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job > summary { border-radius: 13px; }
   html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job[open] > summary { border-color: var(--ui-rpt-line); border-radius: 13px 13px 0 0; }
@@ -279,6 +317,8 @@
   html[data-dashboard-theme] .ops-shell .rpt-adjustment-reasons li { border-color: var(--ui-rpt-line); }
   html[data-dashboard-theme] .ops-shell .rpt-comparison-sides { background: var(--ui-rpt-card); border-color: var(--ui-rpt-line); border-radius: 12px; }
   html[data-dashboard-theme] .ops-shell .rpt-comparison-sides > section { padding: 18px 20px; }
+  html[data-dashboard-theme] .ops-shell .rpt-comparison-sides > section > h3 { color: var(--ui-rpt-info); }
+  html[data-dashboard-theme] .ops-shell .rpt-comparison-sides > section + section > h3 { color: var(--ui-rpt-link); }
   html[data-dashboard-theme] .ops-shell .rpt-comparison-sides > section + section { border-color: var(--ui-rpt-line); }
   html[data-dashboard-theme] .ops-shell .rpt-comparison-row { border-color: var(--ui-rpt-line); }
   html[data-dashboard-theme] .ops-shell .rpt-comparison-row > span { color: var(--ui-rpt-muted); }
@@ -286,17 +326,41 @@
   html[data-dashboard-theme] .ops-shell .rpt-comparison-row.rpt-difference > :is(span, strong) { color: var(--ui-rpt-bad); }
   html[data-dashboard-theme] .ops-shell .rpt-reconciliation { background: var(--ui-rpt-subtle); border-radius: 11px; }
   html[data-dashboard-theme] .ops-shell .rpt-evidence img { background: var(--ui-rpt-subtle); border-color: var(--ui-rpt-line); border-radius: 8px; }
-  html[data-dashboard-theme] .ops-shell .rpt-chargeable-times { background: var(--ui-rpt-warning-soft); border-color: color-mix(in srgb, var(--ui-rpt-line) 55%, var(--ui-rpt-warning) 45%); color: var(--ui-rpt-warning); }
+  html[data-dashboard-theme] .ops-shell .rpt-metric.rpt-chargeable-times { --ui-rpt-accent: var(--aurora-chart-amber, #ffba49); background: var(--ui-rpt-warning-soft); border-color: color-mix(in srgb, var(--ui-rpt-line) 55%, var(--ui-rpt-warning) 45%); color: var(--ui-rpt-warning); }
   html[data-dashboard-theme] .ops-shell .rpt-chargeable-times :is(.rpt-metric-label, small) { color: var(--ui-rpt-warning); }
   html[data-dashboard-theme] .ops-shell .rpt-chargeable-times .rpt-metric-label > svg { color: var(--ui-rpt-warning); background: color-mix(in srgb, var(--ui-rpt-warning-soft) 90%, var(--ui-rpt-warning) 10%); }
   html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job-road-summary .rpt-metric-label { font-size: 12px; }
   html[data-dashboard-theme] .ops-shell .rpt-page .rpt-job-road-summary .rpt-metric { border-radius: 11px; }
+
+  /* One restrained glass surface per report; nested data remains opaque. */
+  @supports (backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px)) {
+    html[data-dashboard-theme] .ops-shell .rpt-toolbar {
+      background: var(--ui-rpt-glass);
+      -webkit-backdrop-filter: blur(8px) saturate(115%);
+      backdrop-filter: blur(8px) saturate(115%);
+    }
+  }
+
+  @keyframes ui-rpt-arrive {
+    from { opacity: .82; }
+    to { opacity: 1; }
+  }
+  html[data-dashboard-theme] .ops-shell .rpt-page > [role=tabpanel] { animation: ui-rpt-arrive 320ms cubic-bezier(.2, .65, .3, 1); }
 
   html[data-dashboard-theme] .ops-shell .rpt-page :is(button, select, a, summary):focus-visible,
   html[data-dashboard-theme] .ops-shell .rpt-breakdown-summary a:focus-visible {
     outline: 2px solid var(--ui-rpt-link);
     outline-offset: 3px;
   }
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  html[data-dashboard-theme] .ops-shell .rpt-page > [role=tabpanel] { animation: none; }
+  html[data-dashboard-theme] .ops-shell :is(.rpt-tabs button, .rpt-header button, .rpt-pager button, .rpt-metric) { transition: none; }
+}
+
+@media screen and (prefers-reduced-transparency: reduce) {
+  html[data-dashboard-theme] .ops-shell .rpt-toolbar { background: var(--ui-rpt-card); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 
 @media screen and (max-width: 1100px) {

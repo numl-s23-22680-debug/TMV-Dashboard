@@ -1,0 +1,43 @@
+{
+  "matrix": [],
+  "workflows": [
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "light",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "light",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "dark",
+      "width": 390,
+      "motion": "no-preference",
+      "passed": true
+    },
+    {
+      "name": "Job action dropdown paints above neighboring glass cards",
+      "theme": "dark",
+      "width": 1366,
+      "motion": "no-preference",
+      "passed": true
+    }
+  ],
+  "wide": [],
+  "contrast": [],
+  "papers": [],
+  "sanitizedFixture": true,
+  "base": "http://localhost:3013",
+  "baseline": "http://localhost:3014",
+  "runtimeErrors": [],
+  "unhandledApiPaths": [],
+  "mutations": [],
+  "contrastMethod": "Visible direct text-node runs; foreground from computed styles; five rendered background pixels per line after temporarily hiding glyphs, preserving color/currentColor and layout. Includes gradients and translucent/backdrop surfaces. WCAG AA 4.5 normal / 3 large; disabled controls excluded."
+}

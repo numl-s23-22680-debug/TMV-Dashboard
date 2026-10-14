@@ -1,0 +1,194 @@
+{
+  "baseline": [],
+  "matrix": [],
+  "workflows": [
+    {
+      "name": "Original six report tabs and date range preserved",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original payment job filter limits breakdown",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original comparison pending-submission filter retained",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original performance job filter retained",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Jobs search opens exact original drawer and keeps query",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original jobs next-page action retained",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Theme preference persists and System follows browser",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Submission preview zoom and Back to Form preserve original feature",
+      "theme": "light",
+      "width": 390,
+      "passed": true
+    },
+    {
+      "name": "Original dossier PDF stays white and prints multiple readable pages",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original submission PDF stays white and prints multiple readable pages",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original PDF Download and Print invoke print callback safely",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Submission preview zoom and Back to Form preserve original feature",
+      "theme": "dark",
+      "width": 390,
+      "passed": true
+    },
+    {
+      "name": "Original dossier PDF stays white and prints multiple readable pages",
+      "theme": "dark",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original submission PDF stays white and prints multiple readable pages",
+      "theme": "dark",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Original PDF Download and Print invoke print callback safely",
+      "theme": "dark",
+      "width": 1366,
+      "passed": true
+    },
+    {
+      "name": "Secondary source failure retains recoverable original error state",
+      "theme": "light",
+      "width": 1366,
+      "passed": true
+    }
+  ],
+  "papers": [
+    {
+      "kind": "dossier",
+      "theme": "light",
+      "paper": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Job Completed\n020 3773 9113\nDriver\nSecond Sample Driver (NEXT)\nRecord time\n13/10/26 · 08:00 | Europe/London\nReference\nDEMO-001\nSynthetic photo\n13/10/26 · 12:00L"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Synthetic photo\n13/10/26 · 12:00Location not recorded\nAmount Charged\n£255.00\nPayment Method\nCash/Card\nClient Signature:\nNot captured\nConfirmed By: N/A\nSigned: 1"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Job time breakdown\nOriginal Calendar duration\n90 min\nActual job duration\nNot recorded\nRecorded extra charge\nGBP 55.00\n\nCalculation pending recorded arrival and "
+        }
+      ]
+    },
+    {
+      "kind": "submission",
+      "theme": "light",
+      "paper": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Storage Check-in\n020 3773 9113\nDriver\nSecond Sample Driver (SE)\nRecord time\n13/10/26 · 10:15 | Europe/London\nReference\nsample-evidence-0\nJob ID\nDEMO-001\nStorage"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Storage Check-in Evidence 2\n13/10/26 · 12:00\nsample-evidence-0\nPage 2 of 2"
+        }
+      ]
+    },
+    {
+      "kind": "dossier",
+      "theme": "dark",
+      "paper": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Job Completed\n020 3773 9113\nDriver\nSecond Sample Driver (NEXT)\nRecord time\n13/10/26 · 08:00 | Europe/London\nReference\nDEMO-001\nSynthetic photo\n13/10/26 · 12:00L"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Synthetic photo\n13/10/26 · 12:00Location not recorded\nAmount Charged\n£255.00\nPayment Method\nCash/Card\nClient Signature:\nNot captured\nConfirmed By: N/A\nSigned: 1"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Job time breakdown\nOriginal Calendar duration\n90 min\nActual job duration\nNot recorded\nRecorded extra charge\nGBP 55.00\n\nCalculation pending recorded arrival and "
+        }
+      ]
+    },
+    {
+      "kind": "submission",
+      "theme": "dark",
+      "paper": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Storage Check-in\n020 3773 9113\nDriver\nSecond Sample Driver (SE)\nRecord time\n13/10/26 · 10:15 | Europe/London\nReference\nsample-evidence-0\nJob ID\nDEMO-001\nStorage"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(17, 22, 32)",
+          "width": 793.6875,
+          "text": "Storage Check-in Evidence 2\n13/10/26 · 12:00\nsample-evidence-0\nPage 2 of 2"
+        }
+      ]
+    }
+  ],
+  "sanitizedFixture": true,
+  "base": "http://localhost:3013",
+  "baselineBase": "http://localhost:3014",
+  "runtimeErrors": [],
+  "unhandledApiPaths": [],
+  "mutations": []
+}

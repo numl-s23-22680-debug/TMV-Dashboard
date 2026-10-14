@@ -1,0 +1,976 @@
+{
+  "matrix": [
+    {
+      "name": "overview",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "light",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "light",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "light",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "dark",
+      "width": 390,
+      "scrollWidth": 390,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "dark",
+      "width": 768,
+      "scrollWidth": 768,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-jobs",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-performance",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-payments",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-tunnels",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "report-congestion",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "driver-breakdown",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "job-detail",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "pdf-preview",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    },
+    {
+      "name": "submission-preview",
+      "theme": "dark",
+      "width": 1366,
+      "scrollWidth": 1366,
+      "clippedHeadings": [],
+      "passed": true
+    }
+  ],
+  "workflows": [],
+  "wide": [],
+  "contrast": [],
+  "papers": [],
+  "sanitizedFixture": true,
+  "base": "http://localhost:3013",
+  "baseline": "http://localhost:3014",
+  "runtimeErrors": [],
+  "unhandledApiPaths": [],
+  "mutations": [],
+  "contrastMethod": "Visible direct text-node runs; foreground from computed styles; five rendered background pixels per line after temporarily hiding glyphs, preserving color/currentColor and layout. Includes gradients and translucent/backdrop surfaces. WCAG AA 4.5 normal / 3 large; disabled controls excluded.",
+  "summary": {
+    "passed": 108,
+    "total": 108,
+    "views": 18,
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "widths": [
+      390,
+      768,
+      1366
+    ]
+  },
+  "consolidatedAtUtc": "2026-10-14T17:22:00.831060+00:00",
+  "retryProvenance": [
+    {
+      "category": "matrix",
+      "earlierSource": "luxe-results-matrix.json (initial capture)",
+      "replacementSource": "luxe-results-matrix-retry.json",
+      "earlierFailures": [
+        {
+          "name": "drivers",
+          "theme": "dark",
+          "width": 390,
+          "passed": false,
+          "error": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('main').getByText('Sample Driver', { exact: true }).first() to be visible\u001b[22m\n"
+        }
+      ],
+      "replacementResults": [
+        {
+          "name": "drivers",
+          "theme": "dark",
+          "width": 390,
+          "scrollWidth": 390,
+          "clippedHeadings": [],
+          "passed": true
+        }
+      ],
+      "reason": "Drivers Midnight390 development-server/loading timeout passed on an isolated retry; no application change."
+    },
+    {
+      "category": "matrix",
+      "replacementSource": "luxe-results-matrix-evidence.json",
+      "replacementResults": [
+        {
+          "name": "evidence",
+          "theme": "light",
+          "width": 390,
+          "scrollWidth": 390,
+          "clippedHeadings": [],
+          "passed": true
+        },
+        {
+          "name": "evidence",
+          "theme": "light",
+          "width": 768,
+          "scrollWidth": 768,
+          "clippedHeadings": [],
+          "passed": true
+        },
+        {
+          "name": "evidence",
+          "theme": "light",
+          "width": 1366,
+          "scrollWidth": 1366,
+          "clippedHeadings": [],
+          "passed": true
+        },
+        {
+          "name": "evidence",
+          "theme": "dark",
+          "width": 390,
+          "scrollWidth": 390,
+          "clippedHeadings": [],
+          "passed": true
+        },
+        {
+          "name": "evidence",
+          "theme": "dark",
+          "width": 768,
+          "scrollWidth": 768,
+          "clippedHeadings": [],
+          "passed": true
+        },
+        {
+          "name": "evidence",
+          "theme": "dark",
+          "width": 1366,
+          "scrollWidth": 1366,
+          "clippedHeadings": [],
+          "passed": true
+        }
+      ],
+      "reason": "All six Evidence viewport images and geometry checks were refreshed after the final dark-link contrast correction."
+    }
+  ]
+}

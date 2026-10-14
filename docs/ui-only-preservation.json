@@ -49,7 +49,7 @@
   "newFiles": [
     {
       "path": "src/screens/admin/dashboard/aurora.css",
-      "sha256": "696fcc906e6b237b2b5152a8d397575c06e7fc41e397e69384a552c7a30fb1ed",
+      "sha256": "50fb01d5994639c98f758f0a7d80d28506909ae960389ac81e1958a284ba6b12",
       "allowed": true
     },
     {
@@ -64,17 +64,17 @@
     },
     {
       "path": "src/screens/admin/dashboard/styles/ui-only-common.css",
-      "sha256": "a062889a2042eabbc921678d88302efe2816dde812be7e3d51883a8169ec8c1f",
+      "sha256": "8eafda31f439a107f9a4953c3dc30601aa4a1e0cfe2ba39cc6bd894cb1ba17de",
       "allowed": true
     },
     {
       "path": "src/screens/admin/dashboard/styles/ui-only-overview.css",
-      "sha256": "061cf1724e04445c55e0c3c062fbcda30892fb0fd87b52c1bff68584183c3a42",
+      "sha256": "ec38a02b48303773326d94395314b4cee19c88f10363d9fd67eabc12649636cc",
       "allowed": true
     },
     {
       "path": "src/screens/admin/dashboard/styles/ui-only-reports.css",
-      "sha256": "59b779ac8252d1b3f2f10e4a55a8ed36b422fb1307675f9a6ea1c53d1342c677",
+      "sha256": "af04229f35e49f9e96e3d0d9dd159b7853ae06b2fca9098cba60987cad07051b",
       "allowed": true
     }
   ],

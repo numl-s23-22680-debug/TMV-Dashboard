@@ -25,6 +25,15 @@ export const BASELINE_HASHES = Object.freeze({
     "2b13753824c863884d9282539f5bb2e91b7e23f66ca836bc531a76514944c227",
 });
 
+// The previous UI-only delivery changed these two presentation components.
+// Match the pair as one revision; mixing old/new components is never accepted.
+export const PREVIOUS_UI_HASHES = Object.freeze({
+  "web/src/screens/admin/dashboard/Layout.tsx":
+    "011b192cafec9b3ec2ada044daa119daae6c0f7af686437e5023076addf56dd3",
+  "web/src/screens/admin/dashboard/pages/OverviewPage.tsx":
+    "d86d1f5463045a0e609edc33b6f0d48c3e5ba8b46480e64bc0139626f06d8fba",
+});
+
 // All user-supplied paths are environment values, never executable commands.
 const POWERSHELL_ZIP = String.raw`
 $ErrorActionPreference = 'Stop'
@@ -162,16 +171,26 @@ export function validateArchive(index) {
     }
   }
   if (!names.has("web/package.json")) throw new Error("The ZIP does not contain web/package.json.");
-  for (const [name, hash] of Object.entries(BASELINE_HASHES)) {
-    if (index.hashes?.[name] !== hash) {
-      throw new Error("This ZIP has a different Layout or Overview revision. No files were changed. Use the original web.zip supplied for this UI update.");
-    }
+  const matches = (hashes) => Object.entries(hashes).every(([name, hash]) => index.hashes?.[name] === hash);
+  const sourceRevision = matches(BASELINE_HASHES) ? "original" : matches(PREVIOUS_UI_HASHES) ? "previous-ui" : null;
+  if (!sourceRevision) {
+    throw new Error("This ZIP has a different Layout or Overview revision. No files were changed. Use the original web.zip or the previous UI-only web-new-ui.zip supplied for this update.");
   }
   for (const filename of PATCH_FILES.slice(2)) {
-    if (names.has(`web/${filename}`.toLowerCase())) {
-      throw new Error("The ZIP already contains one of the new UI files. No files were changed.");
+    const archiveName = `web/${filename}`;
+    const entry = index.entries.find((item) => item.name === archiveName);
+    if (sourceRevision === "original" && names.has(archiveName.toLowerCase())) {
+      throw new Error("The ZIP already contains one of the new UI files with the original source revision. No files were changed.");
+    }
+    if (sourceRevision === "previous-ui") {
+      const attributes = Number(entry?.attributes) >>> 0;
+      const mode = (attributes >>> 16) & 0xf000;
+      if (!entry || entry.size <= 0 || (attributes & 0x10) !== 0 || (mode !== 0 && mode !== 0x8000)) {
+        throw new Error("The previous UI ZIP is missing a required presentation file or contains a directory in its place. No files were changed.");
+      }
     }
   }
+  return sourceRevision;
 }
 
 async function filesUnder(directory, prefix = "") {
@@ -224,7 +243,7 @@ export async function applyUi({ input, output, overlay }) {
   let index;
   try { index = JSON.parse(runArchive(tool, "inspect", { TMV_UI_ZIP_INPUT: input })); }
   catch { throw new Error("The original ZIP could not be inspected. No files were changed."); }
-  validateArchive(index);
+  const sourceRevision = validateArchive(index);
   const originalHash = createHash("sha256").update(await fs.readFile(input)).digest("hex");
   const parent = path.dirname(output);
   await fs.mkdir(parent, { recursive: true });
@@ -251,12 +270,15 @@ export async function applyUi({ input, output, overlay }) {
     await fs.rename(web, path.join(output, "web"));
     await fs.rename(zip, path.join(output, "web-new-ui.zip"));
     const instructions = [
-      "TMV presentation update applied locally.",
+      "TMV Glass UI presentation update applied locally.",
       "",
-      "Only Layout.tsx, OverviewPage.tsx and five new presentation files changed.",
+      sourceRevision === "previous-ui"
+        ? "The previous UI presentation files were refreshed. Layout and Overview behavior is unchanged."
+        : "Only Layout.tsx, OverviewPage.tsx and five new presentation files changed.",
       "Original application logic, API/authentication, PDF preview, exports, tests,",
       "dependencies and configuration files were copied byte-for-byte.",
-      "The original web.zip was not modified. Its private files stay on this computer.",
+      "The input archive was not modified. Its private files stay on this computer.",
+      `New application folder: ${path.join(output, "web")}`,
       "The old generated dist/ folder was omitted from the new copy. Rebuild before using it.",
       "",
       "Open a terminal in the web folder. With Node.js 24 or newer installed, run:",
@@ -272,15 +294,23 @@ export async function applyUi({ input, output, overlay }) {
       "",
     ].join("\r\n");
     await fs.writeFile(path.join(output, "UI-UPDATE-INFO.txt"), instructions);
-    return { output, zip: path.join(output, "web-new-ui.zip"), patchFiles: PATCH_FILES.length };
+    return { output, zip: path.join(output, "web-new-ui.zip"), patchFiles: PATCH_FILES.length, sourceRevision };
   } catch (error) {
     if (outputCreated) {
-      error.message += " The new output folder may be incomplete. The original ZIP is unchanged; choose another output folder to retry.";
+      error.message += " The new output folder may be incomplete. The input ZIP is unchanged; choose another output folder to retry.";
     }
     throw error;
   } finally {
     await fs.rm(stage, { recursive: true, force: true });
   }
+}
+
+export function defaultPaths(desktop) {
+  const previousUi = path.join(desktop, "TMV-New-UI", "web-new-ui.zip");
+  return {
+    input: existsSync(previousUi) ? previousUi : path.join(desktop, "web.zip"),
+    output: path.join(desktop, "TMV-Glass-UI"),
+  };
 }
 
 function optionsFromArgs(args) {
@@ -295,9 +325,10 @@ function optionsFromArgs(args) {
     values[name] = args[i + 1];
   }
   const desktop = desktopDirectory();
+  const defaults = defaultPaths(desktop);
   return {
-    input: values["--input"] || path.join(desktop, "web.zip"),
-    output: values["--output"] || path.join(desktop, "TMV-New-UI"),
+    input: values["--input"] || defaults.input,
+    output: values["--output"] || defaults.output,
     overlay: values["--overlay"] || path.dirname(fileURLToPath(import.meta.url)),
   };
 }
@@ -306,10 +337,10 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   try {
     const options = optionsFromArgs(process.argv.slice(2));
     if (!options) {
-      console.log("TMV UI-only update (Node.js 24+)\n\nDefault: Desktop/web.zip -> Desktop/TMV-New-UI\n\nnode apply-new-ui.mjs --input <original web.zip> --output <new folder> [--overlay <patch folder>]\n\nThe original ZIP is never overwritten. No software or server is started automatically.");
+      console.log("TMV Glass UI-only update (Node.js 24+)\n\nDefault input: Desktop/TMV-New-UI/web-new-ui.zip if it exists, otherwise Desktop/web.zip\nDefault output: Desktop/TMV-Glass-UI (must not already exist)\n\nnode apply-new-ui.mjs --input <web.zip or previous web-new-ui.zip> --output <new folder> [--overlay <patch folder>]\n\nThe input ZIP is never overwritten. No software or server is started automatically.");
     } else {
       const result = await applyUi(options);
-      console.log(`UI update complete.\nNew application: ${path.join(result.output, "web")}\nLocal updated ZIP: ${result.zip}\n\nThe original web.zip is unchanged. See UI-UPDATE-INFO.txt for rebuild and localhost instructions.`);
+      console.log(`Glass UI update complete.\nNew application: ${path.join(result.output, "web")}\nLocal updated ZIP: ${result.zip}\n\nThe input archive is unchanged. See UI-UPDATE-INFO.txt for rebuild and localhost instructions.`);
     }
   } catch (error) {
     console.error(`UI update stopped: ${error.message}`);

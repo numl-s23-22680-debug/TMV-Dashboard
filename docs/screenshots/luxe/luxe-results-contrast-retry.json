@@ -1,0 +1,42 @@
+{
+  "matrix": [],
+  "workflows": [],
+  "wide": [],
+  "contrast": [
+    {
+      "name": "evidence",
+      "theme": "dark",
+      "position": "top",
+      "checked": 54,
+      "minimum": 4.79,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "position": "top",
+      "checked": 49,
+      "minimum": 7.21,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "report-comparison",
+      "theme": "dark",
+      "position": "scrolled",
+      "checked": 49,
+      "minimum": 7.25,
+      "failures": [],
+      "passed": true
+    }
+  ],
+  "papers": [],
+  "sanitizedFixture": true,
+  "base": "http://localhost:3013",
+  "baseline": "http://localhost:3014",
+  "runtimeErrors": [],
+  "unhandledApiPaths": [],
+  "mutations": [],
+  "contrastMethod": "Visible direct text-node runs clipped to actual overflow boxes; covered text excluded by hit-testing. Computed foreground converted by browser canvas; up to five rendered background pixels per line captured with screenshot-only glyph masking, preserving color/currentColor and layout. Includes gradients and translucent/backdrop surfaces. WCAG AA 4.5 normal / 3 large; disabled controls excluded."
+}

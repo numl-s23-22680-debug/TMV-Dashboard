@@ -1,14 +1,16 @@
-# TMV UI-only update for the uploaded web.zip
+# TMV Aurora Glass — presentation update
 
-This update uses the newly uploaded application as its source of truth. It applies the Aurora visual design while retaining the upload's operational behavior, including its newer hours-only driver submission and six-tab driver reports.
+This update uses the newly uploaded application as its source of truth. It applies the Aurora Glass visual design while retaining the upload's operational behavior, including its newer hours-only driver submission and six-tab driver reports.
 
 ## What changes
 
-- Purple application shell, readable navigation, refined page spacing, fields, tables, and cards.
-- Light, Midnight, and System theme preferences, stored separately from the driver application's theme.
-- Compact, colorful presentation of the existing four Overview metrics and existing revenue chart.
-- Consistent presentation of all six original report tabs, performance charts, payments, comparisons, tunnel charges, and congestion charges.
-- Responsive styles and visible keyboard focus. PDF paper retains the original light styling in both themes. Screen-only fixes keep fullscreen previews at the viewport edge, job-card actions inside mobile cards, and selected segmented controls readable.
+- Floating indigo navigation, a frosted header, and a layered violet/cobalt/cyan background in Light and Midnight.
+- Colorful KPI accent rails, tinted icon halos, refined report cards and tables, and restrained glass filter bars.
+- Short entrance, hover, and press feedback. Motion completes quickly; reduced-motion preferences remove it.
+- Opaque alternatives for reduced transparency or unsupported glass effects. Dense financial rows and PDF paper remain readable.
+- Existing 44px shell controls, keyboard focus, mobile card actions, and fullscreen record/PDF previews remain usable.
+
+This iteration changes only four application CSS files relative to the previously delivered UI. Layout.tsx, OverviewPage.tsx, the theme hook, and every operational module are unchanged from that version. The downloadable overlay still contains seven UI files so it can also be applied to the original upload.
 
 ## What is preserved
 
@@ -22,22 +24,23 @@ The following PDF chain is unchanged: PdfPreviewModal, ReportPreviewCanvas, Prin
 
 ## Installing the overlay
 
-Use the original web.zip you uploaded. The download contains exactly seven application UI files, plus local installer/verification instructions. It contains no environment settings or customer fixtures.
+Use the original web.zip you uploaded or the web-new-ui.zip created by the previous UI installer. The download contains exactly seven application UI files, plus local installer/verification instructions. It contains no environment settings or customer fixtures.
 
-The Windows installer combines the UI overlay with your original archive on your own computer and creates a separate updated folder/ZIP. Your original archive is retained. Existing configuration remains local. Generated dist files must be rebuilt from the updated source.
+The Windows installer combines the overlay with either matching archive on your own computer and creates a separate Desktop/TMV-Glass-UI folder and local web-new-ui.zip. It prefers Desktop/TMV-New-UI/web-new-ui.zip when available, then falls back to Desktop/web.zip. Your original archive is retained. Existing configuration remains local. Generated dist files must be rebuilt from the updated source.
 
-For an existing extracted project, copy the overlay's web/src contents into your matching web/src folder, allowing the two UI files to be replaced and five new files to be added. Keep the existing package files, environment settings, and all other source files. Use your existing frontend/backend startup configuration.
+For an existing extracted project, copy the overlay's web/src contents into your matching web/src folder. Starting from the original upload replaces two presentation components and adds five presentation files; upgrading the previous UI replaces its seven presentation files. Keep the existing package files, environment settings, and all other source files. Use your existing frontend/backend startup configuration.
 
-## Executed checks
+## Executed checks for this release
 
-- Uploaded baseline: 77 test files / 390 tests passed; type-check and production/PWA build passed.
-- Updated source: 78 test files / 396 tests passed, including all original tests and six theme tests; type-check and production/PWA build passed.
-- File hashes and TypeScript behavior/binding comparison passed; details are in ui-only-preservation.json.
-- Browser checks: 16 workflows passed, including all six report tabs and their range, payments/comparison/timing filters, exact job search/open, pagination, theme persistence/system, submission zoom/back-to-form, PDF Download/Print callbacks, and failed-load retry.
-- Responsive review: 108 view/theme/width combinations passed at 390, 768, and 1366 px across 18 views; ten untouched baseline captures provide comparisons.
-- Chromium-generated dossier and submission PDFs have exactly matching extracted text and page counts against the untouched baseline in both themes (three-page dossier and two-page submission).
-- Eight local installer tests passed against the uploaded ZIP. A real seven-file CLI smoke with spaces in paths preserved 363 original files, including the local environment configuration, and retained the original ZIP SHA-256.
-- Windows launcher and PowerShell ZIP handling were statically reviewed; installer execution was tested on Linux with Python ZIP support.
+- Type-check and final production/PWA build passed. The project has no lint script.
+- Source hashes and TypeScript behavior/binding comparison passed: 362 original files byte-identical, all 77 original tests unchanged, and every operational module preserved. This refresh changes only four CSS files from the previous UI delivery.
+- The full serial unit run passed 395 of 396 tests across 78 files. One unchanged driver-form test exceeded its original five-second timeout under the shared environment load. Its complete four-test file passed when rerun in isolation with a 15-second timeout; no assertions or original test files were changed. All 396 distinct tests passed across these runs. The initial parallel run was interrupted after environment-related timeouts and is not counted as a passing run.
+- Browser checks passed: 108 view/theme/width combinations at 390, 768, and 1366 px, ten wide-desktop checks at 1920 px, 21 motion/accessibility/overlay checks, and 16 preserved-feature workflows. These cover original report tabs and filters, job search/open, menus, navigation context, theme persistence, failed-load retry, submission editing/zoom, and PDF Download/Print callbacks.
+- Contrast passed across 36 view/theme/scroll-position checks and 2,526 visible text samples; the measured minimum was 4.75:1. Rendered backgrounds include gradients and glass. These are representative checks, not a claim that every possible state has been measured.
+- PDF preview and print text/colors match the untouched upload in both themes. Fullscreen previews passed at all four widths, and dense paper content remains white and readable. Synthetic two-photo workflows and the simpler no-photo overlay fixture have different page counts; neither comparison changes the original renderer.
+- Browser evidence uses synthetic records and records no runtime errors, unhandled API endpoints, or operational mutations. The result files include explicit retry provenance for slow dev-server loading and corrected screenshot sampling of clipped or occluded text.
+- Twelve installer tests passed, including upgrades from the previous UI, mixed-revision rejection, and existing-output protection. Actual CLI smokes with paths containing spaces verified both source versions, original configuration, input ZIP hashes, all untouched operational bytes, and output ZIP integrity.
+- Windows launcher and PowerShell ZIP handling were statically reviewed; actual installer execution was tested on Linux with Python ZIP support.
 
 ## Scope and limits
 
