@@ -1,0 +1,78 @@
+# TMV Aurora brief reconciliation
+
+This checklist maps all 39 numbered sections of the latest pasted brief to concrete implementation or a named data dependency. The original PDF audit and its functional corrections remain tracked in [audit-checklist.md](audit-checklist.md). The Aurora brief changes visual direction while preserving the audited financial, timing, evidence and routing semantics.
+
+Status: **Implemented** means the source change exists; **Verified** means the stated check was actually run; **Dependency** means an unavailable business rule/API prevents a truthful feature. Source, rendered review and final repository checks are complete. See [aurora-handoff.md](aurora-handoff.md) for the full results and precise limitations.
+
+| # | Brief requirement | Implementation / scope | Verification and status |
+| --- | --- | --- | --- |
+| 1 | Multidisciplinary product/design/engineering role | Reviewed existing operation flows, visual references and accessible interactions as one redesign. | Complete source/reference and rendered review. |
+| 2 | Inspect existing architecture; preserve capabilities | React/Vite/Tailwind, Recharts, React Query, existing `/api/admin` contract; original auth and domain guard retained. Frontend-only repository; prior baseline documented. | Verified source inspection; [baseline](baseline.md) retained. |
+| 3 | Original TMV Aurora identity | Branded violet/blue accents, atmospheric canvas, translucent raised surfaces and circular status analytics. No framework replacement. | Implemented; both-theme images reviewed and refined. |
+| 4 | Synthesize references | References inform rounded surfaces, hierarchy, color and graphical composition; no copied business modules. | Complete rendered review against supplied direction. |
+| 5 | Premium palette and meaningful status color | Theme tokens for violet, cyan, turquoise, coral and amber with independent readable text/status tokens. Labels accompany status colors. | Verified: 1,966 visible text runs across 26 theme/view/scroll pairs; zero AA failures; minimum 4.88:1. |
+| 6 | Light/dark themes; persistence/system preference | Dashboard-scoped theme hook, document attribute reaching portaled dialogs, local preference storage, explicit System option. Driver theme remains independent. | Verified theme unit tests plus reload/route/system-change browser workflows. |
+| 7 | Readable atmospheric glass surfaces | Layered radial canvas and restrained raised panels; glass effects applied selectively. | Verified both-theme captures and rendered-background contrast. |
+| 8 | Distinctive workspace composition | Command/executive headers, four metrics, flagship analytics, attention, work list and chronological trends. | Verified Overview at six widths in both themes; populated-week images also reviewed. |
+| 9 | Premium sidebar; grouped existing destinations | Eight supported destinations; expanded/compact/mobile states and account actions retained. Future Bookings/Finance links remain unavailable until functionality exists. | Verified eight-route navigation in both themes and mobile keyboard operation. |
+| 10 | Command header/search/notifications/profile | Honest Jump to page palette with shortcut; date/timezone context, notification source, theme control, account menu. Genuine global record-search API remains unavailable. | Verified command focus/Escape/restoration and navigation; shared attention contract retained. Global record search remains a dependency. |
+| 11 | Executive header/date scope | Refined Operations overview; refresh/data age and London scope; Today/Yesterday/Tomorrow/7-day/custom plus Last 30 days. | Verified London inclusive URL/input endpoints; date controls visually refined in Overview and reports. |
+| 12 | Rich KPI cards connected to data | Total jobs, in progress, completed and final charges. Final charges aggregate stored charged amounts, expose missing/partial coverage, and explicitly differ from receipts. | Verified browser total against fixture stored-pence sum and source/component tests. Compatible previous-period comparisons remain unavailable. |
+| 13 | Circular graphics without distortion | Shared SVG composition/radial components; meaningful labels/values, keyboard legends and data alternatives. Time trends remain chronological. | Verified keyboard highlighting/exact filter destination, empty chart and underlying data. |
+| 14 | Flagship Operations Performance | Status composition, total/count/percentage basis, actionable breakdown and incomplete/empty handling. | Verified known count, exact-status navigation and zero-record chart without decorative segments. |
+| 15 | Job Activity & Trends | Day/week/month reported workload; distribution; scheduled-booking daily heatmap from full jobs, with incomplete days unknown. Underlying values/basis remain accessible. | Verified switching/data disclosure/London-day navigation; populated charts/gaps visually reviewed. Summary-API date basis stays explicitly unverified; hourly data remains unavailable. |
+| 16 | Live Operations | Scheduled/current jobs and exact-record actions; source scope and freshness explicit. | Source integrity retained; browser source failures and all-width work-list rendering verified. No invented availability. |
+| 17 | Actionable Attention Center | Existing recorded job exceptions/feed definitions, known coverage and record links. Existing severities retained. | Verified partial/error behavior and accessible destinations. Unique jobs remain separate from overlapping issues. |
+| 18 | Fleet Intelligence | Existing telemetry/freshness policy; motion and signal age separate. Available-driver totals are not inferred from account activity. | Verified both-theme six-width layouts and preserved exact-job/freshness regression contracts. Availability rules/API remain a dependency. |
+| 19 | Driver performance analytics | Four-tab reports share new surfaces/charts, completion and trustworthy timings, independent movement/work time. | Verified all four report-tab captures at 390/1366 in both themes; targeted report tests passed. Unsupported scores/penalties/disputes are absent. |
+| 20 | Financial visualization | Receipts/payment-method proportions/reconciliation preserve missing-versus-zero and invoice/charge/receipt distinctions. | Source semantics and financial component tests retained; final-charge browser agreement and Payments images verified. Remittance/debt/refund/overdue rules remain unavailable. |
+| 21 | Future native booking language | Shared form fields, validation, dialogs and responsive summaries remain extensible. No unrelated booking engine added. | Dependency documented: authenticated native-booking capability is absent. Existing bookings remain in Jobs. |
+| 22 | Refined interactions/reduced motion | Hover/focus transitions, selected chart segments and skeleton states; reduced-motion styles retained. | Keyboard highlighting/navigation/dialog focus verified; captures run with reduced motion. CSS inspected; no continuous fake telemetry animation. |
+| 23 | Precise typography/tabular numbers | Consistent title/section/body/metadata scales; locally bundled font; tabular financial/time/count figures. | Fonts ready before capture; readable figures and controls inspected in eight sections/reports. |
+| 24 | Shared design system | Tokens, shell, headers, surfaces, metrics, badges, date/filter controls, dialogs, tables and radial/chart primitives reused. | Complete source review and cross-section theme captures. |
+| 25 | Responsive desktop/tablet/mobile | Adaptive grids, mobile navigation/filter wrapping, contained table scrolling/disclosure and readable charts. | Verified 96 main-section pairs at six widths/both themes, plus 16 report pairs; no page-wide overflow or clipped headings/charts. |
+| 26 | Premium efficient tables/lists | Shared header/row/hover/status/action treatment; existing search/sort/pagination/list/card modes retained. | Complete rendered table/mobile-list review; existing meaningful search/pagination/context contracts retained. |
+| 27 | Safe personalization | Theme and existing sidebar/view/filter preferences; System fallback. No unsupported widget editor or role-layout backend. | Verified theme reload/route persistence and independent System preference. Existing context regression coverage retained. |
+| 28 | Operational UX principles | Exact links, independent statuses, scoped filters, recoverable notices and progressive details. | Verified navigation, keyboard/focus, chart inspection and source recovery workflows. |
+| 29 | Real-data integrity | Production uses existing APIs; explicit preview/test tools alone use sample data. No hardcoded operational totals or financial rule changes. | Source derivations inspected; stored-charge/count assertions passed. Missing dates/operands remain unknown. |
+| 30 | Performance | SVG radials, existing chart ecosystem, limited blur, no added animation framework and reduced motion. | Stable browser runs and unchanged dependency ecosystem verified; final production check belongs to handoff. Formal device profiling is not claimed. |
+| 31 | Accessibility | Semantic controls, focus rings, text statuses, dialog restoration, chart summaries and rendered contrast. | Verified keyboard/focus and 1,966 text runs including numeric div/strong and SVG tick text. This is not entire-app WCAG certification. |
+| 32 | Full component states | Loading/loaded/empty/no matches/partial/failure/stale/disabled/save feedback stay distinct. | Verified summary/secondary-source failures, recovery and empty graph; underlying audited state tests retained. |
+| 33 | Target dashboard composition | Implemented with supported metrics, status analytics, priority issues, workload and underlying jobs; no synthetic modules. | Verified/refined actual Today and populated-week Overview. |
+| 34 | Quality benchmark | Dedicated review of spacing, balance, contrast, figures, coherent controls and density. | Completed refinement of dark primary buttons/avatars/tabs/KPI values, disclosure colors and shared date layout, followed by targeted recaptures. |
+| 35 | Eight implementation phases | Architecture → tokens/themes → shell → Overview → shared components → screens → polish → checks. | Complete source/browser stages; this checklist and [prior audit](audit-checklist.md) record scope/dependencies. Final repository checks in handoff. |
+| 36 | Six-width actual rendered review | 390, 768, 1024, 1366, 1440 and 1920px, both themes, sanitized local data. | Verified 112-pair matrix, four extra populated-week images, actual inspection and dedicated refinement pass. |
+| 37 | Final acceptance | Design/data/accessibility/route requirements reconciled here; unavailable backend/rule features explicit. | Browser acceptance complete; final repository checks/handoff recorded by task owner. No production-readiness claim. |
+| 38 | Handoff/code/system/charts/themes/tests/shots/dependencies | Working source, design/component inventory, JSON/screenshots, results and named integration dependencies. | Browser artifacts/checklist complete; final handoff belongs to task owner. |
+| 39 | Original premium operational direction | Cohesive Aurora identity with informative colorful analytics and preserved operations. | Implemented and visually refined; the browser verification below passed. |
+
+## Actual Aurora browser results
+
+| Check | Actual result / artifact |
+| --- | --- |
+| Main section/theme/width matrix | 96/96 pairs passed: eight destinations × six requested widths × two themes. |
+| Driver reports | 16/16 pairs passed: four canonical tabs × 390/1366px × two themes. [Matrix JSON](screenshots/aurora/matrix-results.json) includes all 112 pairs. |
+| Populated-week Overview | 4/4 passed, 390/1366px in both themes; reported days retain gaps rather than implying continuity. [Weekly JSON](screenshots/aurora/weekly-results.json). |
+| Aurora interactions | 13/13 passed: preference/System/reload/routes, mobile keyboard/dialog restoration, London dates, status legend, stored-charge agreement, chart/data/heatmap, empty and failed/partial sources. [Workflow JSON](screenshots/aurora/workflows-results.json). |
+| Rendered contrast | 26/26 pairs, 1,966 visible text runs, zero AA failures; minimum 4.88:1. Includes primary numeric values and chart SVG ticks on actual rendered gradient/glass backgrounds. [Contrast JSON](screenshots/aurora/contrast-results.json). |
+| Runtime errors / unhandled API endpoints / mutations | Zero in these Aurora checks. API errors used by failure tests are deliberate fixture responses, not operational failures. |
+| Final repository checks | 97 files / 477 unit tests passed; type-check and the final CSS production/PWA build passed. All 24 existing browser workflows also passed. See the handoff for warnings and unrun Windows execution. |
+
+Before images: [Overview desktop](screenshots/aurora-before/overview-1366.png), [Jobs desktop](screenshots/aurora-before/jobs-1366.png), [report desktop](screenshots/aurora-before/summary-1366.png). Final examples: [Overview light](screenshots/aurora/overview-week-light-1366.png), [Overview midnight](screenshots/aurora/overview-week-dark-1366.png), [Jobs midnight](screenshots/aurora/jobs-dark-1366.png), [report light](screenshots/aurora/summary-light-1366.png), [Payments mobile](screenshots/aurora/payments-dark-390.png).
+
+## Verification procedure
+
+`scripts/browser/aurora-review.mjs` uses the existing sanitized Playwright fixture layer: external requests and non-setting mutations are blocked. It captures all eight destinations at all six requested widths in both themes, records page overflow and clipped heading/chart bounds, and checks theme selection/reload/system preference/navigation, mobile keyboard/focus, London date scope and source failures.
+
+Its contrast check measures computed foregrounds against five rendered background pixels behind the actual text range while text glyphs are temporarily transparent. This accounts for gradients, background images and glass panels, unlike a check that assumes white behind every surface. It includes direct numeric div/strong text and SVG tspan ticks; native checkbox values and date-picker icons are not treated as text. Disabled text is excluded; normal text uses 4.5:1 and large text 3:1. Results describe sampled visible text and are not a formal audit of every state or pixel.
+
+Existing meaningful workflows remain in `scripts/browser/workflows.mjs`: exact jobs, legacy report links, payment missingness, unknown differences, road unlinked pagination, list return context, settings safe memory-only outcomes, exports, errors and dialog keyboard/focus. Previous pass counts are retained as historical baseline and are not substituted for current Aurora runs.
+
+## Unsupported advanced data integrations
+
+- Complete driver/vehicle availability requires authoritative availability/business rules; account active, assigned, moving and online are independent.
+- Previous-period comparisons require compatible complete periods; no random comparison percentage is displayed.
+- Hourly intensity requires complete hour-level scheduled/observed semantics; daily workload can use existing scheduled dates.
+- Remittance, customer outstanding debt, confirmed road settlement, disputed charges and performance scoring need explicit ledger/rule data; existing reported/calculated/estimate fields stay distinct.
+- Booking creation and automatic dispatch are future modules, absent from the current authenticated frontend contract and outside this visual redesign.
+- Review persistence, incident outcome states and authoritative historical tariff effective dates remain backend dependencies recorded in the original audit handoff.

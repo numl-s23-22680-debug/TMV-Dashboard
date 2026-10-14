@@ -1,0 +1,447 @@
+import { withArrivalDistance } from "../../../../lib/trackerArrival";
+import React, { useState } from "react";
+import { NormalizedJob, ScenarioKind } from "../types";
+import { formatLondonDateTime } from "../utils/date";
+import { formatLocationLabel, type CapturedLocation } from "../../../../lib/geo";
+import { scenarioPointFromRecord } from "../utils/scenarioPoint";
+import { adjustmentReasonForMismatch } from "../utils/workBreakdown";
+import { JobTimeBreakdown } from "./JobTimeBreakdown";
+import { jobEvidenceLabel, jobMoney, jobPaymentLabel } from "../utils/jobPresentation";
+import { ReportDocumentHeader, ReportDocumentFooter, ReportRecordMeta } from "./ReportDocumentHeader";
+
+interface Props {
+  job: NormalizedJob;
+  isPreview?: boolean;
+}
+
+const SCENARIO_LABELS: Record<ScenarioKind, string> = {
+  checkin: "Check In",
+  checkout: "Check Out",
+  parking: "Parking Liability",
+  liability: "Liability Report"
+};
+
+type EvidenceReportPage = {
+  category: string;
+  fileId?: string | null;
+  thumbProxyUrl?: string;
+  capturedAt?: string;
+  receivedAt?: string;
+  completedAt?: string;
+  location?: CapturedLocation;
+  locationName?: string;
+};
+
+type ScenarioPhotoReportPage = {
+  fileId: string;
+  thumbUrl: string;
+  capturedAt?: string;
+  location?: CapturedLocation;
+  locationName?: string;
+};
+
+type ReportPageItem =
+  | { kind: "evidence"; evidence: EvidenceReportPage }
+  | {
+      kind: "scenario";
+      scenario: NormalizedJob["scenarios"][number];
+      photo: ScenarioPhotoReportPage;
+      photoIndex: number;
+    };
+
+const EVIDENCE_FALLBACK_ORDER: Record<string, number> = {
+  Arrival: 100,
+  VanLoaded: 300,
+  StopBy: 400,
+  EmptyVan: 700,
+  Organized: 800,
+  Signature: 900,
+  Documents: 950,
+  Photos: 999
+};
+
+const SCENARIO_FALLBACK_ORDER: Record<ScenarioKind, number> = {
+  checkin: 50,
+  liability: 500,
+  parking: 520,
+  checkout: 850
+};
+
+function timeValue(value?: string): number | null {
+  if (!value) return null;
+  const parsed = new Date(value).getTime();
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function reportPageSortValue(item: ReportPageItem, fallbackBaseMs: number): number {
+  if (item.kind === "evidence") {
+    const timed = timeValue(item.evidence.capturedAt) ?? timeValue(item.evidence.receivedAt) ?? timeValue(item.evidence.completedAt);
+    return timed ?? fallbackBaseMs + (EVIDENCE_FALLBACK_ORDER[item.evidence.category] ?? 999) * 60_000;
+  }
+
+  const timed = timeValue(item.photo.capturedAt) ?? timeValue(item.scenario.timestamp);
+  return timed ?? fallbackBaseMs + (SCENARIO_FALLBACK_ORDER[item.scenario.kind] ?? 999) * 60_000;
+}
+
+export function PaperDossierReport({ job, isPreview = false }: Props) {
+
+  
+  // Helpers
+  const formatPounds = jobMoney;
+  const totalCharges = job.totalCharges ?? job.calculatedTotalCharges ?? ([job.basePrice, job.extraCharges, job.overtimeCharge].every(value => typeof value === "number" && Number.isFinite(value)) ? job.basePrice + job.extraCharges + job.overtimeCharge : undefined);
+  const adjustmentReason = typeof totalCharges === "number" && typeof job.amountCharged === "number" ? adjustmentReasonForMismatch(job) : "";
+  const MoneyRow = ({ label, value, strong = false }: { label: string; value: number | undefined; strong?: boolean }) => (
+    <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] bg-white last:border-b-0">
+      <span className="text-label font-medium text-fg-muted">{label}</span>
+      <span className={`text-[13px] ${strong ? "font-bold" : "font-semibold"} text-admin-ink`}>
+        {formatPounds(value)}
+      </span>
+    </div>
+  );
+
+  // Get ALL image evidence items
+  const photos = job.evidenceItems?.filter(e => !!e.fileId) || [];
+  
+  // If there are NO photos, create a fake empty array with 1 item so we still render the structure
+  // but with a "Not captured" state as requested by the user.
+  const photoPages: EvidenceReportPage[] = photos.length > 0 ? photos : [{ category: "Photos", fileId: null }];
+  const scenarioPages = (job.scenarios || []).flatMap(scenario => {
+    const scenarioPhotos = scenario.photos.length ? scenario.photos : [{ fileId: `${scenario.id}-missing`, thumbUrl: "" }];
+    return scenarioPhotos.map((photo, photoIndex) => ({ scenario, photo, photoIndex }));
+  });
+  const fallbackBaseMs = timeValue(job.bookedStart) ?? timeValue(job.created) ?? 0;
+  const reportPages: ReportPageItem[] = [
+    ...photoPages.map(evidence => ({ kind: "evidence" as const, evidence })),
+    ...scenarioPages.map(page => ({ kind: "scenario" as const, ...page }))
+  ].sort((a, b) => reportPageSortValue(a, fallbackBaseMs) - reportPageSortValue(b, fallbackBaseMs));
+  const lastEvidenceReportIndex = reportPages.reduce((last, item, index) => item.kind === "evidence" ? index : last, -1);
+
+  const submitterName = job.driverName || "Unknown Driver";
+  const submitterInitials = job.driverInitials || "UN";
+  const formattedTime = job.actualFinish || job.bookedStart ? formatLondonDateTime(job.actualFinish || job.bookedStart) : "Not recorded";
+
+  const PhotoSection = ({
+    title,
+    src,
+    capturedAt,
+    fallbackAt,
+    location,
+    locationName
+  }: {
+    title: string,
+    src: string | null,
+    capturedAt?: string,
+    fallbackAt?: string,
+    location?: CapturedLocation,
+    locationName?: string
+  }) => {
+    const [failed, setFailed] = useState(false);
+    return (
+      <div className="report-media-section flex flex-col mb-8">
+        <h2 className="text-[14px] font-semibold text-[#1F2937] mb-3">{title}</h2>
+        <div className="report-media-frame w-full h-[360px] bg-[#F3F4F6] rounded-card border border-[#E5E7EB] shadow-sm overflow-hidden flex items-center justify-center p-2">
+           {src && !failed ? (
+             <img
+               src={src}
+               alt={title}
+               className="max-w-full max-h-full rounded-control object-contain shadow-[0_2px_8px_rgba(0,0,0,0.08)] bg-white"
+               onError={() => setFailed(true)}
+             />
+           ) : (
+             <div className="text-admin-muted text-[14px] font-semibold italic">
+               {src && failed ? "Photo failed to load" : "Not captured"}
+             </div>
+           )}
+        </div>
+        {src && !failed && (capturedAt || fallbackAt || location) && (
+          <div className="mt-1.5 text-[10px] text-[#6B7280] text-center">
+            {(capturedAt || fallbackAt) && formatLondonDateTime(capturedAt || fallbackAt)}
+            {(capturedAt || fallbackAt) && location && " - "}
+            {location ? formatLocationLabel(location, locationName) : "Location not recorded"}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const DetailsRow = ({ label, value }: { label: string; value?: string }) => {
+    if (!value) return null;
+    return (
+      <div className="flex items-center justify-between gap-4 p-3 border-b border-[#E5E7EB] bg-white last:border-b-0">
+        <span className="text-label font-medium text-fg-muted">{label}</span>
+        <span className="text-[13px] font-bold text-admin-ink text-right break-words max-w-[360px]">{value}</span>
+      </div>
+    );
+  };
+
+  const ScenarioDetails = ({
+    scenario,
+    showSignature
+  }: {
+    scenario: NormalizedJob["scenarios"][number];
+    showSignature: boolean;
+  }) => {
+    const scenarioPoint = scenarioPointFromRecord(scenario);
+    return (
+      <div className="mb-3 grid grid-cols-1 gap-3 shrink-0">
+        <div className="report-fact-list border border-[#E5E7EB] rounded-card overflow-hidden">
+          <DetailsRow label="Submitted" value={`${formatLondonDateTime(scenario.timestamp)} | ${scenario.driver || "Driver not recorded"}`} />
+          {scenarioPoint && <DetailsRow label="Reported At" value={scenarioPoint.full} />}
+          <DetailsRow label="Client Name" value={scenario.clientName || "Not recorded"} />
+          <DetailsRow label="Client Phone" value={scenario.clientPhone} />
+          <DetailsRow label="Client Email" value={scenario.clientEmail} />
+          {(scenario.kind === "checkin" || scenario.kind === "checkout") && (
+            <DetailsRow label="Container Number" value={scenario.containerNumber || "Not recorded"} />
+          )}
+          {scenario.kind === "parking" && <DetailsRow label="Address" value={scenario.address || "Not recorded"} />}
+          {scenario.kind === "liability" && (
+            <DetailsRow label="Damage Categories" value={scenario.damageCategories || "Not recorded"} />
+          )}
+          <DetailsRow label="Client Present" value={scenario.clientPresent} />
+        </div>
+
+        {showSignature && (
+          <div className="mb-3 shrink-0">
+            <h2 className="text-label font-medium text-fg-muted mb-1.5">Scenario Signature:</h2>
+            <div className="report-signature border border-[#E5E7EB] rounded-card p-4 bg-[#F8F9FA] flex flex-col items-center justify-center min-h-[100px]">
+              {scenario.signature ? (
+                <img src={scenario.signature.thumbUrl} alt="Scenario signature" className="max-h-[70px] object-contain mix-blend-multiply" />
+              ) : (
+                <span className="text-[13px] font-semibold text-admin-muted italic">Not captured</span>
+              )}
+              {scenario.signature?.capturedAt && (
+                <span className="text-[10px] font-medium text-admin-muted mt-2">
+                  Signed: {formatLondonDateTime(scenario.signature.capturedAt)}
+                </span>
+              )}
+              {scenario.signature?.location && (
+                <span className="text-[10px] font-medium text-admin-muted">
+                  {formatLocationLabel(scenario.signature.location, scenario.signature.locationName)}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Common wrapper for each page. display:flex used to live directly on this element
+  // -- the one page-break-after:always boundary Chromium's print engine has to
+  // respect -- alongside that page-break. Flex (and grid) containers have long had
+  // unreliable print pagination in Chromium when combined with page-break-after on
+  // the same element: page 1 prints fine (there's no boundary to get wrong yet), but
+  // page 2 onward silently drops or collapses, which is exactly "only the first photo
+  // shows" for any report with more than one page. The page-break boundary now sits on
+  // a plain block element; flex (for the header/content/footer stack, with the footer
+  // pinned via mt-auto) moved to a plain inner wrapper that isn't part of that
+  // boundary.
+  const Page = ({ page, totalPages, children }: { page: number, totalPages: number, children: React.ReactNode }) => (
+    <div
+      className={`bg-white text-admin-ink mx-auto ${isPreview ? 'report-preview-page w-full' : 'print-page'}`}
+      style={{
+        boxSizing: 'border-box',
+        pageBreakAfter: page < totalPages ? 'always' : 'auto',
+        breakAfter: page < totalPages ? 'page' : 'auto'
+      }}
+    >
+      <div className="report-page-content">
+        <ReportDocumentHeader title={job.status === "COMPLETED" ? "Job Completed" : "Job details"} reference={job.jobId} page={page} />
+        {page === 1 && <><ReportRecordMeta name={submitterName} initials={submitterInitials} timestamp={formattedTime} reference={job.jobId} /><p className="mb-3 text-[12px] text-admin-muted">Scope: this job · Europe/London · {jobPaymentLabel(job)} · {jobEvidenceLabel(job)}. Stored charges do not establish receipts. Missing evidence remains incomplete.</p></>}
+        {children}
+        <ReportDocumentFooter reference={job.jobId} page={page} total={totalPages} />
+      </div>
+    </div>
+  );
+
+  const totalPages = Math.max(reportPages.length, 1) + 1;
+
+  return (
+    <div className={`report-document font-sans ${isPreview ? 'report-document-preview w-full' : 'block'}`}>
+      <style>{`
+        @page {
+          size: 210mm 297mm;
+          size: A4 portrait;
+          margin: 0;
+        }
+        @media print {
+          .print-page {
+            width: 210mm !important;
+            min-height: 297mm !important;
+            padding: 14mm !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+            background-color: white !important;
+            overflow: visible !important;
+          }
+          .print-page:not(:last-child) {
+            page-break-after: always !important;
+            break-after: page !important;
+          }
+        }
+      `}</style>
+
+      {reportPages.map((item, index) => {
+        const pageNum = index + 1;
+        if (item.kind === "scenario") {
+          const { scenario, photo, photoIndex } = item;
+          const label = SCENARIO_LABELS[scenario.kind] || "Scenario";
+          const scenarioPoint = scenarioPointFromRecord(scenario);
+          const src = photo.thumbUrl || null;
+
+          return (
+            <Page key={`${scenario.id}-${photo.fileId || photoIndex}`} page={pageNum} totalPages={totalPages}>
+              <PhotoSection
+                title={`${label}${scenarioPoint ? ` (${scenarioPoint.point})` : ""} Evidence${scenario.photos.length > 1 ? ` ${photoIndex + 1}` : ""}`}
+                src={src}
+                capturedAt={photo.capturedAt}
+                fallbackAt={scenario.timestamp}
+                location={photo.location}
+                locationName={photo.locationName}
+              />
+              {photoIndex === 0 && <ScenarioDetails scenario={scenario} showSignature={true} />}
+            </Page>
+          );
+        }
+
+        const p = item.evidence;
+        // thumbProxyUrl first: it's our own authenticated proxy that returns raw image
+        // bytes. driveUrl is a Google Drive "view" page, not embeddable as an <img> src.
+        const src = p.fileId ? (p.thumbProxyUrl || `/admin/api/jobs/${encodeURIComponent(job.jobId)}/photos/${encodeURIComponent(p.fileId)}`) : null;
+        
+        return (
+          <Page key={index} page={pageNum} totalPages={totalPages}>
+            <PhotoSection
+              title={p.category || "Photo Evidence"}
+              src={src}
+              capturedAt={p.capturedAt}
+              fallbackAt={p.receivedAt || p.completedAt}
+              location={p.location}
+              locationName={p.locationName}
+            />
+            
+            {/* Inject data blocks on specific pages if possible, or at the end */}
+            {index === reportPages.findIndex(page => page.kind === "evidence") && (
+              <div className="report-facts report-job-facts mb-3 shrink-0">
+                <div className="report-fact-list border border-[#E5E7EB] rounded-card overflow-hidden">
+                  <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] bg-white">
+                    <span className="text-label font-medium text-fg-muted">Customer Name</span>
+                    <span className="text-[13px] font-bold text-admin-ink">{job.customerName || "N/A"}</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] bg-white">
+                    <span className="text-label font-medium text-fg-muted">On my way</span>
+                    <span className="text-[13px] font-bold text-admin-ink">
+                      {job.onMyWayAt ? formatLondonDateTime(job.onMyWayAt) : "Not recorded"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] bg-white">
+                    <span className="text-label font-medium text-fg-muted">Tracker arrival time</span>
+                    <span className={`text-[13px] font-bold ${job.trackerArrivalAt ? "text-admin-ink" : "text-admin-status-red"}`}>{job.trackerArrivalAt ? withArrivalDistance(formatLondonDateTime(job.trackerArrivalAt), job.trackerArrivalDistanceMeters) : (job.trackerUnverifiedReason ? `Unverified (${job.trackerUnverifiedReason})` : "Unverified")}</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] bg-white">
+                    <span className="text-label font-medium text-fg-muted">Proof of arrival photo time</span>
+                    <span className="text-[13px] font-bold text-admin-ink">
+                      {job.pickupArrivalAt ? formatLondonDateTime(job.pickupArrivalAt) : "Not recorded"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] bg-white">
+                    <span className="text-label font-medium text-fg-muted">Van loaded photo time</span>
+                    <span className="text-[13px] font-bold text-admin-ink">
+                      {job.vanLoadedAt ? formatLondonDateTime(job.vanLoadedAt) : "Not recorded"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] bg-white">
+                    <span className="text-label font-medium text-fg-muted">Empty van photo time</span>
+                    <span className="text-[13px] font-bold text-admin-ink">
+                      {job.actualFinish ? formatLondonDateTime(job.actualFinish) : "Not recorded"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] bg-white">
+                    <span className="text-label font-medium text-fg-muted">Customer signature time</span>
+                    <span className="text-[13px] font-bold text-admin-ink">
+                      {job.clientSignatureAt ? formatLondonDateTime(job.clientSignatureAt) : "Not recorded"}
+                    </span>
+                  </div>
+                  {(job.arrivalProofLate || job.arrivalProofOverdue) && (
+                    <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] bg-white">
+                      <span className="text-label font-medium text-admin-status-red">Gap between tracker arrival and proof photo</span>
+                      <span className="text-[13px] font-bold text-admin-status-red">
+                        {job.arrivalProofLate
+                          ? `${job.arrivalProofDelayMinutes ?? 0} min`
+                          : `Proof overdue ${job.arrivalProofDelayMinutes ?? 0} min`}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] bg-white">
+                    <span className="text-label font-medium text-fg-muted">Pickup</span>
+                    <span className="text-[13px] font-bold text-admin-ink truncate max-w-[240px]">{job.pickup || "N/A"}</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 bg-white">
+                    <span className="text-label font-medium text-fg-muted">Dropoff</span>
+                    <span className="text-[13px] font-bold text-admin-ink truncate max-w-[240px]">{job.dropoff || "N/A"}</span>
+                  </div>
+                </div>
+                <div className="report-fact-list border border-[#E5E7EB] rounded-card overflow-hidden">
+                  <MoneyRow label="Base Price" value={job.basePrice} />
+                  <MoneyRow label="Extra Charges" value={job.extraCharges} />
+                  <MoneyRow label="Overtime" value={job.overtimeCharge} />
+                  <MoneyRow label="Total Charges" value={totalCharges} strong />
+                  <MoneyRow label="Amount Charged" value={job.amountCharged} strong />
+                  {adjustmentReason && (
+                    <div className="flex items-start justify-between gap-4 p-3 border-b border-[#E5E7EB] bg-[#FEF2F2]">
+                      <span className="text-label font-bold text-admin-status-red">Adjustment Reason</span>
+                      <span className="max-w-[60%] text-right text-[12px] font-semibold text-admin-ink">{adjustmentReason}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between p-3 bg-white">
+                    <span className="text-label font-medium text-fg-muted">Reconciliation</span>
+                    <span className={`text-[11px] font-bold uppercase tracking-[0.03em] ${job.reconciled ? "text-admin-status-green" : "text-admin-status-red"}`}>
+                      {job.reconciled === true ? "Marked reconciled" : job.reconciled === false ? "Not marked reconciled" : "Not recorded"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {pageNum === 2 && (
+              <div className="mb-3 border border-[#E5E7EB] rounded-card overflow-hidden shrink-0">
+                <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] bg-white">
+                  <span className="text-label font-medium text-fg-muted">Amount Charged</span>
+                  <span className="text-[13px] font-bold text-admin-ink">{formatPounds(job.amountCharged)}</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-white">
+                  <span className="text-label font-medium text-fg-muted">Payment Method</span>
+                  <span className="text-[13px] font-bold text-admin-ink">{job.paymentMethod || "Not recorded"}</span>
+                </div>
+              </div>
+            )}
+
+            {(pageNum === reportPages.length || (pageNum === 3 && reportPages.length >= 3)) && index === lastEvidenceReportIndex && (
+              <div className="mb-3 shrink-0">
+                <h2 className="text-label font-medium text-fg-muted mb-1.5">Client Signature:</h2>
+                <div className="report-signature border border-[#E5E7EB] rounded-card p-4 bg-[#F8F9FA] flex flex-col items-center justify-center min-h-[100px]">
+                  {job.signatureUrl ? (
+                    <img src={job.signatureUrl} alt="Client Signature" className="max-h-[70px] object-contain mix-blend-multiply" />
+                  ) : (
+                    <span className="text-[13px] font-semibold text-admin-muted italic">Not captured</span>
+                  )}
+                  <span className="text-[11px] font-medium text-admin-muted mt-2">Confirmed By: {job.clientConfirmedName || "N/A"}</span>
+                  <span className="text-[10px] font-medium text-admin-muted mt-0.5">
+                    Signed: {job.clientSignatureAt ? formatLondonDateTime(job.clientSignatureAt) : "Not recorded"}
+                  </span>
+                  <span className={`text-[10px] font-bold uppercase tracking-[0.03em] mt-1 ${job.reviewEmailStatus === "Yes" ? "text-admin-status-green" : "text-admin-muted"}`}>
+                    Review Report: RW={job.reviewEmailStatus ?? "No"}
+                  </span>
+                </div>
+              </div>
+            )}
+          </Page>
+        );
+      })}
+
+      <Page page={totalPages} totalPages={totalPages}>
+        <JobTimeBreakdown job={job} />
+      </Page>
+    </div>
+  );
+}

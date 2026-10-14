@@ -1,0 +1,1868 @@
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { scheduledDurationLabel } from "../lib/jobTime";
+import { DriverJobSummaryForm, clearManualDetailsDraft } from "../components/driver/DriverJobSummaryForm";
+import { notifyJobsRefresh } from "../lib/jobsRefresh";
+import {
+  AlertTriangle,
+  Camera,
+  Car,
+  FileWarning,
+  PackageMinus,
+  PackagePlus,
+  PenLine
+} from "lucide-react";
+import {
+  deleteEvidence,
+  fetchJobDetail,
+  type EvidenceItem,
+  type JobUpdateResult,
+  sendAction,
+  submitDriverJobSummary,
+  uploadEvidencePhotos,
+  uploadSignature,
+  type ApiError,
+  type DriverJobSummary,
+  type Job
+} from "../api/jobs";
+import { PhotoUploader } from "../components/PhotoUploader";
+import type { RemotePhoto } from "../components/PhotoPicker";
+import type { PhotoCaptureMeta } from "../lib/geo";
+import { SignatureField } from "../components/SignatureField";
+import { SignatureModal } from "../components/SignatureModal";
+import { Choice, ChoiceGroup } from "../components/ui/Choice";
+import { useToast } from "../components/ui/Toast";
+import { AppShell } from "../app/AppShell";
+import { Alert, BottomActionBar, Button, cx, Field, Input, PageHeader, Select, Skeleton, Textarea } from "../ui";
+import {
+  AnimatedSuccessTick,
+  CompletionSummary,
+  IssueChoiceCard,
+  JobDetailsToggle,
+  RawBookingText,
+  JobHeader,
+  JobProgress,
+  RouteCard,
+  WarningNotice
+} from "../components/driver";
+import { ScenarioFormScreen } from "./ScenarioFormScreen";
+import { useOnline } from "../lib/net";
+import { htmlToPlainText } from "../lib/htmlText";
+import { formatCalendarWindow } from "../lib/calendarWindow";
+import { photoLocationBlockedReason } from "../lib/photoLocation";
+import type { ScenarioKey } from "../scenarioSpec";
+import {
+  CONGESTION_CHARGE,
+  EXTRA_CHARGE_OPTIONS,
+  NO_EXTRAS,
+  overtimeApplies,
+  PAYMENT_METHODS,
+  STEPS,
+  TUNNEL_CHARGE,
+  workflowProgress
+} from "./workflow/steps";
+
+interface JobWorkflowScreenProps {
+  jobId: string;
+  onBack: () => void;
+}
+
+const LONDON = "Europe/London";
+
+/** Steps whose heading block reads left-aligned rather than the default centered --
+ *  the everyday data-entry steps, not the big "you've reached a checkpoint" moments. */
+const LEFT_ALIGNED_STEPS = new Set(["WAITING_PAYMENT", "WAITING_EMPTY_VAN_PHOTO"]);
+
+/** Steps whose hint line reads as an urgent red flag rather than quiet grey helper
+ *  text -- both are "pay attention, this affects the money" moments. */
+const RED_HINT_STEPS = new Set(["WAITING_OVERTIME", "WAITING_EMPTY_VAN_PHOTO"]);
+
+/** Actions that keep the driver on this screen for the next step instead of
+ *  bouncing home -- Extra Charges -> Overtime -> Total Charges -> Payment ->
+ *  Empty Van Photo -> Customer sign-off -> Ask for a review all read as one
+ *  continuous task once the driver starts it, running straight through to
+ *  COMPLETED with no home bounce in between. */
+const STAY_ON_SCREEN_ACTIONS = new Set([
+  "SUBMIT_EXTRA_CHARGES",
+  "SUBMIT_OVERTIME",
+  "SUBMIT_TOTAL_CHARGES",
+  "SUBMIT_PAYMENT",
+  "REVIEW_NONE",
+  "REVIEW_YES"
+]);
+
+/** The near-final "you're basically done" moment — a bigger heading than every
+ *  other step's, to read as the celebratory beat it is. */
+const LARGE_TITLE_STEPS = new Set(["WAITING_REVIEW_CHECK"]);
+
+/** Every card the Liability step's "any issue to report?" screen offers -- all four
+ *  share the same "submit, then optionally add another, then continue" flow (see
+ *  IssueCompletionScreen below), since each is just something the driver may need
+ *  to do at this checkpoint before moving on, not only a liability report. */
+const LIABILITY_STEP_SCENARIOS: readonly ScenarioKey[] = ["parking", "liability", "checkin", "checkout"];
+
+/** Icon/title/description for each card, shared between the step's own screen and
+ *  the completion screen's "add another" list so the two always read the same way. */
+const SCENARIO_META: Record<ScenarioKey, { icon: React.ReactNode; title: string; description: string }> = {
+  parking: {
+    icon: <Car aria-hidden />,
+    title: "Parking Liability",
+    description: "Restricted bay, red route, or anywhere a PCN could land. The customer accepts the charge."
+  },
+  liability: {
+    icon: <FileWarning aria-hidden />,
+    title: "Liability Report",
+    description: "Damage, unprotected items, or anything that needs evidence."
+  },
+  checkin: {
+    icon: <PackagePlus aria-hidden />,
+    title: "Check in",
+    description: "Record items entering storage."
+  },
+  checkout: {
+    icon: <PackageMinus aria-hidden />,
+    title: "Check out",
+    description: "Release items from storage."
+  }
+};
+
+/** "yyyy-MM-dd" as seen in Europe/London -- the operating timezone, regardless of the
+ *  device's own setting. A device several hours ahead previously compared calendar
+ *  days in the wrong zone and flagged today's own job as "not today". */
+function londonDateKey(date: Date): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: LONDON }).format(date);
+}
+
+function isNotToday(bookedStart: string): boolean {
+  if (!bookedStart) return false;
+  const booked = new Date(bookedStart);
+  if (Number.isNaN(booked.getTime())) return false;
+  return londonDateKey(booked) !== londonDateKey(new Date());
+}
+
+function formatBookedDay(bookedStart: string): string {
+  try {
+    return new Date(bookedStart).toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      timeZone: LONDON
+    });
+  } catch {
+    return "";
+  }
+}
+
+export function JobWorkflowScreen({ jobId, onBack }: JobWorkflowScreenProps) {
+  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<Job | null>(null);
+  const [suggestedTotal, setSuggestedTotal] = useState(0);
+  const [evidenceItems, setEvidenceItems] = useState<EvidenceItem[]>([]);
+  const [confirmationText, setConfirmationText] = useState(DEFAULT_CUSTOMER_CONFIRMATION_TEXT);
+  const [driverJobSummary, setDriverJobSummary] = useState<DriverJobSummary | null>(null);
+  const [summarySubmitting, setSummarySubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+  const [signatureOpen, setSignatureOpen] = useState(false);
+  const [customerSignatureBlob, setCustomerSignatureBlob] = useState<Blob | null>(null);
+  const [customerSignaturePreviewUrl, setCustomerSignaturePreviewUrl] = useState<string | null>(null);
+  const [openScenario, setOpenScenario] = useState<ScenarioKey | null>(null);
+  const [completedIssueScenarios, setCompletedIssueScenarios] = useState<ScenarioKey[]>([]);
+  const [issueCompletion, setIssueCompletion] = useState<{
+    last: ScenarioKey;
+    completed: ScenarioKey[];
+  } | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const toast = useToast();
+  const online = useOnline();
+
+  // A step's form value lives in the module-level `formState` object (see the note by
+  // its declaration), which means mutating it re-renders nothing on its own. Every
+  // handler that touches `formState` also calls `bumpForm`, which re-renders this
+  // screen -- and with it BOTH the StepBody (the inputs) and the StepDock (the submit
+  // button, which reads `formState` to decide whether it's still blocked). Without
+  // this the docked button stayed frozen at whatever it was on first render: take the
+  // arrival photo and the dock action never woke up.
+  const [, setFormVersion] = useState(0);
+  const bumpForm = useCallback(() => setFormVersion(v => v + 1), []);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await fetchJobDetail(jobId);
+      setJob(result.job);
+      setSuggestedTotal(result.suggestedTotal);
+      setEvidenceItems(result.evidenceItems ?? []);
+      if (result.confirmationText) setConfirmationText(result.confirmationText);
+      setDriverJobSummary(result.driverJobSummary ?? null);
+      if (result.driverJobSummary) clearManualDetailsDraft(result.job);
+    } catch (err) {
+      setError((err as ApiError)?.message || "Couldn't load this job.");
+    } finally {
+      setLoading(false);
+    }
+  }, [jobId]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  useEffect(() => {
+    if (!customerSignaturePreviewUrl) return;
+    return () => URL.revokeObjectURL(customerSignaturePreviewUrl);
+  }, [customerSignaturePreviewUrl]);
+
+
+  // Defensive: never let one job's half-filled form leak into the next.
+  useEffect(() => () => resetFormState(), []);
+
+  const autoSkippedFrom = useRef<string | null>(null);
+  const autoReviewSendFrom = useRef<string | null>(null);
+  const autoIssueSkipFrom = useRef<string | null>(null);
+  const autoLegacyStopBySkipFrom = useRef<string | null>(null);
+
+  const openFirstIssueScenario = useCallback((scenario: ScenarioKey) => {
+    setCompletedIssueScenarios([]);
+    setIssueCompletion(null);
+    setOpenScenario(scenario);
+  }, []);
+
+  /** Opens one more form from the completion screen's "add another" list -- ISSUES_YES
+   *  already fired for this checkpoint (whichever card was picked first), so this just
+   *  opens the form directly rather than re-running that transition. */
+  const openAdditionalScenario = useCallback((scenario: ScenarioKey) => {
+    setOpenScenario(scenario);
+  }, []);
+
+  /**
+   * Runs a workflow action. Returns whether it succeeded so callers (the signature
+   * modal in particular) can decide whether to close -- a failure keeps the modal open
+   * with the error visible, so the customer doesn't have to sign a second time.
+   *
+   * Workflow steps are deliberately not queued when offline: each one advances a
+   * server-side state machine and the driver needs to see the real next step before
+   * continuing. Replaying them later, out of order, would corrupt the job. So they
+   * block with an honest message, and every form keeps its state so nothing is lost.
+   *
+   * On success this returns the driver to Home rather than rendering the next step in
+   * place -- the same "back to your jobs" move COMPLETED's dock always did, now applied
+   * to every step: Home's card names whatever step comes next (see
+   * workflow/steps.ts's shortLabel and FeaturedJobCard.tsx), so tapping it there is how
+   * the driver moves forward. Pass `{ home: false }` for an action that's mid-step
+   * rather than a completion -- entering a scenario form (ISSUES_YES) or stepping
+   * backward (GO_BACK) should stay in place, not bounce home.
+   */
+  const run = useCallback(
+    async (
+      action: () => Promise<JobUpdateResult>,
+      successMessage?: string,
+      opts?: { home?: boolean }
+    ): Promise<boolean> => {
+      if (!online) {
+        toast.error("You're offline. Reconnect to continue this job — nothing you've entered is lost.");
+        return false;
+      }
+      setBusy(true);
+      setError(null);
+      try {
+        const result = await action();
+        setJob(result.job);
+        if (typeof result.suggestedTotal === "number") setSuggestedTotal(result.suggestedTotal);
+        if (result.evidenceItems) setEvidenceItems(result.evidenceItems);
+        if (successMessage) toast.success(successMessage);
+        if (opts?.home === false || result.job.status === "COMPLETED") {
+          // Staying on this screen for a new step's content: put the driver at the
+          // top of it rather than wherever the previous step happened to be scrolled to.
+          scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          onBack();
+        }
+        return true;
+      } catch (err) {
+        const apiError = err as ApiError;
+        setError(apiError?.message || "That didn't work. Try again.");
+        return false;
+      } finally {
+        setBusy(false);
+        setUploadProgress(null);
+      }
+    },
+    [online, toast, onBack]
+  );
+
+  const cancelScenario = useCallback(() => {
+    if (!job || !openScenario) {
+      setOpenScenario(null);
+      return;
+    }
+
+    const issueChoiceState =
+      job.currentState === "WAITING_ARRIVAL_ISSUES_CHOICE" ||
+      job.currentState === "WAITING_EMPTY_VAN_ISSUES_CHOICE";
+
+    setOpenScenario(null);
+    if (issueChoiceState) {
+      setIssueCompletion(null);
+      setCompletedIssueScenarios([]);
+      void run(() => sendAction(job.jobId, "GO_BACK"), undefined, { home: false });
+    }
+  }, [job, openScenario, run]);
+
+  // Belt-and-braces skip: if the workflow ever lands on the Overtime step for a job
+  // that never picked "Extra time / Charges" (e.g. a backend that still emits the
+  // state), step straight past it without recording any overtime. The dev mock
+  // already routes around Overtime in that case, so this is normally inert.
+  useEffect(() => {
+    if (!job || job.currentState !== "WAITING_OVERTIME") {
+      autoSkippedFrom.current = null;
+      return;
+    }
+    if (overtimeApplies(job.extraCharges) || busy || !online || autoSkippedFrom.current === job.jobId) {
+      return;
+    }
+    autoSkippedFrom.current = job.jobId;
+    void run(() => sendAction(job.jobId, "SUBMIT_OVERTIME", {}), undefined, { home: false });
+  }, [job, busy, online, run]);
+
+  useEffect(() => {
+    if (!job || job.currentState !== "WAITING_REVIEW_SEND") {
+      autoReviewSendFrom.current = null;
+      return;
+    }
+    if (busy || !online || autoReviewSendFrom.current === job.jobId) return;
+    autoReviewSendFrom.current = job.jobId;
+    void run(() => sendAction(job.jobId, "SEND_REVIEW_EMAIL"), "Review email sent", { home: false });
+  }, [job, busy, online, run]);
+
+  useEffect(() => {
+    if (!job || !isIssueWorkflowState(job.currentState)) {
+      autoIssueSkipFrom.current = null;
+      return;
+    }
+    if (busy || !online || autoIssueSkipFrom.current === `${job.jobId}:${job.currentState}`) return;
+    autoIssueSkipFrom.current = `${job.jobId}:${job.currentState}`;
+    const action = isIssueChoiceState(job.currentState) ? "ISSUES_RESUME" : "ISSUES_NONE";
+    void run(() => sendAction(job.jobId, action), undefined, { home: false });
+  }, [job, busy, online, run]);
+
+  useEffect(() => {
+    if (!job || !isLegacyStopByState(job.currentState)) {
+      autoLegacyStopBySkipFrom.current = null;
+      return;
+    }
+    if (busy || !online || autoLegacyStopBySkipFrom.current === `${job.jobId}:${job.currentState}`) return;
+    autoLegacyStopBySkipFrom.current = `${job.jobId}:${job.currentState}`;
+    void run(() => sendAction(job.jobId, "STOP_BY_NONE"), undefined, { home: false });
+  }, [job, busy, online, run]);
+
+  if (loading) {
+    return (
+      <AppShell header={<PageHeader title="Loading job…" onBack={onBack} backLabel="Back to jobs" />}>
+        <div className="flex flex-col gap-4 px-4 py-6">
+          <Skeleton className="h-1.5 w-full" />
+          <Skeleton className="h-7 w-1/2" />
+          <Skeleton className="h-24 w-full rounded-card" />
+          <Skeleton className="h-14 w-full rounded-card" />
+        </div>
+      </AppShell>
+    );
+  }
+
+  if (!job) {
+    return (
+      <AppShell header={<PageHeader title="Job" onBack={onBack} backLabel="Back to jobs" />}>
+        <div className="flex flex-col items-center justify-center gap-4 px-6 py-16 text-center">
+          <AlertTriangle className="size-9 text-danger" aria-hidden />
+          <p className="max-w-xs text-body text-fg-muted">
+            {error || "This job couldn't be found."}
+          </p>
+          <Button variant="secondary" onClick={() => void load()}>
+            Try again
+          </Button>
+          <Button variant="ghost" onClick={onBack}>
+            Back to jobs
+          </Button>
+        </div>
+      </AppShell>
+    );
+  }
+
+  if (openScenario) {
+    return (
+      <ScenarioFormScreen
+        jobId={job.jobId}
+        scenario={openScenario}
+        job={{
+          customerName: job.customerName,
+          customerEmail: job.customerEmail,
+          customerPhone: job.customerPhone,
+          clientNamePostcode: job.clientNamePostcode,
+          rawDescription: job.rawDescription,
+          rawTitle: job.rawTitle,
+          bookedStart: job.bookedStart,
+          bookedFinish: job.bookedFinish
+        }}
+        reportedAt={reportedAtForState(job.currentState, job)}
+        onCancel={cancelScenario}
+        onDone={() => {
+          const completed = completedIssueScenarios.includes(openScenario)
+            ? completedIssueScenarios
+            : [...completedIssueScenarios, openScenario];
+          setCompletedIssueScenarios(completed);
+          setIssueCompletion({ last: openScenario, completed });
+          setOpenScenario(null);
+        }}
+      />
+    );
+  }
+
+  if (issueCompletion) {
+    return (
+      <IssueCompletionScreen
+        job={job}
+        completion={issueCompletion}
+        onBack={onBack}
+        onPickAnother={openAdditionalScenario}
+        onContinue={() => {
+          setIssueCompletion(null);
+          setCompletedIssueScenarios([]);
+          onBack();
+        }}
+      />
+    );
+  }
+
+  const state = job.currentState;
+  const step = STEPS[state] ?? { label: state, order: 1 };
+  const complete = state === "COMPLETED";
+
+  // Photos already uploaded for the photo step being shown — surfaced so a driver who
+  // stepped back to it sees them and can delete any before continuing.
+  const stepEvidenceType = evidenceTypeForState(state);
+  const stepRemotePhotos = stepEvidenceType
+    ? evidenceItems
+        .filter(item => item.evidenceType === stepEvidenceType)
+        .map(item => ({
+          id: item.evidenceId,
+          url: item.url,
+          capturedAt: item.capturedAt,
+          location: item.location,
+          locationName: item.locationName
+        }))
+    : [];
+
+  const removeRemotePhoto = (evidenceId: string) => {
+    if (!online) {
+      toast.error("You're offline — reconnect to delete this photo.");
+      return;
+    }
+    setBusy(true);
+    deleteEvidence(job.jobId, evidenceId)
+      .then(res => setEvidenceItems(res.evidenceItems))
+      .catch((err: ApiError) => toast.error(err?.message || "Couldn't delete that photo."))
+      .finally(() => setBusy(false));
+  };
+
+  const routeExpanded = state === "READY";
+  // Every photo/issue-check step used to show a single-address reminder card (or, for
+  // the money/sign-off steps, nothing) instead of the full route -- redundant now that
+  // each photo already records exactly where it was taken (see the photo-capture-
+  // location-time feature: PhotoUploader's caption, and the admin-side thumbnail
+  // caption, both driven by real GPS, not a typed/selected address). The overview
+  // route + Navigate button stays exactly where it always has: only on READY, as the
+  // one "where am I going" reference before the job starts.
+  const routeHidden = state !== "READY";
+
+  // Does this job's workflow include the Overtime step? While the driver is still on
+  // the Extra charges step their live checkbox selection is the freshest signal;
+  // afterwards it's whatever the server recorded.
+  const overtime =
+    state === "WAITING_EXTRA_CHARGES"
+      ? overtimeApplies(formState.extraCharges)
+      : overtimeApplies(job.extraCharges);
+  const progress = workflowProgress(state, { overtime });
+  // WAITING_ARRIVAL_PHOTO's own GO_BACK target is READY (see backend's BACK_TARGET) --
+  // but READY is no longer a screen this app ever shows (see JobListScreen.tsx's
+  // FeaturedJobCard, which replaced it). Walking back into it here would just
+  // resurrect that eliminated view with a stale "I'm on my way" button. So the very
+  // first step's back arrow skips the GO_BACK call entirely and returns straight to
+  // the jobs list instead -- the job stays IN_PROGRESS/WAITING_ARRIVAL_PHOTO, and
+  // tapping Start Job again there is a safe no-op that lands right back on this same
+  // step (startJob is idempotent -- see jobs.service.ts).
+  const canGoBackStep = state !== "READY" && state !== "COMPLETED" && state !== "WAITING_ARRIVAL_PHOTO";
+  const handleWorkflowBack = () => {
+    if (canGoBackStep) {
+      void run(() => sendAction(job.jobId, "GO_BACK"), undefined, { home: false });
+      return;
+    }
+    onBack();
+  };
+
+  return (
+    <>
+      <AppShell
+        contentRef={scrollRef}
+        header={
+          <JobHeader
+            customerName={job.customerName}
+            jobId={job.jobId}
+            phone={job.customerPhone || undefined}
+            onBack={handleWorkflowBack}
+            backLabel={canGoBackStep ? "Previous step" : "Back to jobs"}
+          />
+        }
+        dock={
+          <StepDock
+            state={state}
+            overtime={overtime}
+            invoice={isInvoiceJob(job)}
+            busy={busy}
+            online={online}
+            uploadProgress={uploadProgress}
+            photoRemoteCount={stepRemotePhotos.length}
+            photoMeta={formState.photoMeta}
+            onAction={(action, input, message) =>
+              run(() => sendAction(job.jobId, action, input), message, {
+                home: !STAY_ON_SCREEN_ACTIONS.has(action)
+              })
+            }
+            onUploadPhotos={async (files, metas) => {
+              const submittedAt = job.currentState;
+              const ok = await run(
+                () => uploadEvidencePhotos(job.jobId, files, setUploadProgress, metas),
+                "Photos uploaded",
+                // Empty Van Photo runs straight into Customer sign-off, no home
+                // bounce -- Arrival/Van Loaded Photo keep the default (bounce home).
+                submittedAt === "WAITING_LOADED_PHOTO" || submittedAt === "WAITING_EMPTY_VAN_PHOTO"
+                  ? { home: false }
+                  : undefined
+              );
+              // Once the server has them, drop the local staging for that step so a
+              // later trip back doesn't re-submit the same files.
+              if (ok) {
+                delete formState.photosByStep[submittedAt];
+                delete formState.photoMetaByStep[submittedAt];
+              }
+            }}
+            customerSignatureReady={Boolean(customerSignatureBlob)}
+            onSubmitSignature={async () => {
+              if (!customerSignatureBlob) {
+                toast.error("The customer needs to sign first.");
+                return;
+              }
+              const ok = await run(
+                () => uploadSignature(job.jobId, job.customerName, customerSignatureBlob, setUploadProgress),
+                "Signature saved",
+                { home: false }
+              );
+              if (ok) {
+                setCustomerSignatureBlob(null);
+                setCustomerSignaturePreviewUrl(null);
+              }
+            }}
+            onBackHome={onBack}
+            completionSummarySubmitted={Boolean(driverJobSummary) || !job.manualDetailsRequiredAt}
+            onBlocked={reason => toast.error(reason)}
+          />
+        }
+      >
+        <p className="px-4 py-2 text-helper text-fg-muted">
+          Scheduled duration: {scheduledDurationLabel(job)}
+        </p>
+        {complete ? (
+          <div className="px-4 pb-5">
+            {error && <Alert tone="danger">{error}</Alert>}
+            {driverJobSummary || !job.manualDetailsRequiredAt ? (
+              <>
+                <CompletionSummary job={job} />
+                <div className="mt-4 rounded-card border border-success/25 bg-success-subtle px-4 py-3">
+                  <p className="text-label font-semibold text-success">{driverJobSummary ? "Manual details submitted" : "Historical job"}</p>
+                  <p className="mt-1 text-helper text-fg-muted">
+                    {driverJobSummary ? "Submitted and locked." : "Manual details are not required for this historical job."}
+                  </p>
+                </div>
+              </>
+            ) : (
+              <DriverJobSummaryForm
+                key={`${job.driverInitials}:${job.jobId}`}
+                job={job}
+                submitting={summarySubmitting}
+                onSubmit={async input => {
+                  if (!online) {
+                    toast.error("You're offline. Reconnect to submit Manual details.");
+                    return;
+                  }
+                  setSummarySubmitting(true);
+                  setError(null);
+                  try {
+                    const result = await submitDriverJobSummary(job.jobId, input);
+                    setDriverJobSummary(result.summary);
+                    clearManualDetailsDraft(job);
+                    toast.success("Manual details submitted");
+                    notifyJobsRefresh();
+                    onBack();
+                  } catch (err) {
+                    const apiError = err as ApiError;
+                    setError(apiError?.message || "Couldn't submit Manual details.");
+                    if (apiError?.code === "MANUAL_DETAILS_LOCKED") await load();
+                  } finally {
+                    setSummarySubmitting(false);
+                  }
+                }}
+              />
+            )}
+            <div className="scroll-pb-dock" aria-hidden />
+          </div>
+        ) : (
+          <div className="flex flex-col gap-5 px-4 py-5">
+            <JobProgress current={progress.current} total={progress.total} />
+
+            <>
+              <div className={LEFT_ALIGNED_STEPS.has(state) ? "text-left" : "text-center"}>
+                <h1 className={cx(LARGE_TITLE_STEPS.has(state) ? "text-display" : "text-title", "text-fg")}>
+                  {step.label}
+                </h1>
+                {step.hint && (
+                  <p
+                    className={cx(
+                      "mt-1.5 text-body",
+                      RED_HINT_STEPS.has(state) ? "font-semibold text-danger" : "text-fg-muted"
+                    )}
+                  >
+                    {step.hint}
+                  </p>
+                )}
+              </div>
+
+              <JobDetailsToggle
+                rawDescription={job.rawDescription}
+                rawTitle={job.rawTitle}
+                bookedStart={job.bookedStart}
+                bookedFinish={job.bookedFinish}
+              />
+
+              {job.onMyWayAt && (
+                <p className="text-meta text-fg-subtle">
+                  Customer notified "I'm on the way" at{" "}
+                  {new Date(job.onMyWayAt).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: LONDON })}
+                </p>
+              )}
+
+              {isNotToday(job.bookedStart) && (
+                <WarningNotice title="Check the date">
+                  This job is booked for <strong>{formatBookedDay(job.bookedStart)}</strong>, not today. Make
+                  sure you've opened the right one.
+                </WarningNotice>
+              )}
+
+              {!online && (
+                <Alert tone="warning">
+                  You're offline. Fill this in now if you like — you just can't submit until you have signal
+                  again.
+                </Alert>
+              )}
+
+              {routeHidden ? null : (
+                <RouteCard
+                  pickup={job.pickup}
+                  dropoff={job.dropoff}
+                  stop={job.stopBy}
+                  collapsible={!routeExpanded}
+                />
+              )}
+
+              {error && <Alert tone="danger">{error}</Alert>}
+
+              <StepBody
+                job={job}
+                state={state}
+                busy={busy}
+                uploadProgress={uploadProgress}
+                error={error}
+                suggestedTotal={suggestedTotal}
+                confirmationText={confirmationText}
+                remotePhotos={stepRemotePhotos}
+                customerSignatureSigned={Boolean(customerSignatureBlob)}
+                customerSignaturePreviewUrl={customerSignaturePreviewUrl}
+                onRemoveRemotePhoto={removeRemotePhoto}
+                onOpenScenario={openFirstIssueScenario}
+                onOpenCustomerSignature={() => setSignatureOpen(true)}
+                onClearCustomerSignature={() => {
+                  setCustomerSignatureBlob(null);
+                  setCustomerSignaturePreviewUrl(null);
+                }}
+                onFormChange={bumpForm}
+              />
+
+            </>
+
+            <div className="scroll-pb-dock" aria-hidden />
+          </div>
+        )}
+      </AppShell>
+
+      <SignatureModal
+        open={signatureOpen}
+        onClose={() => setSignatureOpen(false)}
+        busy={busy}
+        progress={uploadProgress}
+        title="Customer sign-off"
+        instruction="Hand the phone to the customer. They read the confirmation and sign to accept the completed move."
+        agreementText={confirmationText}
+        signerName={job.customerName || undefined}
+        onSave={blob => {
+          setCustomerSignatureBlob(blob);
+          setCustomerSignaturePreviewUrl(URL.createObjectURL(blob));
+          setSignatureOpen(false);
+        }}
+      />
+    </>
+  );
+}
+
+/**
+ * Shown after any one of the Liability step's four cards (Parking Liability,
+ * Liability Report, Check in, Check out) is submitted. Offers every card not yet
+ * done this round so the driver can add another before moving on -- ISSUES_YES
+ * already fired for this checkpoint on the very first pick, and submitting resumes
+ * the main flow (see backend's RESUME_AFTER_ISSUES), so Continue just needs to
+ * leave the screen; anything picked here on top is simply an extra record.
+ */
+function IssueCompletionScreen({
+  job,
+  completion,
+  onBack,
+  onPickAnother,
+  onContinue
+}: {
+  job: Job;
+  completion: { last: ScenarioKey; completed: ScenarioKey[] };
+  onBack: () => void;
+  onPickAnother: (scenario: ScenarioKey) => void;
+  onContinue: () => void;
+}) {
+  const remaining = LIABILITY_STEP_SCENARIOS.filter(s => !completion.completed.includes(s));
+  const lastTitle = SCENARIO_META[completion.last].title;
+
+  return (
+    <AppShell
+      header={
+        <JobHeader
+          customerName={job.customerName}
+          jobId={job.jobId}
+          phone={job.customerPhone || undefined}
+          onBack={onBack}
+        />
+      }
+      dock={
+        <BottomActionBar>
+          <Button fullWidth size="lg" onClick={onContinue}>
+            Continue
+          </Button>
+        </BottomActionBar>
+      }
+    >
+      <div className="flex flex-col items-center px-6 pt-8 text-center">
+        <AnimatedSuccessTick />
+        <h1 className="mt-7 text-title text-fg">{lastTitle} saved. Good job! 👍</h1>
+        <p className="mt-2 max-w-sm text-body text-fg-muted">
+          This confirms it's been completed and recorded against this job.
+        </p>
+      </div>
+
+      {remaining.length > 0 && (
+        <div className="flex flex-col gap-3 px-4 pt-7">
+          <h2 className="px-1 text-heading text-fg">Need anything else here?</h2>
+          {remaining.map(scenario => {
+            const meta = SCENARIO_META[scenario];
+            return (
+              <IssueChoiceCard
+                key={scenario}
+                icon={meta.icon}
+                title={meta.title}
+                description={meta.description}
+                onClick={() => onPickAnother(scenario)}
+              />
+            );
+          })}
+        </div>
+      )}
+
+      <div className="scroll-pb-dock" aria-hidden />
+    </AppShell>
+  );
+}
+
+/* -------------------------------------------------------------------- step body --- */
+
+/**
+ * The scrolling part of each step. The submit control is NOT here -- it lives in the
+ * dock below, so it's always under the thumb. That split is why the forms below
+ * publish their value through module-level state rather than owning their own button.
+ */
+
+/** Shared state between StepBody and StepDock. Two sibling components need the same
+ *  form value (one renders the inputs, one renders the submit), and threading it
+ *  through the parent for every step would have meant a dozen more props on a screen
+ *  that already had plenty. */
+const formState: {
+  extraCharges: string[];
+  overtimeMinutes: string;
+  payment: string[];
+  paymentAmounts: Record<string, string>;
+  photos: File[];
+  /** Photos staged for each photo step, kept by workflow state so stepping away and
+   *  back (GO_BACK / forward) restores exactly what the driver had taken and not yet
+   *  submitted. `photos` above always mirrors the current step's entry. */
+  photosByStep: Record<string, File[]>;
+  /** Where/when each of `photos` was taken — parallel array, same per-step keying as
+   *  photosByStep. */
+  photoMeta: Array<PhotoCaptureMeta | null>;
+  photoMetaByStep: Record<string, Array<PhotoCaptureMeta | null>>;
+  totalChargesCorrect: "" | "yes" | "no";
+  totalChargesAmount: string;
+  totalChargesNote: string;
+} = {
+  extraCharges: [],
+  overtimeMinutes: "",
+  payment: [],
+  paymentAmounts: {},
+  photos: [],
+  photosByStep: {},
+  photoMeta: [],
+  photoMetaByStep: {},
+  totalChargesCorrect: "",
+  totalChargesAmount: "",
+  totalChargesNote: ""
+};
+
+function resetFormState() {
+  formState.extraCharges = [];
+  formState.overtimeMinutes = "";
+  formState.payment = [];
+  formState.paymentAmounts = {};
+  formState.photos = [];
+  formState.photosByStep = {};
+  formState.photoMeta = [];
+  formState.photoMetaByStep = {};
+  formState.totalChargesCorrect = "";
+  formState.totalChargesAmount = "";
+  formState.totalChargesNote = "";
+}
+
+/** Same sibling-sharing trick as `formState`: the photo steps render the uploader in
+ *  <StepBody> but their "Take photo" button lives in <StepDock>. The uploader parks a
+ *  camera-open trigger here; the dock button calls it. Cleared when the uploader
+ *  unmounts (step change). */
+const photoCapture: { open: (() => void) | null } = { open: null };
+
+/** Max photos the current photo step accepts — the dock uses it to stop offering
+ *  "Take photo" once the step is full. */
+export function photoMaxFor(state: string): number {
+  switch (state) {
+    case "WAITING_LOADED_PHOTO":
+      return 5;
+    case "WAITING_EMPTY_VAN_PHOTO":
+      return 2;
+    default:
+      return 2;
+  }
+}
+
+/** The server evidence type a photo step's photos belong to (so a driver stepping
+ *  back to it sees the ones already uploaded). Null for non-photo steps. */
+function evidenceTypeForState(state: string): string | null {
+  switch (state) {
+    case "WAITING_ARRIVAL_PHOTO":
+      return "Arrival";
+    case "WAITING_LOADED_PHOTO":
+      return "VanLoaded";
+    case "WAITING_EMPTY_VAN_PHOTO":
+      return "EmptyVan";
+    default:
+      return null;
+  }
+}
+
+function isIssueChoiceState(state: string): boolean {
+  return (
+    state === "WAITING_ARRIVAL_ISSUES_CHOICE" ||
+    state === "WAITING_EMPTY_VAN_ISSUES_CHOICE"
+  );
+}
+
+function isIssueWorkflowState(state: string): boolean {
+  return (
+    isIssueChoiceState(state) ||
+    state === "WAITING_ARRIVAL_ISSUES_CHECK" ||
+    state === "WAITING_EMPTY_VAN_ISSUES_CHECK"
+  );
+}
+
+function isLegacyStopByState(state: string): boolean {
+  return (
+    state === "WAITING_STOP_BY_CHECK" ||
+    state === "WAITING_STOP_BY_PHOTO" ||
+    state === "WAITING_STOP_BY_ISSUES_CHECK" ||
+    state === "WAITING_STOP_BY_ISSUES_CHOICE"
+  );
+}
+
+/** Which checkpoint of the move a Parking Liability / Liability Report is being filed
+ *  from, given the workflow state the moment the form opens — so the submission (and
+ *  Parking Liability's address default) reflects where the driver actually is. */
+function reportedAtForState(
+  state: string,
+  job: Pick<Job, "pickup" | "dropoff">
+): { label: "Pickup" | "Drop-off"; address?: string } | undefined {
+  switch (state) {
+    case "WAITING_ARRIVAL_ISSUES_CHOICE":
+    case "WAITING_LOADED_PHOTO":
+      return { label: "Pickup", address: job.pickup };
+    case "WAITING_EMPTY_VAN_ISSUES_CHOICE":
+      return { label: "Drop-off", address: job.dropoff };
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Whether this job is billed by invoice rather than collected on the day — signalled
+ * by an "INV" tag after the "/" in the Calendar event title (the title's usual shape
+ * is "<crew> Men - £<price> - <HH:mm> / <Y|N> - <initials>"; ops writes "INV" there
+ * instead for an invoice job). The driver still logs extra charges and overtime as
+ * normal — only the "confirm this total with the customer" step and cash/card
+ * collection are skipped, since there's nothing to collect on site.
+ *
+ * NOTE: this reads the free-text Calendar title because there's no dedicated
+ * invoice flag on the Job yet. If ops's actual "/ ... INV" wording turns out to
+ * differ from this, loosen/tighten the regex to match it exactly.
+ */
+function isInvoiceJob(job: Job): boolean {
+  return /\/[^/]*\bINV\b/i.test(job.rawTitle ?? "");
+}
+
+/** "Extra time / Charges, London Congestion charge · 90 min overtime (£67.50)" —
+ *  what the driver logged on Extra charges / Overtime, recapped instead of a grand
+ *  total on invoice jobs (nothing to collect on site, but the extras still matter for
+ *  the invoice). Reads straight off `job` since both steps' SUBMIT_* actions have
+ *  already saved to it by the time Total Charges / Payment are reached. */
+function extrasSummary(job: Job): string {
+  const parts = (job.extraCharges ?? []).filter(charge => charge !== NO_EXTRAS);
+  const pieces = [...parts];
+  if (job.overtimeMinutes > 0) {
+    const charge = job.overtimeCharge > 0 ? ` (£${job.overtimeCharge.toFixed(2)})` : "";
+    pieces.push(`${job.overtimeMinutes} min overtime${charge}`);
+  }
+  return pieces.length > 0 ? pieces.join(" · ") : "No extra charges added.";
+}
+
+/** 2h, 2.5h, 3h … 10h — the Overtime step's "longer than 90 minutes" dropdown. */
+const OVERTIME_HOUR_OPTIONS = Array.from({ length: 17 }, (_, i) => 2 + i * 0.5);
+
+function overtimeBlockedReason(offlineReason?: string): string | undefined {
+  if (offlineReason) return offlineReason;
+  if (formState.overtimeMinutes.trim() === "") {
+    return "Enter the overtime minutes — use 0 if there was none.";
+  }
+
+  const minutes = Number(formState.overtimeMinutes);
+  if (!Number.isFinite(minutes) || minutes < 0) {
+    return "Overtime must be a number of minutes.";
+  }
+
+  return undefined;
+}
+
+function totalChargesBlockedReason(offlineReason?: string): string | undefined {
+  if (offlineReason) return offlineReason;
+  if (!formState.totalChargesCorrect) return "Choose whether the charges are correct.";
+  if (formState.totalChargesCorrect === "yes") return undefined;
+
+  const amount = Number(formState.totalChargesAmount);
+  if (!formState.totalChargesAmount.trim() || !Number.isFinite(amount) || amount < 0) {
+    return "Enter the custom final total amount.";
+  }
+  if (!formState.totalChargesNote.trim()) return "Add a reason for the adjustment.";
+  return undefined;
+}
+
+function totalChargesInput(): Record<string, string[]> | undefined {
+  if (formState.totalChargesCorrect !== "no") return undefined;
+  return {
+    total_charges: [formState.totalChargesAmount],
+    total_adjustment_note: [formState.totalChargesNote.trim()]
+  };
+}
+
+export function paymentMethodTakesAmount(method: string): boolean {
+  return method !== "Invoice";
+}
+
+function paymentAmountInputName(method: string): string {
+  return `payment_amount_${method}`;
+}
+
+export function paymentActionInput(
+  methods: string[],
+  amounts: Record<string, string>
+): Record<string, string[]> {
+  const input: Record<string, string[]> = { payment_method: methods };
+  for (const method of methods) {
+    if (!paymentMethodTakesAmount(method)) continue;
+    input[paymentAmountInputName(method)] = [amounts[method] ?? ""];
+  }
+  return input;
+}
+
+export function paymentBlockedReasonFor(
+  methods: string[],
+  amounts: Record<string, string>,
+  offlineReason?: string
+): string | undefined {
+  if (offlineReason) return offlineReason;
+  if (methods.length === 0) return "Choose at least one payment method.";
+  for (const method of methods) {
+    if (!paymentMethodTakesAmount(method)) continue;
+    const raw = amounts[method]?.trim() ?? "";
+    if (!raw) return `Enter the amount taken by ${method}.`;
+    const amount = Number(raw);
+    if (!Number.isFinite(amount) || amount < 0) return `Enter a valid amount taken by ${method}.`;
+  }
+  return undefined;
+}
+
+export function customerSignatureBlockedReason(
+  signed: boolean,
+  offlineReason?: string
+): string | undefined {
+  if (offlineReason) return offlineReason;
+  if (!signed) return "The customer needs to sign first.";
+  return undefined;
+}
+
+function StepBody({
+  job,
+  state,
+  busy,
+  uploadProgress,
+  error,
+  suggestedTotal,
+  confirmationText,
+  remotePhotos,
+  customerSignatureSigned,
+  customerSignaturePreviewUrl,
+  onRemoveRemotePhoto,
+  onOpenScenario,
+  onOpenCustomerSignature,
+  onClearCustomerSignature,
+  onFormChange
+}: {
+  job: Job;
+  state: string;
+  busy: boolean;
+  uploadProgress: number | null;
+  error: string | null;
+  suggestedTotal: number;
+  /** The agreement the customer signs -- shown on WAITING_CLIENT_CONFIRMATION ahead
+   *  of opening the signature pad, not just inside it. */
+  confirmationText: string;
+  /** Photos already uploaded for the current photo step (empty for other steps). */
+  remotePhotos: RemotePhoto[];
+  customerSignatureSigned: boolean;
+  customerSignaturePreviewUrl: string | null;
+  onRemoveRemotePhoto: (evidenceId: string) => void;
+  onOpenScenario: (scenario: ScenarioKey) => void;
+  onOpenCustomerSignature: () => void;
+  onClearCustomerSignature: () => void;
+  onFormChange: () => void;
+}) {
+  // Re-renders the whole workflow screen -- not just this subtree -- so the docked
+  // submit button sees the same `formState` change the inputs just made.
+  const tick = onFormChange;
+
+  // Stable across renders so <PhotoPicker>'s register effect doesn't re-run each tick.
+  const registerPhotoCapture = useCallback((open: (() => void) | null) => {
+    photoCapture.open = open;
+  }, []);
+
+  // Reset shared form state whenever the step changes, so values never leak from one
+  // step to the next. Steps the driver can navigate back into (Extra charges,
+  // Overtime) are re-seeded from what the server already recorded, so a return trip
+  // shows their previous answers rather than a blank form — this is what lets them
+  // *deselect* "Extra time / Charges" after having gone forward with it.
+  useEffect(() => {
+    formState.extraCharges = state === "WAITING_EXTRA_CHARGES" ? [...(job.extraCharges ?? [])] : [];
+    formState.overtimeMinutes = state === "WAITING_OVERTIME"
+      ? String(job.driverReportedOvertimeMinutes ?? Math.ceil(job.overtimeMinutes || 0)) : "";
+    // Invoice jobs (see isInvoiceJob) skip collecting payment on site -- Invoice is
+    // pre-selected so the driver doesn't have to tap it themselves.
+    formState.payment = state === "WAITING_PAYMENT" && isInvoiceJob(job) ? ["Invoice"] : [];
+    // Photos are kept per step (see photosByStep) so returning to a photo step
+    // restores what was taken there; only the mirror for the current step is set here.
+    formState.photos = formState.photosByStep[state] ?? [];
+    formState.photoMeta = formState.photoMetaByStep[state] ?? [];
+    formState.totalChargesCorrect = "";
+    formState.totalChargesAmount = state === "WAITING_TOTAL_CHARGES" ? suggestedTotal.toFixed(2) : "";
+    formState.totalChargesNote = "";
+    tick();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, job.jobId, suggestedTotal]);
+
+  switch (state) {
+    case "READY":
+      return <ReadyCard job={job} />;
+
+    case "WAITING_ARRIVAL_PHOTO":
+      return (
+        <PhotoUploader
+          key={state}
+          label="Proof of arrival pictures"
+          maxPhotos={2}
+          submitting={busy}
+          progress={uploadProgress}
+          error={error}
+          registerCapture={registerPhotoCapture}
+          initialFiles={formState.photosByStep[state] ?? []}
+          initialMeta={formState.photoMetaByStep[state] ?? []}
+          remoteFiles={remotePhotos}
+          onRemoveRemote={onRemoveRemotePhoto}
+          onFilesChange={(files, metas) => {
+            formState.photos = files;
+            formState.photosByStep[state] = files;
+            formState.photoMeta = metas;
+            formState.photoMetaByStep[state] = metas;
+            tick();
+          }}
+        />
+      );
+
+    case "WAITING_LOADED_PHOTO":
+      return (
+        <PhotoUploader
+          key={state}
+          label="Van Loaded Photo (pick up point)"
+          hint="Up to 2 - show how the load is stacked and secured."
+          maxPhotos={2}
+          submitting={busy}
+          progress={uploadProgress}
+          error={error}
+          registerCapture={registerPhotoCapture}
+          initialFiles={formState.photosByStep[state] ?? []}
+          initialMeta={formState.photoMetaByStep[state] ?? []}
+          remoteFiles={remotePhotos}
+          onRemoveRemote={onRemoveRemotePhoto}
+          onFilesChange={(files, metas) => {
+            formState.photos = files;
+            formState.photosByStep[state] = files;
+            formState.photoMeta = metas;
+            formState.photoMetaByStep[state] = metas;
+            tick();
+          }}
+        />
+      );
+
+    case "WAITING_EMPTY_VAN_PHOTO":
+      return (
+        <div className="flex flex-col gap-4">
+          <PhotoUploader
+            key={state}
+            label="Empty Van Photo (Drop Off Point)"
+            labelHidden
+            hint="Please show that the van is completely empty, clean and organised. Make sure everything is clear and ready for the next customer and job. ✅"
+            maxPhotos={1}
+            submitting={busy}
+            progress={uploadProgress}
+            error={error}
+            registerCapture={registerPhotoCapture}
+            initialFiles={formState.photosByStep[state] ?? []}
+            initialMeta={formState.photoMetaByStep[state] ?? []}
+            remoteFiles={remotePhotos}
+            onRemoveRemote={onRemoveRemotePhoto}
+            onFilesChange={(files, metas) => {
+              formState.photos = files;
+              formState.photosByStep[state] = files;
+              formState.photoMeta = metas;
+              formState.photoMetaByStep[state] = metas;
+              tick();
+            }}
+          />
+        </div>
+      );
+
+    case "WAITING_ARRIVAL_ISSUES_CHECK":
+    case "WAITING_EMPTY_VAN_ISSUES_CHECK":
+      return null;
+
+    // Recovery path: a driver who left the app mid-detour (ISSUES_YES already fired,
+    // no form ever submitted) lands back here with `openScenario` reset to null on
+    // remount. These call onOpenScenario directly -- ISSUES_YES already happened, so
+    // re-firing it would just error against the backend's state machine.
+    case "WAITING_ARRIVAL_ISSUES_CHOICE":
+    case "WAITING_EMPTY_VAN_ISSUES_CHOICE":
+      return (
+        <div className="flex flex-col gap-3">
+          <IssueChoiceCard
+            icon={<Car aria-hidden />}
+            title="Parking Liability"
+            description="Restricted bay, red route, or anywhere a PCN could land. The customer accepts the charge."
+            onClick={() => onOpenScenario("parking")}
+          />
+          <IssueChoiceCard
+            icon={<FileWarning aria-hidden />}
+            title="Liability Report"
+            description="Damage, unprotected items, or an overloaded van. The customer signs to accept liability."
+            onClick={() => onOpenScenario("liability")}
+          />
+          <IssueChoiceCard
+            icon={<PackagePlus aria-hidden />}
+            title="Check in"
+            description="Record items entering storage."
+            onClick={() => onOpenScenario("checkin")}
+          />
+          <IssueChoiceCard
+            icon={<PackageMinus aria-hidden />}
+            title="Check out"
+            description="Release items from storage."
+            onClick={() => onOpenScenario("checkout")}
+          />
+        </div>
+      );
+
+    case "IN_PROGRESS":
+      return <InProgressCard job={job} />;
+
+    case "WAITING_EXTRA_CHARGES":
+      return (
+        <div className="flex flex-col gap-4">
+          {job.congestionZoneEnteredAt && (
+            <Alert tone="info" title="Central London detected">
+              This Van passed through the Congestion Charge zone — consider adding "{CONGESTION_CHARGE}" below.
+            </Alert>
+          )}
+          {job.tunnelZoneEnteredAt && (
+            <Alert tone="info" title="Tunnel toll zone detected">
+              This job passed through a tunnel toll zone — consider adding "{TUNNEL_CHARGE}" below.
+            </Alert>
+          )}
+          <ChoiceGroup legend="Extra charges" hint="Select every one that applies.">
+            {EXTRA_CHARGE_OPTIONS.map(option => (
+              <Choice
+                key={option}
+                type="checkbox"
+                label={option}
+                selected={formState.extraCharges.includes(option)}
+                onToggle={() => {
+                  const current = formState.extraCharges;
+                  if (option === NO_EXTRAS) {
+                    formState.extraCharges = current.includes(option) ? [] : [option];
+                  } else {
+                    const withoutNone = current.filter(v => v !== NO_EXTRAS);
+                    formState.extraCharges = withoutNone.includes(option)
+                      ? withoutNone.filter(v => v !== option)
+                      : [...withoutNone, option];
+                  }
+                  tick();
+                }}
+              />
+            ))}
+          </ChoiceGroup>
+        </div>
+      );
+
+    case "WAITING_OVERTIME": {
+      // Overtime only exists when "Extra time / Charges" was picked. If we're here
+      // without it, the screen is mid auto-skip — render nothing rather than flash
+      // the form.
+      if (!overtimeApplies(job.extraCharges)) return null;
+
+      // The hours dropdown mirrors formState.overtimeMinutes when it's a >=2h, on-the-
+      // half-hour value (i.e. it was set by the dropdown, or matches one of its
+      // options) -- otherwise (0-90 min, set by a chip) it shows its placeholder.
+      const overtimeMinutesNum = Number(formState.overtimeMinutes);
+      const dropdownValue =
+        Number.isFinite(overtimeMinutesNum) && overtimeMinutesNum >= 120 && overtimeMinutesNum % 30 === 0
+          ? String(overtimeMinutesNum)
+          : "";
+
+      return (
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2.5">
+            <span className="pl-0.5 text-label text-fg-muted">Driver-reported extra minutes</span>
+
+            {/* Quick-pick chips: overtime is almost always a round number, and typing
+                on a numeric keypad next to a van is slower than one tap. A fixed
+                3-column grid keeps them a consistent, generous size, always 3 to a
+                row, rather than wrapping at whatever width the labels happen to be. */}
+            <div className="grid grid-cols-3 gap-2.5">
+              {["0", "30", "60", "90"].map(value => (
+                <button
+                  key={value}
+                  onClick={() => {
+                    formState.overtimeMinutes = value;
+                    tick();
+                  }}
+                  className={cx(
+                    "min-h-tap rounded-pill border text-button transition-colors",
+                    formState.overtimeMinutes === value
+                      ? "border-brand bg-brand text-brand-fg"
+                      : "border-line bg-surface text-fg-muted hover:bg-surface-sunken"
+                  )}
+                >
+                  {value === "0" ? "None" : `${value} min`}
+                </button>
+              ))}
+            </div>
+
+            {/* Longer than 90 minutes: pick the nearest half hour instead of typing. */}
+            <Select
+              value={dropdownValue}
+              placeholder="Longer? Pick the hours"
+              className="min-h-control-lg text-[16px]"
+              onChange={e => {
+                formState.overtimeMinutes = e.target.value;
+                tick();
+              }}
+            >
+              {OVERTIME_HOUR_OPTIONS.map(hours => (
+                <option key={hours} value={Math.round(hours * 60)}>
+                  {hours} hours
+                </option>
+              ))}
+            </Select>
+          </div>
+        </div>
+      );
+    }
+
+    case "WAITING_TOTAL_CHARGES":
+      if (isInvoiceJob(job)) {
+        return (
+          <div className="flex flex-col gap-4">
+            <div className="rounded-card border border-brand-line bg-brand-subtle px-4 py-3.5">
+              <p className="text-eyebrow uppercase text-brand-subtle-fg">Payment by Invoice</p>
+              <p className="mt-1 text-body text-fg-muted">
+                This job is billed by invoice — there's no total to confirm with the customer on site.
+              </p>
+            </div>
+            <div className="rounded-card border border-line bg-surface px-4 py-3.5">
+              <p className="text-eyebrow uppercase text-fg-subtle">Extra charges</p>
+              <p className="mt-1 text-card text-fg">{extrasSummary(job)}</p>
+            </div>
+          </div>
+        );
+      }
+      return (
+        <div className="flex flex-col gap-4">
+          <div className="rounded-card border border-brand-line bg-brand-subtle px-4 py-3.5">
+            <p className="text-eyebrow uppercase text-brand-subtle-fg">Total to charge</p>
+            <p className="mt-0.5 text-display tabular-nums text-brand-subtle-fg">
+              £{suggestedTotal.toFixed(2)}
+            </p>
+            <p className="mt-1 text-helper text-fg-muted">
+              Base price, additional charges and calculated overtime.
+            </p>
+          </div>
+          <ChoiceGroup legend="Are these charges correct?">
+            <Choice
+              type="radio"
+              name="total_charges_correct"
+              label="Yes"
+              selected={formState.totalChargesCorrect === "yes"}
+              onToggle={() => {
+                formState.totalChargesCorrect = "yes";
+                tick();
+              }}
+            />
+            <Choice
+              type="radio"
+              name="total_charges_correct"
+              label="No"
+              selected={formState.totalChargesCorrect === "no"}
+              onToggle={() => {
+                formState.totalChargesCorrect = "no";
+                tick();
+              }}
+            />
+          </ChoiceGroup>
+          {formState.totalChargesCorrect === "no" && (
+            <div className="flex flex-col gap-3 rounded-card border border-line bg-surface px-4 py-3.5">
+              <p className="text-heading text-fg">Custom Edit Price</p>
+              <Field label="Final total amount" required>
+                {control => (
+                  <Input
+                    {...control}
+                    prefix="£"
+                    inputMode="decimal"
+                    value={formState.totalChargesAmount}
+                    onChange={event => {
+                      formState.totalChargesAmount = event.target.value;
+                      tick();
+                    }}
+                  />
+                )}
+              </Field>
+              <Field label="Reason/note for adjustment" required>
+                {control => (
+                  <Textarea
+                    {...control}
+                    rows={3}
+                    value={formState.totalChargesNote}
+                    onChange={event => {
+                      formState.totalChargesNote = event.target.value;
+                      tick();
+                    }}
+                  />
+                )}
+              </Field>
+            </div>
+          )}
+        </div>
+      );
+
+    case "WAITING_PAYMENT":
+      return (
+        <div className="flex flex-col gap-4">
+          <ChoiceGroup>
+            {PAYMENT_METHODS.map(option => {
+              const selected = formState.payment.includes(option);
+              return (
+                <div key={option} className="flex flex-col gap-2">
+                  <Choice
+                    type="checkbox"
+                    label={option}
+                    selected={selected}
+                    onToggle={() => {
+                      formState.payment = selected
+                        ? formState.payment.filter(value => value !== option)
+                        : [...formState.payment, option];
+                      if (selected) delete formState.paymentAmounts[option];
+                      tick();
+                    }}
+                  />
+                  {selected && paymentMethodTakesAmount(option) && (
+                    <div className="ml-4 rounded-card border border-line bg-surface px-4 py-3">
+                      <Field label={`${option} amount taken`} required>
+                        {control => (
+                          <Input
+                            {...control}
+                            prefix={"\u00a3"}
+                            inputMode="decimal"
+                            value={formState.paymentAmounts[option] ?? ""}
+                            onChange={event => {
+                              formState.paymentAmounts[option] = event.target.value;
+                              tick();
+                            }}
+                          />
+                        )}
+                      </Field>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </ChoiceGroup>
+          {false && formState.payment.some(paymentMethodTakesAmount) && (
+            <div className="flex flex-col gap-3 rounded-card border border-line bg-surface px-4 py-3.5">
+              <p className="text-label text-fg-muted">Amount taken by payment method</p>
+              {formState.payment.filter(paymentMethodTakesAmount).map(method => (
+                <Field key={method} label={method} required>
+                  {control => (
+                    <Input
+                      {...control}
+                      prefix="£"
+                      inputMode="decimal"
+                      value={formState.paymentAmounts[method] ?? ""}
+                      onChange={event => {
+                        formState.paymentAmounts[method] = event.target.value;
+                        tick();
+                      }}
+                    />
+                  )}
+                </Field>
+              ))}
+            </div>
+          )}
+          {/* Invoice jobs: Invoice is pre-selected (see the reset effect above) but
+              the driver can still see/change it here; the extras recap is a reminder
+              of what's actually going on the invoice. */}
+          {isInvoiceJob(job) && (
+            <p className="text-helper text-fg-subtle">
+              <span className="font-semibold text-fg-muted">Extra charges: </span>
+              {extrasSummary(job)}
+            </p>
+          )}
+        </div>
+      );
+
+    case "WAITING_CLIENT_CONFIRMATION":
+      return (
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col items-center gap-3 rounded-card border border-warning-line bg-warning-subtle px-4 py-6">
+            <span className="grid size-11 place-items-center rounded-pill bg-brand-subtle text-brand">
+              <PenLine className="size-5" aria-hidden />
+            </span>
+            <p className="text-heading text-warning">Hand your phone to the customer</p>
+            {/* The actual agreement they're signing -- shown up front here too, not
+                just inside the signature pad, so they can read it before the driver
+                even opens it. */}
+            <p className="w-full whitespace-pre-wrap text-left text-body text-fg-muted">{confirmationText}</p>
+          </div>
+          <SignatureField
+            signed={customerSignatureSigned}
+            previewUrl={customerSignaturePreviewUrl}
+            onOpen={onOpenCustomerSignature}
+            onClear={onClearCustomerSignature}
+            instruction="The customer signs to accept the completed move."
+          />
+        </div>
+      );
+
+    case "WAITING_REVIEW_CHECK":
+      return (
+        <div className="rounded-card border border-line bg-surface px-4 py-6 text-center">
+          <p className="text-body text-fg">
+            🎉 Congratulations! You've successfully completed another job. Great work! 💪🎊
+          </p>
+        </div>
+      );
+
+    case "WAITING_REVIEW_SEND":
+      return null; // dock only
+
+    case "COMPLETED":
+      return null; // the screen renders <CompletionSummary> above
+
+    default:
+      return (
+        <div className="rounded-card bg-surface-sunken px-4 py-4">
+          <p className="text-body text-fg-muted">
+            This job is at a step this version of the app doesn't recognise ({state}). Call the office before
+            continuing.
+          </p>
+        </div>
+      );
+  }
+}
+
+/** Placeholder for a detail the backend hasn't sent. */
+const NO_VALUE = "—";
+
+/**
+ * The job exactly as booked -- title, window, and the full Calendar description
+ * verbatim (see lib/htmlText.ts's htmlToPlainText). This used to sit below a set of
+ * already-parsed summary rows (balance/crew/van/floors/...); those were dropped as
+ * redundant with this and the route card above -- everything they showed is already
+ * in here, in whatever words the office actually used, so there's nothing to keep in
+ * sync between two versions of the same booking. Styled as the card's main content,
+ * not a secondary block, since it's now the only thing here.
+ */
+function ReadyCard({ job }: { job: Job }) {
+  const when = formatCalendarWindow(job.bookedStart, job.bookedFinish);
+  const description = job.rawDescription ? htmlToPlainText(job.rawDescription) : "";
+
+  if (!job.rawTitle && !description) {
+    return (
+      <div className="rounded-card border border-line bg-surface px-4 py-4">
+        <p className="text-body text-fg-muted">{NO_VALUE} Booking details aren't in yet.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-1 rounded-card border border-line bg-surface px-4 py-4">
+      {job.rawTitle && (
+        <p className="text-title font-bold text-fg [overflow-wrap:anywhere]">{job.rawTitle}</p>
+      )}
+      {when && <p className="text-body text-fg-muted">{when}</p>}
+      {description && <RawBookingText text={description} className="mt-3" />}
+    </div>
+  );
+}
+
+function InProgressCard({ job }: { job: Job }) {
+  const started = job.actualStart
+    ? new Date(job.actualStart).toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: LONDON
+      })
+    : null;
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-card border border-line bg-surface px-4 py-4">
+      <div>
+        <p className="text-eyebrow uppercase text-fg-subtle">Started at</p>
+        <p className="mt-0.5 text-title tabular-nums text-fg">{started ?? "—"}</p>
+      </div>
+      <span className="inline-flex items-center gap-1.5 rounded-pill bg-success-subtle px-3 py-1.5 text-meta font-bold uppercase tracking-[0.04em] text-success">
+        <span className="size-2 rounded-pill bg-success motion-safe:animate-pulse" aria-hidden />
+        Running
+      </span>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------- step dock ---- */
+
+interface StepDockProps {
+  state: string;
+  /** Whether the Overtime step is part of this job's workflow. */
+  overtime: boolean;
+  /** Billed by invoice (see isInvoiceJob) — Total charges skips the confirm-with-
+   *  customer step since there's nothing to show/collect on site. */
+  invoice: boolean;
+  busy: boolean;
+  online: boolean;
+  uploadProgress: number | null;
+  /** Photos already uploaded for the current photo step — count toward the step max. */
+  photoRemoteCount: number;
+  photoMeta: Array<PhotoCaptureMeta | null>;
+  customerSignatureReady: boolean;
+  onAction: (action: string, input?: Record<string, string[]>, message?: string) => void;
+  onUploadPhotos: (files: File[], metas: Array<PhotoCaptureMeta | null>) => void;
+  onSubmitSignature: () => void;
+  onBackHome: () => void;
+  completionSummarySubmitted: boolean;
+  onBlocked: (reason: string) => void;
+}
+
+/**
+ * The primary action for every step, pinned to the bottom of the screen.
+ *
+ * Every button here carries a `blockedReason` rather than being disabled. The old
+ * forms greyed out the submit and said nothing, so a driver who'd missed one field
+ * just saw a dead button; worse, the signature step's button *looked* enabled and
+ * silently returned. Now the button always responds, and if it can't proceed it says
+ * exactly what's missing.
+ */
+function StepDock({
+  state,
+  overtime,
+  invoice,
+  busy,
+  online,
+  uploadProgress,
+  photoRemoteCount,
+  photoMeta,
+  customerSignatureReady,
+  onAction,
+  onUploadPhotos,
+  onSubmitSignature,
+  onBackHome,
+  completionSummarySubmitted,
+  onBlocked
+}: StepDockProps) {
+  const offlineReason = !online ? "You're offline — reconnect to submit this step." : undefined;
+
+  switch (state) {
+    // READY has no dock of its own -- FeaturedJobCard.tsx (the Jobs list) owns the
+    // whole "I'm on the Way" / Start Job flow before this screen is ever opened; this
+    // screen only opens once a job is already past READY. (This case used to render
+    // its own "I'm on my way" button here, dead code once FeaturedJobCard replaced the
+    // READY screen -- see handleWorkflowBack's own comment above for the same history.)
+
+    case "WAITING_ARRIVAL_PHOTO":
+    case "WAITING_LOADED_PHOTO":
+    case "WAITING_EMPTY_VAN_PHOTO": {
+      // Local (just taken) + remote (already uploaded) photos both count toward the step.
+      const photoTotal = formState.photos.length + photoRemoteCount;
+      const photosFull = photoTotal >= photoMaxFor(state);
+      const waitingForLocation = photoLocationBlockedReason(formState.photos.length, photoMeta);
+      return (
+        <BottomActionBar>
+          {/* Two equal, same-style buttons side by side: open the camera (left) +
+              submit (right). */}
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              size="lg"
+              className="!rounded-[10px]"
+              iconLeft={<Camera aria-hidden />}
+              disabled={busy || photosFull}
+              onClick={() => photoCapture.open?.()}
+            >
+              {photoTotal === 0 ? "Take photo" : "Take another"}
+            </Button>
+            <Button
+              size="lg"
+              className="!rounded-[10px]"
+              loading={busy}
+              blockedReason={
+                offlineReason ?? (photoTotal === 0 ? "Take a photo first." : waitingForLocation)
+              }
+              onBlocked={onBlocked}
+              onClick={() => onUploadPhotos(formState.photos, formState.photoMeta)}
+            >
+              {busy
+                ? uploadProgress !== null
+                  ? `Continuing ${Math.round(uploadProgress * 100)}%`
+                  : "Continuing..."
+                : "Continue"}
+            </Button>
+          </div>
+        </BottomActionBar>
+      );
+    }
+
+    case "WAITING_ARRIVAL_ISSUES_CHECK":
+    case "WAITING_EMPTY_VAN_ISSUES_CHECK":
+      return null;
+
+    case "IN_PROGRESS":
+      return (
+        <BottomActionBar>
+          <Button
+            fullWidth
+            size="lg"
+            loading={busy}
+            blockedReason={offlineReason}
+            onBlocked={onBlocked}
+            onClick={() => onAction("FINISH_MOVE", undefined, "Move finished")}
+          >
+            {busy ? "Finishing…" : "Finish move"}
+          </Button>
+        </BottomActionBar>
+      );
+
+    case "WAITING_EXTRA_CHARGES":
+      return (
+        <BottomActionBar>
+          <Button
+            fullWidth
+            size="lg"
+            loading={busy}
+            blockedReason={
+              offlineReason ??
+              (formState.extraCharges.length === 0
+                ? `Choose at least one — pick “${NO_EXTRAS}” if there were none.`
+                : undefined)
+            }
+            onBlocked={onBlocked}
+            onClick={() => onAction("SUBMIT_EXTRA_CHARGES", { extra_charges: formState.extraCharges })}
+          >
+            Continue
+          </Button>
+        </BottomActionBar>
+      );
+
+    case "WAITING_OVERTIME":
+      // Mirrors StepBody: no dock while the screen auto-skips an Overtime step that
+      // doesn't apply to this job.
+      if (!overtime) return null;
+      return (
+        <BottomActionBar>
+          <Button
+            fullWidth
+            size="lg"
+            loading={busy}
+            blockedReason={overtimeBlockedReason(offlineReason)}
+            onBlocked={onBlocked}
+            onClick={() =>
+              onAction("SUBMIT_OVERTIME", { overtime_minutes: [formState.overtimeMinutes] })
+            }
+          >
+            Continue
+          </Button>
+        </BottomActionBar>
+      );
+
+    case "WAITING_TOTAL_CHARGES":
+      return (
+        <BottomActionBar>
+          <Button
+            fullWidth
+            size="lg"
+            loading={busy}
+            // Invoice jobs have nothing to confirm -- there's no "is this correct?"
+            // choice shown, so Continue is only ever blocked by being offline.
+            blockedReason={invoice ? offlineReason : totalChargesBlockedReason(offlineReason)}
+            onBlocked={onBlocked}
+            onClick={() => onAction("SUBMIT_TOTAL_CHARGES", invoice ? undefined : totalChargesInput())}
+          >
+            Continue
+          </Button>
+        </BottomActionBar>
+      );
+
+    case "WAITING_PAYMENT":
+      return (
+        <BottomActionBar>
+          <Button
+            fullWidth
+            size="lg"
+            loading={busy}
+            blockedReason={paymentBlockedReasonFor(formState.payment, formState.paymentAmounts, offlineReason)}
+            onBlocked={onBlocked}
+            onClick={() => onAction("SUBMIT_PAYMENT", paymentActionInput(formState.payment, formState.paymentAmounts))}
+          >
+            Continue
+          </Button>
+        </BottomActionBar>
+      );
+
+    case "WAITING_CLIENT_CONFIRMATION":
+      return (
+        <BottomActionBar>
+          <Button
+            fullWidth
+            size="lg"
+            iconLeft={<PenLine />}
+            loading={busy}
+            blockedReason={customerSignatureBlockedReason(customerSignatureReady, offlineReason)}
+            onBlocked={onBlocked}
+            onClick={onSubmitSignature}
+          >
+            {busy
+              ? uploadProgress !== null
+                ? `Saving ${Math.round(uploadProgress * 100)}%`
+                : "Saving..."
+              : "Continue"}
+          </Button>
+        </BottomActionBar>
+      );
+
+    case "WAITING_REVIEW_CHECK":
+      return (
+        <BottomActionBar>
+          <div className="grid grid-cols-2 gap-3">
+            <Button variant="secondary" size="lg" disabled={busy} onClick={() => onAction("REVIEW_NONE")}>
+              No thanks
+            </Button>
+            <Button size="lg" loading={busy} onClick={() => onAction("REVIEW_YES")}>
+              Yes, ask
+            </Button>
+          </div>
+        </BottomActionBar>
+      );
+
+    case "WAITING_REVIEW_SEND":
+      return null;
+
+    case "COMPLETED":
+      if (!completionSummarySubmitted) return null;
+      return (
+        <BottomActionBar>
+          <Button
+            fullWidth
+            size="lg"
+            onBlocked={onBlocked}
+            onClick={onBackHome}
+          >
+            Back to your jobs
+          </Button>
+        </BottomActionBar>
+      );
+
+    default:
+      return null;
+  }
+}
+
+
+// Fallback shown until the job detail response's confirmationText loads. Reads the
+// same Settings key the admin dashboard already edits.
+const DEFAULT_CUSTOMER_CONFIRMATION_TEXT =
+  "I confirm that the moving service has been completed and all my belongings have been unloaded. " +
+  "I have checked the van and confirm that nothing has been left behind. By signing, I agree that the job " +
+  "is complete and the team is released to leave. Any request to return after sign-off will be subject to " +
+  "availability and additional charges.";

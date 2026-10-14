@@ -1,0 +1,37 @@
+/* Road evidence uses the report palette; estimates remain distinct from receipts. */
+.road-coverage { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 14px 17px; margin: 16px 0; background: var(--rpt-info-soft, #edf5ff); border: 1px solid var(--rpt-info-line, #d8e5fa); border-radius: 14px; color: var(--rpt-info, #31568b); font-size: 13px; line-height: 1.6; }
+.road-coverage strong { width: 100%; font-size: 14px; font-weight: 650; }
+.road-rules { margin: 0 0 18px; padding: 13px 17px; border: 1px solid var(--rpt-line, #e2e6f2); border-radius: 14px; background: var(--rpt-card, #fff); font-size: 13px; }
+.road-rules summary { cursor: pointer; color: var(--rpt-link, #5c42cf); font-weight: 600; min-height: 24px; }
+.road-rules p { color: var(--rpt-muted, #626b82); margin: 10px 0; line-height: 1.6; }
+.road-rules dl div { display: grid; grid-template-columns: 140px 1fr; gap: 12px; margin-top: 9px; }
+.road-rules dt { color: var(--rpt-ink, #172039); font-weight: 600; }
+.road-rules dd { color: var(--rpt-muted, #626b82); }
+.road-reported { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 10px; margin-top: 11px; font-size: 14px; }
+.road-reported b { font-variant-numeric: tabular-nums; }
+.road-reported small { width: 100%; color: var(--rpt-muted, #626b82); font-size: 12px; line-height: 1.5; }
+.road-status { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 7px; font-size: 12px; font-weight: 550; background: var(--rpt-subtle, #f0f2f8); color: var(--rpt-muted, #626b82); }
+.road-status-review { background: var(--rpt-warning-soft, #fff4df); color: var(--rpt-warning, #885718); }
+.road-review-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 12px 0 18px; }
+.road-review-filter > div { display: flex; gap: 4px; padding: 4px; background: var(--rpt-subtle, #f0f2f8); border: 1px solid var(--rpt-line, #e2e6f2); border-radius: 13px; }
+.road-review-filter button { min-height: 44px; padding: 9px 14px; border-radius: 9px; font-size: 13px; color: var(--rpt-muted, #626b82); font-weight: 550; }
+.road-review-filter button[aria-pressed=true] { background: var(--rpt-card, #fff); color: var(--rpt-link, #5c42cf); box-shadow: 0 2px 5px #13213b08; }
+.road-review-filter > span { font-size: 13px; color: var(--rpt-muted, #626b82); }
+.road-event-table { font-size: 14px; }
+.road-event-table td { white-space: normal; }
+.road-event-table button { min-height: 44px; }
+.road-rules summary:focus-visible, .road-review-filter button:focus-visible { outline: 2px solid var(--rpt-link, #5c42cf); outline-offset: 3px; }
+@media (max-width: 767px) {
+  .road-event-table thead { display: none; }
+  .road-event-table, .road-event-table tbody, .road-event-table tr, .road-event-table td { display: block; width: 100%; min-width: 0; }
+  .road-event-table tr { padding: 14px; margin-bottom: 12px; border: 1px solid var(--rpt-line, #e2e6f2); border-radius: 14px; background: var(--rpt-card, #fff); }
+  .road-event-table td { display: grid; grid-template-columns: 112px minmax(0, 1fr); padding: 7px 0 !important; border: 0 !important; overflow-wrap: anywhere; }
+  .road-event-table td::before { content: attr(data-label); font-size: 12px; color: var(--rpt-muted, #626b82); }
+  .road-event-table td > small { grid-column: 2; }
+  .road-event-table .road-status { justify-self: start; }
+  .road-rules dl div { grid-template-columns: 1fr; gap: 3px; }
+  .road-review-filter > span { line-height: 1.6; }
+}
+@media print {
+  .road-coverage, .road-rules, .road-event-table tr { box-shadow: none; background: white; color: #172039; }
+}

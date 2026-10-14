@@ -1,0 +1,41 @@
+# Road charges, Live Fleet and record navigation
+
+The full attached audit was read and compared with this checkout. This change preserves the existing charge calculations, scheme schedules, record identities, authentication, tracker integration and map provider.
+
+## Completed audit items
+
+| Audit recommendation | Implementation | Verification | Status |
+| --- | --- | --- | --- |
+| Combine tunnel and congestion | `DriverRoadAlerts` supports All, Tunnel and Congestion inside the four-tab driver report; scheme filtering is passed to the existing report endpoint. | Report integration and road component tests; desktop/mobile screenshots. | Complete |
+| Do not hide unlinked events after pagination | The returned event page renders every row. Unlinked records show Needs job match and retain evidence. | Tests assert row count, source total, page actions and absence of invented links. | Complete |
+| Review unlinked events across the range | Unlinked events mode loads every supported road-alert page, verifies unique complete coverage, then filters and paginates. URL state records the review filter and filtered page. | Multi-page test places the only unlinked record on the last page; failure test requires recoverable error. | Complete |
+| Distinguish entry, time inside, charging assessment and fee | Separate fields and labels show recorded entry, time in zone, entries marked chargeable, expected amount, fee reason and rate basis. | Source comparison and tests preserve original report records. | Complete |
+| Keep rules secondary and accurate about provenance | View charge rules is a closed disclosure with scheme schedules, London timezone, rate-basis explanation and an explicit missing effective date. Existing schedules are unchanged. | Disclosure/zero-event tests and visual review. | Complete; legal schedule validation remains outside this frontend checkout |
+| Preserve estimates and historical basis | Current Pricing Settings estimate is retained verbatim; saved job snapshot remains separate from authority confirmation. Partial estimates say Known estimate subtotal with coverage. | Estimate-provenance, unpriced-fee and full-range subtotal tests. | Complete |
+| Distinguish missing/partial/empty/error tracker states | Coverage notice separates unavailable and partial history. Complete zero-event scope, missing history, unlinked events, fee-unavailable events and failed complete-range loading have different states. Empty ranges have no pagination. | Dedicated tests and synthetic browser review. | Complete |
+| Exact fleet job navigation | `LiveFleetPage` fetches all current-job pages and opens the exact job ID through canonical Jobs detail. Multiple active jobs are not guessed into a unique current job. | Page test and real browser fixture workflow. | Complete |
+| Separate signal freshness from vehicle motion | Central policy keeps existing 30-minute freshness and 2 mph motion thresholds. Stale data shows Last known: moving/stopped and Stale signal, never an inferred Parked state or fabricated stopped duration. | SQL/ISO timestamp, threshold, invalid timestamp and component tests. | Complete |
+| Keep fleet view coordinated and preserve context | Selected vehicle, search, motion/freshness filter and list visibility use fleet-scoped URL state. Map viewport is preserved in session storage. | Context tests, browser return workflow and narrow-screen review. | Complete |
+| Remove unnecessary fleet technical controls | Single-option provider selector removed; OpenStreetMap attribution retained. Coordinates, ignition, battery and signal values live in Telemetry details. Repeated collapse hint removed. | Component tests and screenshots. | Complete |
+| Loading and recovery | Fleet distinguishes loading, no positions, API failure and refresh failure retaining last-known positions. Job-association and boundary-source failures have separate notices and retry controls. | Error/retry tests and source review. | Complete |
+| Keyboard and accessibility | Controls have names and text statuses, fullscreen supports Escape/focus handling, evidence uses shared accessible Modal, reduced-motion map selection is honored. Mobile road rows stack without page-wide horizontal scrolling. | Unit controls, browser Escape/focus restoration, screenshots at 390/768/1366/1920. | Complete |
+| Preserve legacy report links and record context | Legacy reports normalize to Summary, Jobs & timings, Payments and Road charges. Encoded origin URLs preserve report state and driver-directory context without spilling unrelated fields into Jobs. Return destinations validate same origin/path and known sections. | Legacy routing, exact-record return, directory return and unsafe-URL rejection tests. | Complete |
+
+## Data definitions and limits
+
+- `roadAlerts.total` is the count of returned report events for the selected driver/range/scheme, not a count of confirmed authority charges. Every returned row remains visible, including `jobId: null`.
+- `roadAlertSummary.entries` counts recorded zone entries; `chargeableEntries` counts the report service's entries marked chargeable. The UI does not turn each entry into a separate legal payment obligation.
+- `estimatedKnownPence` sums the known API-supplied expected fees. Null estimates remain unpriced. This change does not revise the backend's deduplication or rate calculations.
+- `manualRoadChargeTotals` contains job-level driver-reported fee subtotals and known/missing/unavailable job counts for the full report range. Those amounts are not allocated to individual events. In review mode, the UI explicitly distinguishes full-range job submissions from filtered event estimates.
+- `ReportRoadAlert` does not supply an event-level driver-reported fee, settlement, confirmed authority charge, historical effective rate date or per-event payment reconciliation. A comparable event-level difference cannot safely be calculated from a repeated job aggregate. The UI links the job and evidence instead; adding comparable fields requires the external report API to supply an auditable association and matching unit.
+- Tracker `lastUpdate` is a UTC SQL/ISO position timestamp. It establishes signal age; it does not establish stopped duration, parking, availability or acceptance of a job.
+- Fleet matching uses the current tracker-to-driver assignment and a unique in-progress job. It does not rewrite the historical job vehicle or make an assignment when multiple jobs match.
+- `VITE_FLEET_STALE_AFTER_MINUTES` and `VITE_FLEET_MOVING_ABOVE_MPH` are optional positive numeric display-policy overrides. Defaults remain 30 minutes and 2 mph. They affect no stored operational or financial data.
+
+## Verification performed
+
+The eight focused test files passed together (44 tests), followed by added directory-return and restored-review pagination cases (50 focused cases total). Tests cover real behavior and data semantics, including exact fleet job IDs, all-current-job-page loading, range-wide unlinked filters, unknown fees, known zero submissions, scoped safe returns and navigation cancellation for unsaved settings. Whole-project `npm run typecheck` passed after the road/fleet changes.
+
+Eight final screenshots and `review-results.json` are in [screenshots/road-fleet-review](screenshots/road-fleet-review). Matching untouched-checkout baseline views are in [screenshots/before](screenshots/before) at 390px and 1366px (legacy Tunnel report versus consolidated Road charges). Road charges and Live Fleet were captured at 390px, 768px, 1366px and 1920px using sanitized local fixtures, with no page-wide horizontal overflow, runtime errors, unhandled API endpoints or intercepted mutations. Desktop road and mobile fleet screenshots were inspected; fee-state copy was corrected after visual review. External map tiles are deliberately blocked by the browser fixture, so the screenshots verify map/list controls and markers but do not assert external tile-provider availability.
+
+Focused browser workflows verify range-wide unlinked review, event evidence, Escape/focus restoration, exact current-job navigation and return to the selected vehicle/search. Results are saved beside the screenshots. Production APIs, messages and records were never used for this verification.

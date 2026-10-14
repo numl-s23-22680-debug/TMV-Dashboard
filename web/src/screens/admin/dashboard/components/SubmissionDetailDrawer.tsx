@@ -1,0 +1,811 @@
+import { withArrivalDistance } from "../../../../lib/trackerArrival";
+import React, { useEffect, useRef, useState } from "react";
+import { X, Download, Eye, Maximize2, ZoomIn, ZoomOut, Check, ChevronLeft, ChevronRight, RefreshCw, Save, FileText, Trash2, Loader2 } from "lucide-react";
+import { IconButton } from "../../../../ui";
+import { PaperDossierReport } from "./PaperDossierReport";
+import { PaperScenarioReport } from "./PaperScenarioReport";
+import { PrintPortal } from "./PrintPortal";
+import { NormalizedJob, ScenarioItem, formatGBP } from "../types";
+import { formatLondonDateTime } from "../utils/date";
+import { waitForPrintImages } from "../utils/printReady";
+import { resolveDriver } from "../utils/drivers";
+import { saveJobReview, deleteEvidencePhoto } from "../api";
+import { formatCapturedTime, formatLocationLabel, mapsUrlForLocation } from "../../../../lib/geo";
+import { htmlToPlainText } from "../../../../lib/htmlText";
+import { RawBookingText } from "../../../../components/driver/RawBookingText";
+import { JobScenarioSection } from "./JobScenarioSection";
+import { scenarioPointFromRecord } from "../utils/scenarioPoint";
+import { adjustmentReasonForMismatch } from "../utils/workBreakdown";
+import { ReportPreviewCanvas } from "./ReportPreviewCanvas";
+import { ReportReturnButton } from "./ReportReturnButton";
+import { useRecordDialog } from "../hooks/useRecordDialog";
+import { scenarioJobId } from "../utils/evidenceRecords";
+
+type ScenarioKind = "checkin" | "checkout" | "parking" | "liability";
+
+const SCENARIO_TITLES: Record<ScenarioKind, string> = {
+  checkin: "Storage Check-in",
+  checkout: "Storage Check-out",
+  parking: "Parking Liability Notice",
+  liability: "Liability Report"
+};
+
+interface Props {
+  job: NormalizedJob | ScenarioItem;
+  isOpen: boolean;
+  onClose: () => void;
+  onNavigate?: (dir: 'next' | 'prev') => void;
+  hasNext?: boolean;
+  hasPrev?: boolean;
+  /** Set only for a scenario submission (check-in/out, parking, liability) --
+   *  a NormalizedJob (finished job) has no kind and uses PaperDossierReport instead. */
+  kind?: ScenarioKind;
+  /** Triggers the download flow immediately on open -- for the row-level "Download"
+   *  quick action, which used to open this drawer and print in the same click with
+   *  no visible preview step. See the comment on handleDownload for why that mattered. */
+  autoDownload?: boolean;
+  onUpdated?: () => void;
+  onOpenJob?: (jobId: string) => void;
+}
+
+function ChargeRow({
+  label,
+  value,
+  strong = false,
+  brand = false
+}: {
+  label: string;
+  value: number;
+  strong?: boolean;
+  brand?: boolean;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4 bg-white px-3 py-2.5">
+      <span className={`text-[12px] ${strong ? "font-bold text-admin-ink" : "font-medium text-admin-muted"}`}>
+        {label}
+      </span>
+      <span className={`font-mono text-[13px] tabular-nums ${strong ? "font-bold" : "font-semibold"} ${brand ? "text-admin-brand" : "text-admin-ink"}`}>
+        {formatGBP(value)}
+      </span>
+    </div>
+  );
+}
+
+function ChargeNoteRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-start justify-between gap-4 bg-admin-status-red-bg/40 px-3 py-2.5">
+      <span className="text-[12px] font-bold text-admin-status-red">{label}</span>
+      <span className="max-w-[60%] text-right text-[12px] font-semibold text-admin-ink">
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function paymentBreakdownLabel(row: { method?: string; amount: number }) {
+  if ((row.method || "").toLowerCase() === "invoice" && row.amount === 0) return "Outstanding";
+  return formatGBP(row.amount);
+}
+
+function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div>
+      <span className="text-[11px] uppercase text-admin-muted font-semibold tracking-wider">{label}</span>
+      <div className="text-[14px] font-medium text-admin-ink mt-1">{value}</div>
+    </div>
+  );
+}
+
+export function SubmissionDetailDrawer({ job: initialJob, isOpen, onClose, onNavigate, hasNext, hasPrev, kind, autoDownload, onUpdated, onOpenJob }: Props) {
+  const { panelRef, titleId } = useRecordDialog(isOpen, onClose);
+  const [job, setJob] = useState<NormalizedJob | ScenarioItem>(initialJob);
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [zoom, setZoom] = useState(100);
+  const [activeTab, setActiveTab] = useState<"Activity" | "Comments">("Activity");
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const [managerStatus, setManagerStatus] = useState<"Pending" | "Approved" | "Flagged">("Pending");
+  const [managerNote, setManagerNote] = useState("");
+  const [savingReview, setSavingReview] = useState(false);
+  const [deletingPhotoId, setDeletingPhotoId] = useState<string | null>(null);
+
+  // handleDownload is defined further down (it needs job-derived values that only
+  // make sense once job is known non-null), but the autoDownload effect has to sit
+  // up here with the other hooks, before the early return below -- Rules of Hooks.
+  // The ref always holds the latest handleDownload closure; the effect just calls it
+  // once when the drawer opens with autoDownload set.
+  const handleDownloadRef = useRef<() => void>();
+  useEffect(() => {
+    setJob(initialJob);
+  }, [initialJob]);
+
+  useEffect(() => {
+    if (isOpen && autoDownload && job) handleDownloadRef.current?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, autoDownload]);
+
+  useEffect(() => {
+    if (kind) return;
+    const normalized = job as NormalizedJob;
+    setManagerStatus(normalized.managerReviewStatus || "Pending");
+    setManagerNote(normalized.managerReviewNote || "");
+  }, [job, kind]);
+
+  if (!isOpen || !job) return null;
+
+  // A scenario submission (check-in/out, parking, liability) has a completely
+  // different shape from a finished job's NormalizedJob -- flat/capitalized raw
+  // fields and a `photos`/`signature` pair instead of `evidenceItems`/`signatureUrl`.
+  // Reading job.* directly (as this component originally did, job-only) left every
+  // field undefined for a scenario item: blank customer details, "No photos
+  // captured" even when photos exist, and a blank PaperDossierReport on Preview/
+  // Download since that report also expects NormalizedJob fields.
+  const isScenario = !!kind;
+  const scenarioItem = job as ScenarioItem & Record<string, any>;
+  const rawRecord: Record<string, any> = isScenario ? (scenarioItem.rawRecord || scenarioItem) : {};
+
+  const displayId = isScenario ? (scenarioItem.id || "—") : (job as NormalizedJob).jobId;
+  // A scenario submission's `driver` field is a free-text string -- sometimes
+  // initials, sometimes an email, sometimes a full name -- not a guaranteed-short
+  // code. Dumping it straight into a fixed-size avatar circle (as this used to)
+  // overflowed the circle and visually collided with the text next to it for
+  // anything longer than ~2 characters. resolveDriver() is the shared, correct
+  // place this is already handled: `code` is always capped to 2 chars.
+  const scenarioDriver = isScenario ? resolveDriver(scenarioItem.driverName || scenarioItem.driver || rawRecord["Driver"], scenarioItem.driverInitials) : null;
+  const driverInitials = isScenario
+    ? scenarioDriver!.code
+    : ((job as NormalizedJob).driverInitials || "UN");
+  const driverName = isScenario
+    ? (scenarioItem.driverName || rawRecord["Driver Name"] || scenarioDriver!.name)
+    : ((job as NormalizedJob).driverName || "Unknown");
+  const customerName = isScenario
+    ? (scenarioItem.clientName || rawRecord["Client Name"] || rawRecord["Client Full Name"] || "Not recorded")
+    : (job as NormalizedJob).customerName;
+
+  const scenarioPhotos = isScenario ? (scenarioItem.photos || []).map((p: any, i: number) => ({
+    key: p.fileId || String(i),
+    href: p.fileUrl || p.driveUrl || p.thumbUrl,
+    thumbSrc: p.thumbUrl || p.fileUrl || p.driveUrl,
+    category: SCENARIO_TITLES[kind!],
+    capturedAt: p.capturedAt || scenarioItem.timestamp,
+    receivedAt: undefined as string | undefined,
+    completedAt: undefined as string | undefined,
+    location: p.location,
+    locationName: p.locationName
+  })) : [];
+  const jobPhotos = !isScenario ? ((job as NormalizedJob).evidenceItems?.filter(e => !!e.fileId) || []).map(p => ({
+    key: p.id,
+    href: p.driveUrl || p.thumbProxyUrl || `/admin/api/jobs/${(job as NormalizedJob).jobId}/photos/${p.fileId}`,
+    thumbSrc: p.thumbProxyUrl || `/admin/api/jobs/${(job as NormalizedJob).jobId}/photos/${p.fileId}`,
+    category: p.category,
+    capturedAt: p.capturedAt,
+    receivedAt: p.receivedAt,
+    completedAt: p.completedAt,
+    location: p.location,
+    locationName: p.locationName
+  })) : [];
+  const photos = isScenario ? scenarioPhotos : jobPhotos;
+
+  const signatureUrl = isScenario
+    ? ((scenarioItem.signature as any)?.url || scenarioItem.signature?.thumbUrl || scenarioItem.signatureUrl || rawRecord["Signature Url"] || rawRecord["Signature"])
+    : (job as NormalizedJob).signatureUrl;
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const handleDownload = () => {
+    setIsGeneratingPdf(true);
+    document.body.classList.add("printing-report");
+    setTimeout(async () => {
+      await waitForPrintImages("#tmv-print-portal, .print-content");
+
+      // Temporarily set document title for nice PDF filename
+      const originalTitle = document.title;
+      const dateStr = new Date().toISOString().slice(0, 10);
+      const label = isScenario ? SCENARIO_TITLES[kind!].replace(/\s+/g, '') : 'Job_Completed';
+      document.title = `${label}_${displayId}_${(driverName || '').replace(/\s+/g, '')}_${dateStr}`;
+
+      window.print();
+
+      document.title = originalTitle;
+      document.body.classList.remove("printing-report");
+      setIsGeneratingPdf(false);
+      showToast("Print dialog opened");
+
+      if (autoDownload) {
+        onClose();
+      }
+    }, 400);
+  };
+  handleDownloadRef.current = handleDownload;
+
+  const formattedTime = isScenario
+    ? formatLondonDateTime(scenarioItem.timestamp || rawRecord["Timestamp"] || rawRecord["Date"])
+    : ((job as NormalizedJob).actualFinish
+        ? formatLondonDateTime((job as NormalizedJob).actualFinish)
+        : ((job as NormalizedJob).bookedStart ? formatLondonDateTime((job as NormalizedJob).bookedStart) : 'Unknown Time'));
+  const normalizedJob = !isScenario ? (job as NormalizedJob) : null;
+  const scenarioPoint = isScenario ? scenarioPointFromRecord(scenarioItem) : null;
+  const totalCharges = normalizedJob
+    ? normalizedJob.totalCharges ?? normalizedJob.calculatedTotalCharges ?? normalizedJob.basePrice + normalizedJob.extraCharges + normalizedJob.overtimeCharge
+    : 0;
+
+  const handleSaveReview = async () => {
+    if (!normalizedJob || savingReview) return;
+    setSavingReview(true);
+    try {
+      const result = await saveJobReview(normalizedJob.jobId, { status: managerStatus, note: managerNote });
+      setJob(result.job ?? {
+        ...normalizedJob,
+        managerReviewStatus: result.review.status,
+        managerReviewNote: result.review.note,
+        managerReviewedAt: result.review.reviewedAt
+      });
+      onUpdated?.();
+      showToast("Manager review saved");
+    } catch (error: any) {
+      showToast(error?.message || "Couldn't save manager review");
+    } finally {
+      setSavingReview(false);
+    }
+  };
+
+  // Purely our own storage (Mongo + Cloudinary), no Calendar involved -- unlike
+  // Reassign/Delete elsewhere in the admin, there's no permission dance, just a
+  // confirm and a plain delete. Scenario submissions (isScenario) have no evidence
+  // photos to delete here -- their photos aren't in the evidence collection.
+  const handleDeleteEvidence = async (evidenceId: string) => {
+    if (!normalizedJob || deletingPhotoId) return;
+    if (!window.confirm("Delete this photo? This can't be undone.")) return;
+    setDeletingPhotoId(evidenceId);
+    try {
+      await deleteEvidencePhoto(normalizedJob.jobId, evidenceId);
+      setJob({ ...normalizedJob, evidenceItems: normalizedJob.evidenceItems.filter(e => e.id !== evidenceId) });
+      showToast("Photo deleted");
+      onUpdated?.();
+    } catch (error: any) {
+      showToast(error?.message || "Couldn't delete photo. Try again.");
+    } finally {
+      setDeletingPhotoId(null);
+    }
+  };
+
+  const SidebarLeft = () => (
+    <div className="w-full lg:w-[300px] lg:flex-shrink-0 border-b lg:border-b-0 lg:border-r border-admin-line bg-white flex flex-col p-6 overflow-y-auto custom-scrollbar relative z-10">
+      <h3 className="text-[14px] font-bold text-admin-ink mb-6">Manager fields</h3>
+      {normalizedJob ? (
+      <div className="space-y-4">
+        <div className="bg-[#F8F9FA] border border-admin-line rounded-module p-4 flex items-center justify-between shadow-sm">
+          <label className="flex items-center gap-2 text-label font-semibold text-fg">Status</label>
+          <select
+            value={managerStatus}
+            onChange={e => setManagerStatus(e.target.value as "Pending" | "Approved" | "Flagged")}
+            className="bg-white border border-admin-line rounded-card px-3 py-1.5 text-[13px] font-medium text-admin-ink focus:outline-none focus:ring-2 focus:ring-admin-brand/20 outline-none"
+          >
+            <option>Pending</option>
+            <option>Approved</option>
+            <option>Flagged</option>
+          </select>
+        </div>
+        <div className="bg-[#F8F9FA] border border-admin-line rounded-module p-4 relative shadow-sm">
+          <label className="flex items-center gap-2 text-label font-semibold text-fg mb-3">Note</label>
+          <textarea
+            value={managerNote}
+            onChange={e => setManagerNote(e.target.value)}
+            maxLength={2000}
+            className="w-full bg-white border border-admin-line rounded-card p-3 text-[13px] text-admin-ink placeholder-admin-muted focus:outline-none focus:ring-2 focus:ring-admin-brand/20 min-h-[120px] resize-none"
+            placeholder="Add manager review note"
+          />
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <span className="text-[11px] text-admin-muted">
+              {normalizedJob.managerReviewedAt ? `Last saved ${formatLondonDateTime(normalizedJob.managerReviewedAt)}` : "Not reviewed yet"}
+            </span>
+            <button
+              onClick={handleSaveReview}
+              disabled={savingReview}
+              className="h-9 px-3 rounded-card bg-admin-brand text-white text-[12px] font-bold transition hover:bg-admin-brand-dark disabled:opacity-60 flex items-center gap-2"
+            >
+              {savingReview ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+      ) : (
+        <div className="rounded-card border border-admin-line bg-admin-surface p-4 text-[13px] text-admin-muted">
+          Manager review is only available for completed job records.
+        </div>
+      )}
+    </div>
+  );
+
+  const SidebarRight = () => (
+    <div className="w-full lg:w-[300px] lg:flex-shrink-0 border-t lg:border-t-0 lg:border-l border-admin-line bg-white flex flex-col p-6 overflow-y-auto custom-scrollbar relative z-10">
+      <div className="flex items-center gap-6 border-b border-admin-line pb-3 mb-6">
+        <button onClick={() => setActiveTab("Activity")} className={`text-[13px] font-bold pb-3 -mb-3 transition ${activeTab === 'Activity' ? 'text-admin-brand border-b-2 border-admin-brand' : 'text-admin-muted hover:text-admin-ink'}`}>Activity</button>
+        <button onClick={() => setActiveTab("Comments")} className={`text-[13px] font-bold pb-3 -mb-3 transition ${activeTab === 'Comments' ? 'text-admin-brand border-b-2 border-admin-brand' : 'text-admin-muted hover:text-admin-ink'}`}>Comments</button>
+      </div>
+
+      <div className="flex-1">
+        {activeTab === "Activity" && (
+          <div className="relative pl-4 space-y-6 before:absolute before:left-0 before:top-2 before:bottom-0 before:w-px before:bg-admin-line">
+            {normalizedJob?.activity?.length ? (
+              normalizedJob.activity.map((entry, index) => (
+                <div key={`${entry.timestamp}-${entry.action}-${index}`} className="relative flex flex-col">
+                  <div className="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-admin-brand ring-4 ring-white" />
+                  <div className="flex items-center gap-2 mb-1 min-w-0">
+                    <div className="w-6 h-6 shrink-0 rounded-full bg-admin-brand-soft text-admin-brand font-bold text-[9px] flex items-center justify-center overflow-hidden">
+                      {(entry.driver || driverInitials || "UN").slice(0, 2).toUpperCase()}
+                    </div>
+                    <span className="min-w-0 truncate text-[13px] font-bold text-admin-ink">{entry.action.replace(/_/g, " ")}</span>
+                  </div>
+                  {entry.detail && <span className="text-[12px] text-admin-muted mb-1 leading-snug">{entry.detail}</span>}
+                  <span className="text-[11px] font-medium text-admin-muted/60">
+                    {entry.driver || "System"} - {formatLondonDateTime(entry.timestamp)}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div className="rounded-card border border-admin-line bg-admin-surface p-4 text-[13px] text-admin-muted">
+                No activity log entries recorded.
+              </div>
+            )}
+          </div>
+        )}
+        {activeTab === "Comments" && (
+          <div className="space-y-4">
+            {normalizedJob?.managerReviewNote ? (
+              <div className="rounded-module border border-admin-line bg-[#F8F9FA] p-4">
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <span className="text-[12px] font-bold text-admin-ink">Manager note</span>
+                  <span className="text-[11px] font-semibold text-admin-muted">
+                    {normalizedJob.managerReviewedAt ? formatLondonDateTime(normalizedJob.managerReviewedAt) : ""}
+                  </span>
+                </div>
+                <p className="text-[13px] leading-relaxed text-admin-ink whitespace-pre-wrap">{normalizedJob.managerReviewNote}</p>
+              </div>
+            ) : (
+              <div className="rounded-card border border-admin-line bg-admin-surface p-4 text-[13px] text-admin-muted">
+                No saved manager comments yet.
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const FormAnswersView = () => (
+    <div className={`mx-auto space-y-6 w-full py-6 sm:py-8 px-4 sm:px-6 ${isScenario ? "max-w-2xl" : "max-w-4xl"}`}>
+      <div className="bg-white rounded-module p-4 sm:p-6 shadow-sm border border-admin-line">
+         <label className="text-[13px] font-semibold text-admin-muted mb-2 flex items-center gap-1.5">
+           {!isScenario && <FileText className="w-3.5 h-3.5 text-admin-brand" />}
+           {isScenario ? "Customer & Details" : "Booking Description"}
+         </label>
+         {isScenario ? (
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+             <div>
+               <span className="text-[11px] uppercase text-admin-muted font-semibold tracking-wider">Client Name</span>
+               <div className="text-[14px] font-medium text-admin-ink mt-1">{customerName}</div>
+             </div>
+             {(kind === "checkin" || kind === "checkout") && (
+               <div>
+                 <span className="text-[12px] text-admin-muted font-medium">Storage container reference</span>
+                 <div className="text-[14px] font-medium text-admin-ink mt-1">{scenarioItem.containerNumber || rawRecord["Container Number"] || "—"}</div>
+               </div>
+             )}
+             {kind === "parking" && (
+               <div className="sm:col-span-2">
+                 <span className="text-[11px] uppercase text-admin-muted font-semibold tracking-wider">Address</span>
+                 <div className="text-[14px] font-medium text-admin-ink mt-1">{scenarioItem.address || rawRecord["Address"] || "N/A"}</div>
+               </div>
+             )}
+             {kind === "liability" && (
+               <div className="sm:col-span-2">
+                 <span className="text-[11px] uppercase text-admin-muted font-semibold tracking-wider">Damage Categories</span>
+                 <div className="text-[14px] font-medium text-admin-ink mt-1">{scenarioItem.damageCategories || rawRecord["Damage Categories"] || "—"}</div>
+               </div>
+             )}
+             {(rawRecord["reported_at"] || rawRecord["Reported At"]) && (
+               <div className="sm:col-span-2">
+                 <span className="text-[11px] uppercase text-admin-muted font-semibold tracking-wider">Reported At</span>
+                 {/* Which checkpoint of the move this was filed from -- Pickup, a
+                     mid-route Stop-by / waypoint, or Drop-off -- set automatically by
+                     the driver app, not typed by the driver, for every scenario kind
+                     (Check In/Out included, now that the Liability step's cards can
+                     open them too). See web/src/screens/JobWorkflowScreen.tsx's
+                     reportedAtForState. */}
+                 <div className="text-[14px] font-medium text-admin-ink mt-1">
+                   {rawRecord["reported_at"] || rawRecord["Reported At"]}
+                 </div>
+               </div>
+             )}
+           </div>
+         ) : (job as NormalizedJob).rawDescription ? (
+           <RawBookingText text={htmlToPlainText((job as NormalizedJob).rawDescription)} />
+         ) : (
+           <p className="text-[13px] text-admin-muted">No booking description recorded.</p>
+         )}
+      </div>
+
+      {!isScenario && normalizedJob && <JobScenarioSection scenarios={normalizedJob.scenarios} />}
+
+      {!isScenario && normalizedJob && (
+        <div className="bg-white rounded-module p-4 sm:p-6 shadow-sm border border-admin-line">
+          <label className="text-[13px] font-semibold text-admin-muted block mb-4">Driver submitted details</label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <DetailRow label="Booked crew" value={`${normalizedJob.crewSize} crew`} />
+            <DetailRow
+              label="Extra charges selected"
+              value={
+                normalizedJob.extraChargeSelections?.length
+                  ? normalizedJob.extraChargeSelections.join(", ")
+                  : "None recorded"
+              }
+            />
+            <DetailRow label="Overtime minutes" value={`${normalizedJob.overtimeMinutes || 0} min`} />
+            <DetailRow label="Overtime charge" value={formatGBP(normalizedJob.overtimeCharge)} />
+            <DetailRow label="Payment method" value={normalizedJob.paymentMethod || "Not recorded"} />
+            <DetailRow label="Payment status" value={normalizedJob.paymentStatus || "Not recorded"} />
+            <DetailRow label="Customer confirmed by" value={normalizedJob.clientConfirmedName || "Not recorded"} />
+            <DetailRow
+              label="On my way (customer notified)"
+              value={normalizedJob.onMyWayAt ? formatLondonDateTime(normalizedJob.onMyWayAt) : "Not recorded"}
+            />
+            <DetailRow
+              label="Tracker arrival time"
+              value={
+                normalizedJob.trackerArrivalAt ? (
+                  withArrivalDistance(formatLondonDateTime(normalizedJob.trackerArrivalAt), normalizedJob.trackerArrivalDistanceMeters)
+                ) : (
+                  <div>
+                    <span className="text-admin-status-red font-semibold">Unverified</span>
+                    {normalizedJob.trackerUnverifiedReason && (
+                      <div className="text-[12px] text-admin-status-red mt-0.5 font-normal">
+                        {normalizedJob.trackerUnverifiedReason}
+                      </div>
+                    )}
+                  </div>
+                )
+              }
+            />
+            {normalizedJob.trackerStatus && !normalizedJob.trackerUnverifiedReason && (
+              <DetailRow label="Tracker status" value={normalizedJob.trackerStatus === "reporting" ? "Reporting" : normalizedJob.trackerStatus === "stale" ? "Stale / no recent position" : "No verified report"} />
+            )}
+            <DetailRow
+              label="Proof of arrival photo time"
+              value={normalizedJob.pickupArrivalAt ? formatLondonDateTime(normalizedJob.pickupArrivalAt) : "Not recorded"}
+            />
+            <DetailRow
+              label="Van loaded photo time"
+              value={normalizedJob.vanLoadedAt ? formatLondonDateTime(normalizedJob.vanLoadedAt) : "Not recorded"}
+            />
+            <DetailRow
+              label="Empty van photo time"
+              value={normalizedJob.actualFinish ? formatLondonDateTime(normalizedJob.actualFinish) : "Not recorded"}
+            />
+            <DetailRow
+              label="Customer signature time"
+              value={normalizedJob.clientSignatureAt ? formatLondonDateTime(normalizedJob.clientSignatureAt) : "Not recorded"}
+            />
+          </div>
+          {(normalizedJob.arrivalProofLate || normalizedJob.arrivalProofOverdue) && (
+            <div className="mt-4 inline-flex rounded-control bg-admin-status-red-bg px-3 py-1.5 text-[12px] font-bold uppercase tracking-[0.03em] text-admin-status-red">
+              {normalizedJob.arrivalProofLate
+                ? `Gap between tracker arrival and proof photo (${normalizedJob.arrivalProofDelayMinutes ?? 0} min)`
+                : `Proof photo overdue (${normalizedJob.arrivalProofDelayMinutes ?? 0} min)`}
+            </div>
+          )}
+        </div>
+      )}
+
+      {!isScenario && normalizedJob && (
+        <div className="bg-white rounded-module p-4 sm:p-6 shadow-sm border border-admin-line">
+          <label className="text-[13px] font-semibold text-admin-muted block mb-4">Payment breakdown</label>
+          {normalizedJob.paymentBreakdown?.length ? (
+            <div className="divide-y divide-admin-line rounded-card border border-admin-line overflow-hidden">
+              {normalizedJob.paymentBreakdown.map((row, index) => (
+                <div key={`${row.method}-${index}`} className="flex items-center justify-between gap-4 bg-white px-3 py-2.5">
+                  <span className="text-[12px] font-medium text-admin-muted">{row.method || "Not recorded"}</span>
+                  <span className="font-mono text-[13px] font-semibold tabular-nums text-admin-ink">
+                    {paymentBreakdownLabel(row)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-[13px] text-admin-muted">No payment breakdown recorded.</p>
+          )}
+        </div>
+      )}
+
+      {!isScenario && normalizedJob && (
+        <div className="bg-white rounded-module p-4 sm:p-6 shadow-sm border border-admin-line">
+          <div className="flex items-start justify-between gap-3 mb-4">
+            <label className="text-[13px] font-semibold text-admin-muted block">Charges</label>
+            <span className={normalizedJob.reconciled ? "rounded-control bg-admin-status-green-bg px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.03em] text-admin-status-green" : "rounded-control bg-admin-status-red-bg px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.03em] text-admin-status-red"}>
+              {normalizedJob.reconciled ? "Reconciled" : "Mismatch"}
+            </span>
+          </div>
+          <div className="divide-y divide-admin-line rounded-card border border-admin-line overflow-hidden">
+            <ChargeRow label="Base price" value={normalizedJob.basePrice} />
+            {normalizedJob.extraChargeBreakdown?.length ? (
+              normalizedJob.extraChargeBreakdown.map((row, index) => (
+                <ChargeRow key={`${row.label}-${index}`} label={row.label || "Extra charge"} value={row.amount} />
+              ))
+            ) : (
+              <>
+                <ChargeRow label="Extra charges" value={normalizedJob.extraCharges} />
+                <ChargeRow label="Overtime" value={normalizedJob.overtimeCharge} />
+              </>
+            )}
+            <ChargeRow label="Total Charges" value={totalCharges} strong />
+            <ChargeRow label="Amount Charged" value={normalizedJob.amountCharged} strong brand />
+            {adjustmentReasonForMismatch(normalizedJob) && (
+              <ChargeNoteRow label="Adjustment Reason" value={adjustmentReasonForMismatch(normalizedJob)} />
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="bg-white rounded-module p-4 sm:p-6 shadow-sm border border-admin-line">
+         <label className="text-[13px] font-semibold text-admin-muted block mb-4">{kind === "liability" || kind === "parking" ? "Photos for Evidence" : "Evidence that the items have been loaded."}</label>
+         {photos.length > 0 ? (
+           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+             {photos.map((p) => {
+               const capturedTime = p.capturedAt ? formatCapturedTime(p.capturedAt) : "";
+               const fallbackTime = !capturedTime && (p.receivedAt || p.completedAt) ? formatLondonDateTime(p.receivedAt || p.completedAt) : "";
+               return (
+                 <div key={p.key} className="space-y-1">
+                   <div className="relative group/photo">
+                     <a
+                       href={p.href}
+                       target="_blank" rel="noreferrer"
+                       className="aspect-square rounded-card bg-admin-surface overflow-hidden border border-admin-line shadow-sm hover:ring-2 hover:ring-admin-brand/50 transition cursor-pointer block relative group"
+                     >
+                       <img src={p.thumbSrc} className="w-full h-full object-cover" alt={p.category} />
+                       <div className="absolute inset-0 bg-admin-ink/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                          <Maximize2 className="w-5 h-5 text-white" />
+                       </div>
+                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-admin-ink/80 to-transparent p-2 text-[9px] text-white font-bold truncate">
+                          {p.category}
+                       </div>
+                     </a>
+                     {/* Scenario submission photos (Check In/Out/Liability) aren't in
+                         the evidence collection -- only a finished job's own evidence
+                         photos are deletable from here. */}
+                     {!isScenario && (
+                       <button
+                         onClick={e => { e.preventDefault(); e.stopPropagation(); handleDeleteEvidence(p.key); }}
+                         disabled={deletingPhotoId === p.key}
+                         title="Delete photo"
+                         aria-label="Delete photo"
+                         className="absolute top-1 right-1 z-10 p-1 rounded-full bg-white/90 text-admin-status-red opacity-0 group-hover/photo:opacity-100 hover:bg-admin-status-red hover:text-white transition shadow-sm disabled:opacity-60"
+                       >
+                         {deletingPhotoId === p.key ? (
+                           <Loader2 className="w-3 h-3 animate-spin" />
+                         ) : (
+                           <Trash2 className="w-3 h-3" />
+                         )}
+                       </button>
+                     )}
+                   </div>
+                   {/* Proof of place -- where/when the driver's device says this was
+                       actually taken. Absent on older submissions. */}
+                   {(capturedTime || fallbackTime || p.location) && (
+                     <div className="text-[10px] leading-tight text-admin-muted text-center space-y-0.5">
+                       {(capturedTime || fallbackTime) && <div>{capturedTime || fallbackTime}</div>}
+                       {p.location ? (
+                         <a
+                           href={mapsUrlForLocation(p.location)}
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           className="block truncate text-admin-brand underline underline-offset-2"
+                         >
+                           {formatLocationLabel(p.location, p.locationName)}
+                         </a>
+                       ) : (
+                         <div>Location not recorded</div>
+                       )}
+                     </div>
+                   )}
+                 </div>
+               );
+             })}
+           </div>
+         ) : (
+           <div className="p-8 text-center bg-admin-surface border border-dashed border-admin-line rounded-card">
+              <span className="text-admin-muted text-[13px]">No photos captured.</span>
+           </div>
+         )}
+      </div>
+
+      <div className="bg-white rounded-module p-4 sm:p-6 shadow-sm border border-admin-line">
+         <label className="text-[13px] font-semibold text-admin-muted block mb-4">Client Signature</label>
+         {signatureUrl ? (
+            <div className="flex items-center gap-5">
+              <div className="max-w-sm">
+                <div className="border border-admin-line rounded-card p-4 bg-admin-surface flex justify-center">
+                  <img src={signatureUrl} alt="Signature" className="max-h-24 mix-blend-multiply" />
+                </div>
+                {/* Proof of place for the signature itself, same as a photo's caption --
+                    absent on submissions made before signature location was captured. */}
+                {isScenario && (scenarioItem.signature?.capturedAt || scenarioItem.signature?.location) && (
+                  <div className="mt-2 text-[11px] leading-tight text-admin-muted text-center space-y-0.5">
+                    {scenarioItem.signature?.capturedAt && <div>{formatCapturedTime(scenarioItem.signature.capturedAt)}</div>}
+                    {scenarioItem.signature?.location ? (
+                      <a
+                        href={mapsUrlForLocation(scenarioItem.signature.location)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block truncate text-admin-brand underline underline-offset-2"
+                      >
+                        {formatLocationLabel(scenarioItem.signature.location, scenarioItem.signature.locationName)}
+                      </a>
+                    ) : (
+                      <div>No location</div>
+                    )}
+                  </div>
+                )}
+              </div>
+              {!isScenario && (
+                <div className={`text-[11px] font-bold uppercase tracking-[0.03em] ${ (job as NormalizedJob).reviewEmailStatus === "Yes" ? "text-admin-status-green" : "text-admin-muted"}`}>
+                  Review Report: RW={(job as NormalizedJob).reviewEmailStatus ?? "No"}
+                </div>
+              )}
+            </div>
+         ) : (
+            <div className="p-8 text-center bg-admin-surface border border-dashed border-admin-line rounded-card max-w-sm">
+              <span className="text-admin-muted text-[13px]">No physical signature captured.</span>
+            </div>
+         )}
+      </div>
+    </div>
+  );
+
+  return (
+    // print:static -- this wrapper being position:fixed on screen previously defeated
+    // .print-content's own position:absolute fix (see below): .print-content is
+    // absolutely positioned relative to its nearest positioned ancestor, and this
+    // outer div being position:fixed at print time meant that ancestor was itself
+    // pinned to one viewport-sized box, silently capping the printed report to a
+    // single page regardless of .print-content's own positioning.
+    <div className="fixed inset-0 print:static z-[100] flex items-center justify-center overflow-hidden bg-admin-ink/70 backdrop-blur-sm p-3 sm:p-6 animate-in fade-in duration-200">
+      <div className="absolute inset-0 cursor-pointer print:hidden" onClick={onClose} />
+      <div className="relative z-10 flex w-full h-full items-center justify-center print:hidden">
+      
+      {toast && (
+        <div className="fixed top-6 right-6 z-[200] bg-admin-ink text-white px-5 py-3 rounded-card shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
+          <Check className="w-4 h-4 text-admin-status-green" />
+          <span className="text-[14px] font-semibold">{toast}</span>
+        </div>
+      )}
+
+      {/* Main Modal Container */}
+      <div ref={panelRef} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} className={`bg-[#F5F5F5] outline-none shadow-2xl flex flex-col overflow-hidden transition-all duration-300 border border-white/10 animate-in zoom-in-95 ${isFullscreen ? 'w-full h-full max-w-none rounded-none' : 'w-full max-w-6xl max-h-[94vh] rounded-module'}`}>
+        
+        {/* TOP HEADER */}
+        <div className="min-h-[72px] bg-white border-b border-admin-line shadow-sm px-3 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 shrink-0 relative z-20">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+             <ReportReturnButton compact />
+             <div className="w-10 h-10 shrink-0 overflow-hidden rounded-full bg-admin-brand-soft text-admin-brand border border-admin-brand/20 flex items-center justify-center font-bold text-[14px]">
+               {driverInitials}
+             </div>
+             <div className="min-w-0">
+               <h2 id={titleId} className="text-card text-fg leading-tight truncate">{isScenario ? `${SCENARIO_TITLES[kind!]} · ${customerName}` : driverName || "Unknown"}</h2>
+               <div className="flex flex-wrap items-center gap-1.5 text-[12px] text-admin-muted mt-0.5">
+                 <span className="truncate">{formattedTime}, {isScenario ? "Ref" : "Job ID"}: {displayId}</span>
+                 {scenarioPoint && (
+                   <span
+                     title={scenarioPoint.full}
+                     className="rounded-control border border-admin-brand/20 bg-admin-brand-soft px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.03em] text-admin-brand"
+                   >
+                     {scenarioPoint.point}
+                   </span>
+                 )}
+               </div>
+             </div>
+          </div>
+          <div className="flex items-center gap-2 sm:gap-3">
+             {onNavigate && (
+               <div className="flex items-center gap-1 sm:mr-4 bg-admin-surface rounded-card border border-admin-line p-1">
+                 <button aria-label="Previous evidence record" onClick={() => onNavigate('prev')} disabled={!hasPrev} className="p-1.5 rounded-card text-admin-muted hover:text-admin-ink hover:bg-white disabled:opacity-30 transition"><ChevronLeft className="w-4 h-4" /></button>
+                 <button aria-label="Next evidence record" onClick={() => onNavigate('next')} disabled={!hasNext} className="p-1.5 rounded-card text-admin-muted hover:text-admin-ink hover:bg-white disabled:opacity-30 transition"><ChevronRight className="w-4 h-4" /></button>
+               </div>
+             )}
+             {isScenario && (scenarioItem.folderUrl || scenarioItem.driveFolderUrl) && <a className="h-10 inline-flex items-center px-3 rounded-card border border-admin-line text-sm text-admin-ink" href={scenarioItem.folderUrl || scenarioItem.driveFolderUrl} target="_blank" rel="noreferrer">Open documents</a>}
+             {isScenario && onOpenJob && scenarioJobId(scenarioItem) && <button className="h-10 px-3 rounded-card border border-admin-line text-sm text-admin-brand" onClick={() => onOpenJob(scenarioJobId(scenarioItem)!)}>Open linked job</button>}
+             <button
+               onClick={() => setIsPreviewing(!isPreviewing)}
+               aria-label={isPreviewing ? "Back to Form" : "Preview PDF"}
+               title={isPreviewing ? "Back to Form" : "Preview PDF"}
+               className={`h-10 px-2.5 sm:px-4 rounded-card border font-bold text-[13px] transition flex items-center gap-2 shadow-sm ${isPreviewing ? 'bg-admin-surface border-admin-line text-admin-ink' : 'border-admin-line bg-white hover:bg-admin-surface text-admin-ink'}`}
+             >
+               <Eye className="w-4 h-4 text-admin-muted" /> <span className="hidden sm:inline">{isPreviewing ? "Back to Form" : "Preview PDF"}</span>
+             </button>
+             <button
+               onClick={handleDownload}
+               aria-label="Download PDF"
+               title="Download PDF"
+               disabled={isGeneratingPdf}
+               className="h-10 px-2.5 sm:px-4 rounded-card border border-transparent bg-admin-brand hover:bg-admin-brand-dark text-white font-bold text-[13px] transition flex items-center gap-2 shadow-sm disabled:opacity-70"
+             >
+               {isGeneratingPdf ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+               <span className="hidden sm:inline">Download PDF</span>
+             </button>
+             <div className="hidden sm:block w-px h-6 bg-admin-line mx-2" />
+             <IconButton aria-label="Close" icon={<X />} onClick={onClose} className="-mr-2" />
+          </div>
+        </div>
+
+        {/* BODY -- stacked columns below lg, side-by-side panels at lg+ */}
+        <div className="min-h-0 flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
+          
+          {/* Manager Sidebar -- finished jobs (not scenario submissions) drop this
+              entirely and let the center content use the freed width instead. */}
+          
+
+          {/* Center Content */}
+          <div className="min-h-0 min-w-0 flex-1 overflow-auto relative bg-[#edf1f4] custom-scrollbar">
+             {isPreviewing ? (
+               <div className="min-h-full p-3 sm:p-6">
+                  <ReportPreviewCanvas zoom={zoom}>
+                     {isScenario ? (
+                       <PaperScenarioReport item={job} kind={kind!} isPreview={true} />
+                     ) : (
+                       <PaperDossierReport job={job as NormalizedJob} isPreview={true} />
+                     )}
+                  </ReportPreviewCanvas>
+               </div>
+             ) : (
+               <FormAnswersView />
+             )}
+          </div>
+
+          {/* Activity/Comments remain in the form view, not over the document. */}
+          
+        </div>
+        {isPreviewing && <div className="report-preview-footer">
+                     {/* These two had no handlers and the readout was hardcoded to
+                         100%, so the zoom control was purely decorative. It now zooms. */}
+                     <button
+                       onClick={() => setZoom(z => Math.max(50, z - 10))}
+                       disabled={zoom <= 50}
+                       aria-label="Zoom out"
+                       title="Zoom out"
+                       className="w-10 h-10 rounded-card transition flex items-center justify-center disabled:opacity-40"
+                     >
+                       <ZoomOut className="w-4 h-4" />
+                     </button>
+                     <span className="text-[12px] font-semibold text-admin-ink px-2 font-mono tabular-nums">{zoom}%</span>
+                     <button
+                       onClick={() => setZoom(z => Math.min(200, z + 10))}
+                       disabled={zoom >= 200}
+                       aria-label="Zoom in"
+                       title="Zoom in"
+                       className="w-10 h-10 rounded-card transition flex items-center justify-center disabled:opacity-40"
+                     >
+                       <ZoomIn className="w-4 h-4" />
+                     </button>
+                     <div className="w-px h-6 bg-admin-line mx-1" />
+                     <button onClick={() => setIsFullscreen(!isFullscreen)} className="w-10 h-10 rounded-card transition flex items-center justify-center" title="Toggle Fullscreen">
+                       <Maximize2 className="w-4 h-4" />
+                     </button>
+                  </div>}
+      </div>
+      
+         </div>
+      {/* PDF renderer mounted via PrintPortal directly into document.body for clean print isolation */}
+      <PrintPortal>
+        {isScenario ? (
+          <PaperScenarioReport item={job} kind={kind!} isPreview={false} />
+        ) : (
+          <PaperDossierReport job={job as NormalizedJob} isPreview={false} />
+        )}
+      </PrintPortal>
+    </div>
+  );
+}

@@ -1,0 +1,78 @@
+{
+  "base": "http://localhost:3004",
+  "sanitizedFixture": true,
+  "method": {
+    "contrast": "Five rendered background samples behind each visible text range with glyphs temporarily hidden; includes gradient/glass/background images. WCAG AA thresholds 4.5:1 normal and 3:1 large; disabled controls excluded.",
+    "widths": [
+      390,
+      768,
+      1024,
+      1366,
+      1440,
+      1920
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ]
+  },
+  "matrix": [],
+  "workflows": [
+    {
+      "name": "Theme selection persists through reload, route changes and system changes",
+      "passed": true
+    },
+    {
+      "name": "System theme is followed when there is no saved override",
+      "passed": true
+    },
+    {
+      "name": "Eight destinations load through the navigation in light theme",
+      "passed": true
+    },
+    {
+      "name": "Mobile navigation, command dialog and theme controls remain keyboard accessible in light",
+      "passed": true
+    },
+    {
+      "name": "Eight destinations load through the navigation in dark theme",
+      "passed": true
+    },
+    {
+      "name": "Mobile navigation, command dialog and theme controls remain keyboard accessible in dark",
+      "passed": true
+    },
+    {
+      "name": "Last 30 days keeps London-local inclusive endpoints and updates URL scope",
+      "passed": true
+    },
+    {
+      "name": "Status composition exposes values, highlights keyboard focus and opens the exact filter",
+      "passed": true
+    },
+    {
+      "name": "Overview final charges agree with stored charged amounts and distinguish receipts",
+      "passed": true
+    },
+    {
+      "name": "Activity switching retains chronological values and heatmap opens one London day",
+      "passed": true
+    },
+    {
+      "name": "A verified empty period has an honest empty chart and no decorative status segments",
+      "passed": true
+    },
+    {
+      "name": "Primary summary failure is recoverable and not represented as measured zero",
+      "passed": true
+    },
+    {
+      "name": "Secondary job-source failure retains supported summary and incomplete coverage",
+      "passed": true
+    }
+  ],
+  "contrast": [],
+  "runtimeErrors": [],
+  "interceptedMutations": [],
+  "unhandledEndpoints": []
+}

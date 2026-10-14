@@ -1,0 +1,234 @@
+{
+  "base": "http://localhost:3004",
+  "sanitizedFixture": true,
+  "method": {
+    "contrast": "Five rendered background samples behind each visible text range with glyphs temporarily hidden; includes gradient/glass/background images. WCAG AA thresholds 4.5:1 normal and 3:1 large; disabled controls excluded.",
+    "widths": [
+      390,
+      768,
+      1024,
+      1366,
+      1440,
+      1920
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ]
+  },
+  "matrix": [],
+  "workflows": [],
+  "contrast": [
+    {
+      "name": "overview",
+      "theme": "light",
+      "checked": 87,
+      "minimum": 5.07,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "light",
+      "checked": 137,
+      "minimum": 5.08,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "light",
+      "checked": 55,
+      "minimum": 5.08,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "light",
+      "checked": 55,
+      "minimum": 4.88,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "light",
+      "checked": 55,
+      "minimum": 5.23,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "light",
+      "checked": 70,
+      "minimum": 5.29,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "light",
+      "checked": 35,
+      "minimum": 5.34,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "checked": 60,
+      "minimum": 5.38,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "summary",
+      "theme": "light",
+      "checked": 79,
+      "minimum": 5.14,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "jobs-timings",
+      "theme": "light",
+      "checked": 108,
+      "minimum": 5.11,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "payments",
+      "theme": "light",
+      "checked": 78,
+      "minimum": 5.15,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "road-charges",
+      "theme": "light",
+      "checked": 71,
+      "minimum": 5.11,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview",
+      "theme": "dark",
+      "checked": 87,
+      "minimum": 5.37,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "jobs",
+      "theme": "dark",
+      "checked": 137,
+      "minimum": 5.38,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "drivers",
+      "theme": "dark",
+      "checked": 55,
+      "minimum": 5.34,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "live-fleet",
+      "theme": "dark",
+      "checked": 55,
+      "minimum": 4.88,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "vehicles",
+      "theme": "dark",
+      "checked": 55,
+      "minimum": 5.41,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "evidence",
+      "theme": "dark",
+      "checked": 70,
+      "minimum": 5.44,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "alerts",
+      "theme": "dark",
+      "checked": 35,
+      "minimum": 5.34,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "checked": 60,
+      "minimum": 5.38,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "summary",
+      "theme": "dark",
+      "checked": 79,
+      "minimum": 5.34,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "jobs-timings",
+      "theme": "dark",
+      "checked": 108,
+      "minimum": 5.34,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "payments",
+      "theme": "dark",
+      "checked": 78,
+      "minimum": 5.34,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "road-charges",
+      "theme": "dark",
+      "checked": 71,
+      "minimum": 5.34,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview-week-charts",
+      "theme": "light",
+      "checked": 93,
+      "minimum": 5.17,
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "overview-week-charts",
+      "theme": "dark",
+      "checked": 93,
+      "minimum": 5.37,
+      "failures": [],
+      "passed": true
+    }
+  ],
+  "runtimeErrors": [],
+  "interceptedMutations": [],
+  "unhandledEndpoints": []
+}

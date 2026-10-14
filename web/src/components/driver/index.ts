@@ -1,0 +1,92 @@
+/**
+ * Driver-app domain components — compositions of the src/ui primitives that carry
+ * The Man Van workflow knowledge (jobs, steps, storage, issues). Screen files
+ * import from here; the primitives stay generic in src/ui.
+ */
+
+export { AppHeader } from "./AppHeader";
+export type { AppHeaderProps } from "./AppHeader";
+
+export { MobileHeader } from "./MobileHeader";
+export type { MobileHeaderProps } from "./MobileHeader";
+
+export { AppTopBar } from "./AppTopBar";
+export type { AppTopBarProps } from "./AppTopBar";
+
+export { BottomNav } from "./BottomNav";
+export type { BottomNavProps, TabId } from "./BottomNav";
+
+export { DesktopSidebar } from "./DesktopSidebar";
+export type { DesktopSidebarProps } from "./DesktopSidebar";
+
+export { ThemeToggle, ThemeToggleButton } from "./ThemeToggle";
+
+export { NotificationBell } from "./NotificationBell";
+
+export { ProfileMenu } from "./ProfileMenu";
+export type { ProfileMenuProps } from "./ProfileMenu";
+
+export { FeaturedJobCard } from "./FeaturedJobCard";
+export type { FeaturedJobCardProps } from "./FeaturedJobCard";
+
+export { BookingWindowHeader } from "./BookingWindowHeader";
+export type { BookingWindowHeaderProps } from "./BookingWindowHeader";
+
+export { UpcomingJobCard, UpcomingJobCardSkeleton } from "./UpcomingJobCard";
+export type { UpcomingJobCardProps } from "./UpcomingJobCard";
+
+export { JobDetailsPanel } from "./JobDetailsPanel";
+export type { JobDetailsPanelProps } from "./JobDetailsPanel";
+
+export { RawBookingText } from "./RawBookingText";
+export type { RawBookingTextProps } from "./RawBookingText";
+
+export { JobDetailsToggle } from "./JobDetailsToggle";
+export type { JobDetailsToggleProps } from "./JobDetailsToggle";
+
+export { CustomerIdentity } from "./CustomerIdentity";
+export type { CustomerIdentityProps } from "./CustomerIdentity";
+
+export { bigActionButtonClass } from "./bigActionButton";
+
+export { JobFilterBar } from "./JobFilterBar";
+export type { JobFilterBarProps, HomeFilter } from "./JobFilterBar";
+
+export { DatePickerSheet } from "./DatePickerSheet";
+export type { DatePickerSheetProps } from "./DatePickerSheet";
+
+export { JobRoute } from "./JobRoute";
+export type { JobRouteProps } from "./JobRoute";
+
+export { JobTime } from "./JobTime";
+export type { JobTimeProps } from "./JobTime";
+
+export { JobHeader } from "./JobHeader";
+export type { JobHeaderProps } from "./JobHeader";
+
+export { JobProgress } from "./JobProgress";
+export type { JobProgressProps } from "./JobProgress";
+
+export { ScheduleSection } from "./ScheduleSection";
+export type { ScheduleSectionProps } from "./ScheduleSection";
+
+export { StatusIndicator, JobStatusChip, jobStatusMeta } from "./JobStatusChip";
+export type { StatusIndicatorProps, JobStatusChipProps, JobBucket } from "./JobStatusChip";
+
+export { WarningNotice } from "./WarningNotice";
+export type { WarningNoticeProps } from "./WarningNotice";
+
+export { RouteCard } from "./RouteCard";
+export type { RouteCardProps } from "./RouteCard";
+
+export { IssueDecision } from "./IssueDecision";
+export type { IssueDecisionProps } from "./IssueDecision";
+
+export { IssueChoiceCard } from "./IssueChoiceCard";
+export type { IssueChoiceCardProps } from "./IssueChoiceCard";
+
+export { CompletionSummary } from "./CompletionSummary";
+export type { CompletionSummaryProps } from "./CompletionSummary";
+
+export { AnimatedSuccessTick } from "./AnimatedSuccessTick";
+export type { AnimatedSuccessTickProps } from "./AnimatedSuccessTick";

@@ -1,0 +1,360 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { CalendarClock } from "lucide-react";
+import { type DriverProfile } from "../api/auth";
+import { fetchJobsList, markJobViewed, type ApiError, type Job } from "../api/jobs";
+import { PullToRefresh } from "../app/PullToRefresh";
+import { AppShell } from "../app/AppShell";
+import { OfflineBanner } from "../app/OfflineBanner";
+import {
+  FeaturedJobCard,
+  JobFilterBar,
+  MobileHeader,
+  ScheduleSection,
+  UpcomingJobCard,
+  UpcomingJobCardSkeleton,
+  type HomeFilter
+} from "../components/driver";
+import { Alert, Button, EmptyState } from "../ui";
+import { addDaysToKey, groupJobsByDate, todayKey } from "../lib/jobDates";
+import { subscribeJobsRefresh } from "../lib/jobsRefresh";
+
+/** How often the Jobs list quietly refetches in the background while this screen
+ *  is open and visible -- a fallback for whenever a push doesn't arrive (missed,
+ *  permission never granted, notifications disabled at the OS level, ...), not the
+ *  primary mechanism. A newly assigned job's own push (see booking.service.ts /
+ *  jobs.routes.ts) triggers an immediate refetch via lib/jobsRefresh instead of
+ *  waiting for the next tick. */
+const POLL_INTERVAL_MS = 30_000;
+
+interface JobListScreenProps {
+  driver: DriverProfile;
+  onOpenJob: (jobId: string) => void;
+  onOpenProfile: () => void;
+}
+
+/* The selected filter is kept for the session so opening a job and coming back
+ * doesn't reset the view. sessionStorage (not localStorage): it's a within-session
+ * convenience, not a durable preference. */
+const FILTER_KEY = "tmv-jobs:filter";
+
+interface JobsListState {
+  today: Job[];
+  past: Job[];
+  next: Job[];
+}
+
+export interface VisibleDriverJobs {
+  today: Job | null;
+  upcomingGroups: ReturnType<typeof groupJobsByDate>;
+  counts: { today: number; upcoming: number; previous: number };
+}
+
+export function selectVisibleDriverJobs(jobsList: JobsListState): VisibleDriverJobs {
+  // Today shows exactly one job at a time -- whichever the driver is actually
+  // mid-way through (IN_PROGRESS), or the earliest still-READY one if none is
+  // started yet. Everything else booked for today is "later today" work the
+  // driver hasn't reached yet, so it reads the same as any other day still to
+  // come -- it moves into Upcoming, not sitting in Today ahead of its turn. Once
+  // the active job is COMPLETED it drops out of jobsList.today entirely (see the
+  // backend's getJobsGroupedForDriver), so the next-earliest one here becomes
+  // "Up next" on the very next load -- one at a time, automatically.
+  const orderedToday = [...jobsList.today].sort((a, b) => a.bookedStart.localeCompare(b.bookedStart));
+  const active = orderedToday.find(j => j.status === "IN_PROGRESS") ?? orderedToday[0] ?? null;
+  const laterToday = orderedToday.filter(j => j.jobId !== active?.jobId);
+
+  return {
+    today: active,
+    upcomingGroups: groupJobsByDate([...laterToday, ...jobsList.next]),
+    counts: {
+      today: active ? 1 : 0,
+      upcoming: laterToday.length + jobsList.next.length,
+      previous: jobsList.past.length
+    }
+  };
+}
+
+function readStoredFilter(): { filter: HomeFilter; hadStored: boolean } {
+  try {
+    const f = sessionStorage.getItem(FILTER_KEY);
+    const valid = f === "today" || f === "upcoming";
+    return { filter: valid ? (f as HomeFilter) : "today", hadStored: valid };
+  } catch {
+    return { filter: "today", hadStored: false };
+  }
+}
+
+function jobsLabel(n: number): string {
+  return `${n} ${n === 1 ? "job" : "jobs"}`;
+}
+
+export function JobListScreen({ driver, onOpenJob }: JobListScreenProps) {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [jobsList, setJobsList] = useState<JobsListState>({ today: [], past: [], next: [] });
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const stored = useRef(readStoredFilter());
+  const [filter, setFilter] = useState<HomeFilter>(stored.current.filter);
+  /* Auto-pick a non-empty filter on first load only when the driver hasn't chosen one. */
+  const autoSelectPending = useRef(!stored.current.hadStored);
+
+  const load = useCallback(async (mode: "initial" | "refresh") => {
+    if (mode === "initial") setLoading(true);
+    setError(null);
+    try {
+      const result = await fetchJobsList();
+      setJobsList({ today: result.today, past: result.past, next: result.next });
+    } catch (err) {
+      setError((err as ApiError)?.message || "Couldn't load your jobs.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void load("initial");
+  }, [load]);
+
+  // Background refresh, three ways:
+  //  1. A push notification (new job assigned, reassigned, edited, ...) tells us
+  //     directly and immediately -- see lib/jobsRefresh.ts and
+  //     InAppNotificationListener.tsx, which fires this for every push it gets.
+  //  2. Regaining focus/visibility (switching back to this tab, unlocking the
+  //     phone) -- catches anything that changed while this screen wasn't the one
+  //     on screen, without waiting for the next poll tick.
+  //  3. A plain interval, paused while the tab is hidden -- the fallback for
+  //     whenever neither of the above fires (push permission never granted, the
+  //     driver never left the screen at all).
+  // All three call the same "refresh" mode as pull-to-refresh: no skeleton, no
+  // loading flash, just a quiet swap-in once the new data arrives.
+  useEffect(() => {
+    const refresh = () => void load("refresh");
+
+    const unsubscribePush = subscribeJobsRefresh(refresh);
+
+    const onVisibilityOrFocus = () => {
+      if (!document.hidden) refresh();
+    };
+    document.addEventListener("visibilitychange", onVisibilityOrFocus);
+    window.addEventListener("focus", onVisibilityOrFocus);
+
+    const intervalId = window.setInterval(() => {
+      if (!document.hidden) refresh();
+    }, POLL_INTERVAL_MS);
+
+    return () => {
+      unsubscribePush();
+      document.removeEventListener("visibilitychange", onVisibilityOrFocus);
+      window.removeEventListener("focus", onVisibilityOrFocus);
+      window.clearInterval(intervalId);
+    };
+  }, [load]);
+
+  const filtered = useMemo(() => selectVisibleDriverJobs(jobsList), [jobsList]);
+
+  // Persist the selection for this session.
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(FILTER_KEY, filter);
+    } catch {
+      /* ignore — non-critical */
+    }
+  }, [filter]);
+
+  // First successful load with no stored choice: if Today is empty but there's
+  // work booked ahead, land on Upcoming instead of an empty screen.
+  useEffect(() => {
+    if (loading || error || !autoSelectPending.current) return;
+    autoSelectPending.current = false;
+    if (filter !== "today" || filtered.counts.today > 0) return;
+    if (filtered.counts.upcoming > 0) setFilter("upcoming");
+  }, [loading, error, filter, filtered.counts]);
+
+  const hasAnyJobs = jobsList.today.length + jobsList.past.length + jobsList.next.length > 0;
+  const showFilterBar = !loading && !error && hasAnyJobs;
+
+  return (
+    <AppShell banner={<OfflineBanner />} contentWidth="content" contentRef={scrollRef} topInset={false}>
+      {/* Greeting — scrolls away with the page. Pull down to refresh. */}
+      <div className="px-4 pt-5">
+        <MobileHeader driver={driver} className="mb-4" />
+      </div>
+
+      {/* Date filters — the primary Jobs navigation. Sits directly in AppShell's
+       *  scroll flow (not inside PullToRefresh, whose overflow context would stop
+       *  `position: sticky` working) so it pins to the top as the list scrolls. */}
+      {showFilterBar && (
+        <div className="sticky top-0 z-20 bg-bg px-4 pb-1 pt-2">
+          <JobFilterBar
+            value={filter}
+            onChange={value => {
+              setFilter(value);
+              // Switching tabs is also a natural moment to check for anything new --
+              // no reason to make the driver pull-to-refresh just because they
+              // tapped between Today and Upcoming.
+              void load("refresh");
+            }}
+            counts={{ today: filtered.counts.today, upcoming: filtered.counts.upcoming }}
+          />
+        </div>
+      )}
+      <div
+        data-persistent-alert-host="screen"
+        className="px-4 pt-3 empty:hidden"
+      />
+
+      <PullToRefresh onRefresh={() => load("refresh")} scrollRef={scrollRef}>
+        <div className="px-4 pb-4 pt-5 scroll-pb-nav">
+          {loading ? (
+            <div className="flex flex-col gap-2.5">
+              <UpcomingJobCardSkeleton />
+              <UpcomingJobCardSkeleton />
+              <UpcomingJobCardSkeleton />
+            </div>
+          ) : error ? (
+            <Alert
+              tone="danger"
+              title="Couldn't load your jobs"
+              action={
+                <Button size="sm" variant="secondary" onClick={() => load("refresh")}>
+                  Retry
+                </Button>
+              }
+            >
+              {error}
+            </Alert>
+          ) : !hasAnyJobs ? (
+            <div className="rounded-xl border border-line bg-surface py-12 text-center shadow-xs">
+              <p className="text-heading text-fg">Nothing assigned yet</p>
+              <p className="mx-auto mt-1.5 max-w-xs text-body text-fg-muted">
+                New work appears here as soon as the office dispatches it.
+              </p>
+              <Button size="sm" variant="secondary" className="mt-4" onClick={() => load("refresh")}>
+                Refresh
+              </Button>
+            </div>
+          ) : (
+            <div key={filter} className="flex animate-in flex-col gap-6 fade-in">
+              <FilterView
+                filter={filter}
+                filtered={filtered}
+                onOpenJob={onOpenJob}
+                onRefresh={() => load("refresh")}
+              />
+            </div>
+          )}
+        </div>
+      </PullToRefresh>
+    </AppShell>
+  );
+}
+
+interface FilterViewProps {
+  filter: HomeFilter;
+  filtered: VisibleDriverJobs;
+  onOpenJob: (jobId: string) => void;
+  onRefresh: () => void;
+}
+
+function FilterView({ filter, filtered, onOpenJob, onRefresh }: FilterViewProps) {
+  const refreshAction = (
+    <Button size="sm" variant="secondary" onClick={onRefresh}>
+      Refresh
+    </Button>
+  );
+
+  if (filter === "today") {
+    if (!filtered.today) {
+      return (
+        <EmptyState
+          icon={<CalendarClock />}
+          title="No jobs scheduled for today"
+          description="Enjoy the quiet, or check what's coming up."
+          action={refreshAction}
+        />
+      );
+    }
+    return <TodayJobsList job={filtered.today} onOpenJob={onOpenJob} />;
+  }
+
+  // upcoming
+  if (filtered.upcomingGroups.length === 0) {
+    return (
+      <EmptyState
+        icon={<CalendarClock />}
+        title="No upcoming jobs"
+        description="Jobs booked for tomorrow onward will show up here."
+        action={refreshAction}
+      />
+    );
+  }
+  return <UpcomingJobsList groups={filtered.upcomingGroups} />;
+}
+
+interface TodayJobsListProps {
+  /** The one job Today ever shows -- whichever the driver is actually mid-way
+   *  through (IN_PROGRESS), or the earliest still-READY one if none is started yet.
+   *  Everything else booked for today has already been moved into Upcoming by the
+   *  caller (see JobListScreen's `filtered`), so there's nothing left to list here. */
+  job: Job;
+  onOpenJob: (jobId: string) => void;
+}
+
+/** Today's one actionable job -- the full <FeaturedJobCard> (booking details,
+ *  contact, Start Job). One job at a time: the rest of today's work sits in
+ *  Upcoming until this one is completed, at which point the next-earliest job
+ *  becomes this slot on the next load (see JobListScreen's `filtered`). */
+function TodayJobsList({ job, onOpenJob }: TodayJobsListProps) {
+  return <FeaturedJobCard job={job} onStarted={onOpenJob} />;
+}
+
+/**
+ * Upcoming (later today onward) jobs, styled the same as Today's <FeaturedJobCard>
+ * -- each is an <UpcomingJobCard>, collapsed to just its booking-window header until
+ * tapped, expanding to the same customer + raw-booking-details content Today's card
+ * always shows. Not actionable yet -- there's no Start Job footer. Purely local:
+ * nothing here ever opens another screen.
+ */
+/** "Later today" / "Tomorrow" / "Day after tomorrow" for the next few days, then
+ *  the plain formatted date beyond that -- relative names stop being useful once
+ *  they'd force the driver to count days in their head anyway. */
+function relativeGroupLabel(key: string, label: string, todaysKey: string): string {
+  if (key === todaysKey) return "Later today";
+  if (key === addDaysToKey(todaysKey, 1)) return "Tomorrow";
+  if (key === addDaysToKey(todaysKey, 2)) return "Day after tomorrow";
+  return label;
+}
+
+function UpcomingJobsList({ groups }: { groups: ReturnType<typeof groupJobsByDate> }) {
+  const [expandedJobId, setExpandedJobId] = useState<string | null>(null);
+  // Recomputed on every render (not module-scope) so a session left open past
+  // midnight doesn't keep labelling groups by yesterday's "today" key.
+  const todaysKey = todayKey();
+  const handleToggle = (jobId: string) => {
+    const willExpand = expandedJobId !== jobId;
+    if (willExpand) void markJobViewed(jobId).catch(() => undefined);
+    setExpandedJobId(willExpand ? jobId : null);
+  };
+
+  return (
+    <>
+      {groups.map(group => (
+        <ScheduleSection
+          key={group.key}
+          title={relativeGroupLabel(group.key, group.label, todaysKey)}
+          meta={jobsLabel(group.jobs.length)}
+        >
+          {group.jobs.map((job, i) => (
+            <UpcomingJobCard
+              key={job.jobId}
+              job={job}
+              index={i}
+              expanded={expandedJobId === job.jobId}
+              onToggle={() => handleToggle(job.jobId)}
+            />
+          ))}
+        </ScheduleSection>
+      ))}
+    </>
+  );
+}
